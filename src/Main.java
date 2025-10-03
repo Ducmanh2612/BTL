@@ -12,7 +12,7 @@ import gameobject.powerup.*;
  * Main entry point for the Arkanoid game.
  * Handles the game loop and user input.
  */
-// test commit
+// test commit 2
 
 public class Main {
     // Mutable target FPS so it can be adjusted at runtime via + / - or command-line
