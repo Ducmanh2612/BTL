@@ -5,7 +5,7 @@ import gameobject.GameObject;
 
 
 public abstract class MovableObject extends GameObject {
-    protected int dx, dy; // Movement speed in x and y direction
+    protected double dx, dy; // Movement speed in x and y direction
 
     public MovableObject(int x, int y, int width, int height) {
         super(x, y, width, height);
@@ -13,8 +13,8 @@ public abstract class MovableObject extends GameObject {
         this.dy = 0;
     }
 
-    public int getDx() { return dx; }
-    public int getDy() { return dy; }
+    public double getDx() { return dx; }
+    public double getDy() { return dy; }
     public void setDx(int dx) { this.dx = dx; }
     public void setDy(int dy) { this.dy = dy; }
 

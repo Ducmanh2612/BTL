@@ -5,14 +5,14 @@ package gameobject.movable;
  * Demonstrates OOP principle: Polymorphism (overriding methods)
  */
 public class Ball extends MovableObject {
-    private int speed;
+    private double speed;
     private int gameWidth;
     private int gameHeight;
     private boolean active;
 
     public Ball(int x, int y, int width, int height, int gameWidth, int gameHeight) {
         super(x, y, width, height);
-        this.speed = 1;
+        this.speed = 1.5;
         this.gameWidth = gameWidth;
         this.gameHeight = gameHeight;
         this.dx = 1;  // Initial direction
