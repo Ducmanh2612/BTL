@@ -1,7 +1,6 @@
 package org.example.arkanoidFX.gameobject.brick;
 
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
+import javafx.scene.image.ImageView;
 
 
 /**
@@ -15,19 +14,22 @@ public class NormalBrick extends Brick {
         this.type = "Normal";
         this.scoreValue = 10;
 
-        // Create the Rectangle shape for JavaFX rendering
-        Rectangle rectangle = new Rectangle(width, height);
-        rectangle.setFill(Color.RED);
-        rectangle.setStroke(Color.BLACK);
-        rectangle.setStrokeWidth(1);
-        rectangle.setLayoutX(x);
-        rectangle.setLayoutY(y);
-        this.shape = rectangle;
+        this.textures.add(new ImageView(new javafx.scene.image.Image(getClass().getResourceAsStream("/textures/NormalBrick.png"))));
+        this.textures.add(new ImageView(new javafx.scene.image.Image(getClass().getResourceAsStream("/textures/NormalBrick_Cracked.png"))));
+        this.state = BrickState.NORMAL;
     }
 
     @Override
     public void takeHit() {
         hitPoints--;
+        if (hitPoints == 0) {
+            state = BrickState.CRACKED;
+        }
+    }
+
+    @Override
+    public ImageView getTexture() {
+        return state == BrickState.NORMAL ? textures.get(0) : textures.get(1);
     }
 
     @Override

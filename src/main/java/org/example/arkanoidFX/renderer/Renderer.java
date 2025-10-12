@@ -2,6 +2,7 @@ package org.example.arkanoidFX.renderer;
 
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -22,7 +23,14 @@ public class Renderer {
     }
 
     public void draw(GameObject obj) {
-        root.getChildren().add(obj.getShape());
+        ImageView texture = obj.getTexture();
+        if (texture != null) {
+            texture.setX(obj.getX());
+            texture.setY(obj.getY());
+            texture.setFitWidth(obj.getWidth());
+            texture.setFitHeight(obj.getHeight());
+            root.getChildren().add(texture);
+        }
         primaryStage.show();
     }
 

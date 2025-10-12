@@ -1,7 +1,8 @@
 package org.example.arkanoidFX.gameobject;
 
+import javafx.scene.image.ImageView;
 
-import javafx.scene.shape.Shape;
+import java.util.List;
 
 /**
  * Base class for all game objects.
@@ -10,13 +11,14 @@ import javafx.scene.shape.Shape;
  */
 public abstract class GameObject {
     protected int x, y, width, height;
-    protected Shape shape;
+    protected List<ImageView> textures;
 
     public GameObject(int x, int y, int width, int height) {
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
+        // textures are initialized in subclasses
     }
 
     // Getters for collision detection
@@ -28,24 +30,21 @@ public abstract class GameObject {
     // Setters
     public void setX(int x) {
         this.x = x;
-        if (shape != null) {
-            shape.setLayoutX(x);
-        }
     }
 
     public void setY(int y) {
         this.y = y;
-        if (shape != null) {
-            shape.setLayoutY(y);
-        }
     }
 
     public void setWidth(int width) { this.width = width; }
     public void setHeight(int height) { this.height = height; }
 
-    // Get the JavaFX Shape for rendering
-    public Shape getShape() {
-        return shape;
+    // Get the current texture for rendering
+    public ImageView getTexture() {
+        if (textures != null && !textures.isEmpty()) {
+            return textures.get(0);
+        }
+        return null;
     }
 
     // Check if this object collides with another
@@ -58,12 +57,4 @@ public abstract class GameObject {
 
     public abstract void update();
     public abstract void render();
-
-    // Update the shape's position to match the game object's position
-    protected void updateShapePosition() {
-        if (shape != null) {
-            shape.setLayoutX(x);
-            shape.setLayoutY(y);
-        }
-    }
 }

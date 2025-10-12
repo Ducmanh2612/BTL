@@ -1,7 +1,7 @@
 package org.example.arkanoidFX.gameobject.brick;
 
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 /**
  * Strong brick that requires multiple hits to destroy.
@@ -14,27 +14,22 @@ public class StrongBrick extends Brick {
         this.type = "Strong";
         this.scoreValue = 30;
 
-        // Create the Rectangle shape for JavaFX rendering
-        Rectangle rectangle = new Rectangle(width, height);
-        rectangle.setFill(Color.ORANGE);
-        rectangle.setStroke(Color.BLACK);
-        rectangle.setStrokeWidth(1);
-        rectangle.setLayoutX(x);
-        rectangle.setLayoutY(y);
-        this.shape = rectangle;
+        this.textures.add(new ImageView(new Image(getClass().getResourceAsStream("/textures/StrongBrick.png"))));
+        this.textures.add(new ImageView(new Image(getClass().getResourceAsStream("/textures/StrongBrick_Cracked.png"))));
+        this.textures.add(new ImageView(new Image(getClass().getResourceAsStream("/textures/StrongBrick_Cracked1.png"))));
+        this.textures.add(new ImageView(new Image(getClass().getResourceAsStream("/textures/StrongBrick_Cracked2.png"))));
+        this.state = BrickState.NORMAL;
     }
 
     @Override
     public void takeHit() {
         hitPoints--;
-        // Update color based on remaining hit points
-        if (shape instanceof Rectangle) {
-            Rectangle rect = (Rectangle) shape;
-            if (hitPoints == 2) {
-                rect.setFill(Color.YELLOW);
-            } else if (hitPoints == 1) {
-                rect.setFill(Color.LIGHTYELLOW);
-            }
+        if (hitPoints == 2) {
+            state = BrickState.CRACKED1;
+        } else if (hitPoints == 1) {
+            state = BrickState.CRACKED2;
+        } else if (hitPoints == 0) {
+            state = BrickState.CRACKED3;
         }
     }
 
@@ -51,5 +46,16 @@ public class StrongBrick extends Brick {
     @Override
     public void render() {
         // Render method for terminal
+    }
+
+    @Override
+    public ImageView getTexture() {
+        switch (state) {
+            case NORMAL: return textures.get(0);
+            case CRACKED1: return textures.get(1);
+            case CRACKED2: return textures.get(2);
+            case CRACKED3: return textures.get(3);
+            default: return textures.get(0);
+        }
     }
 }

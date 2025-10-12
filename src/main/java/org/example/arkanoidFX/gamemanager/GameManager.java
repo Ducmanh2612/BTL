@@ -29,8 +29,8 @@ public class GameManager {
     private static final int PADDLE_WIDTH = 100;
     private static final int PADDLE_HEIGHT = 20;
     private static final int BALL_SIZE = 30;
-    private static final int BRICK_WIDTH = 50;
-    private static final int BRICK_HEIGHT = 30;
+    private static final int BRICK_WIDTH = 70;
+    private static final int BRICK_HEIGHT = 35;
 
     // Game objects
     private Paddle paddle;
@@ -48,6 +48,9 @@ public class GameManager {
     private Stage primaryStage;
     private Random random;
     private AnimationTimer gameLoop;
+    // Input state for smooth movement
+    private boolean leftPressed = false;
+    private boolean rightPressed = false;
 
     // Inner class to track active power-ups with remaining duration
     private static class ActivePowerUp {
@@ -89,11 +92,11 @@ public class GameManager {
                 switch (code) {
                     case A:
                     case LEFT:
-                        paddle.moveLeft();
+                        leftPressed = true;
                         break;
                     case D:
                     case RIGHT:
-                        paddle.moveRight();
+                        rightPressed = true;
                         break;
                     case P:
                         gameState = "PAUSED";
@@ -109,9 +112,15 @@ public class GameManager {
         renderer.getScene().setOnKeyReleased(event -> {
             KeyCode code = event.getCode();
 
-            if (code == KeyCode.A || code == KeyCode.LEFT ||
-                code == KeyCode.D || code == KeyCode.RIGHT) {
-                paddle.stop();
+            switch (code) {
+                case A:
+                case LEFT:
+                    leftPressed = false;
+                    break;
+                case D:
+                case RIGHT:
+                    rightPressed = false;
+                    break;
             }
         });
     }
@@ -156,12 +165,12 @@ public class GameManager {
     private void createBricks() {
         int rows = 5 + level;
         int cols = 8;
-        int startY = 2;
-        int spacing = 1;
+        int startY = 80;  // Moved down from 2 to 80
+        int spacing = 5;  // Increased spacing from 1 to 5
 
         for (int row = 0; row < rows; row++) {
             for (int col = 0; col < cols; col++) {
-                int x = col * (BRICK_WIDTH + spacing) + 2;
+                int x = col * (BRICK_WIDTH + spacing) + 5;  // Added slight left margin
                 int y = row * (BRICK_HEIGHT + spacing) + startY;
 
                 if (random.nextInt(100) < 20) {
@@ -178,6 +187,15 @@ public class GameManager {
             return;
         }
 
+        // Process input state
+        if (leftPressed && !rightPressed) {
+            paddle.moveLeft();
+        } else if (rightPressed && !leftPressed) {
+            paddle.moveRight();
+        } else {
+            paddle.stop();
+        }
+        
         paddle.update();
         ball.update();
 

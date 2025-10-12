@@ -4,26 +4,19 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="98c97097-7428-4867-a374-2e7f83d5d4cb" name="Changes" comment="update .gitignore">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/checkstyle-idea.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/checkstyle-idea.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+    <list default="true" id="98c97097-7428-4867-a374-2e7f83d5d4cb" name="Changes" comment="update Renderer to use JavaFX">
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/arkanoidFX/gameobject/brick/BrickState.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/gamemanager/GameManager.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/gameobject/GameObject.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/gameobject/brick/Brick.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/gameobject/brick/NormalBrick.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/gameobject/brick/StrongBrick.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/gameobject/movable/Ball.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/gameobject/movable/MovableObject.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/gameobject/movable/Paddle.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/gameobject/powerup/ExpandPaddlePowerUp.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/gameobject/powerup/FastBallPowerUp.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/gameobject/powerup/PowerUp.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/renderer/Renderer.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/arkanoidFX/gamemanager/GameManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/arkanoidFX/gamemanager/GameManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/arkanoidFX/gameobject/GameObject.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/arkanoidFX/gameobject/GameObject.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/arkanoidFX/gameobject/brick/Brick.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/arkanoidFX/gameobject/brick/Brick.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/arkanoidFX/gameobject/brick/NormalBrick.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/arkanoidFX/gameobject/brick/NormalBrick.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/arkanoidFX/gameobject/brick/StrongBrick.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/arkanoidFX/gameobject/brick/StrongBrick.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/arkanoidFX/gameobject/movable/Ball.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/arkanoidFX/gameobject/movable/Ball.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/arkanoidFX/gameobject/movable/Paddle.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/arkanoidFX/gameobject/movable/Paddle.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/arkanoidFX/gameobject/powerup/ExpandPaddlePowerUp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/arkanoidFX/gameobject/powerup/ExpandPaddlePowerUp.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/arkanoidFX/gameobject/powerup/FastBallPowerUp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/arkanoidFX/gameobject/powerup/FastBallPowerUp.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/arkanoidFX/renderer/Renderer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/arkanoidFX/renderer/Renderer.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -102,11 +95,11 @@
 }</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Administrator\IdeaProjects\ArkanoidFX\src\main\resources" />
       <recent name="C:\Users\Administrator\IdeaProjects\demoFX\Deprecated" />
       <recent name="$PROJECT_DIR$/Deprecated" />
       <recent name="$PROJECT_DIR$/src/main/java/org/example/demofx" />
       <recent name="$PROJECT_DIR$" />
-      <recent name="$PROJECT_DIR$/src" />
     </key>
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
       <recent name="gameobject" />
@@ -178,12 +171,21 @@
       <option name="project" value="LOCAL" />
       <updated>1759650210018</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="update Renderer to use JavaFX">
+      <option name="closed" value="true" />
+      <created>1759652383945</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1759652383945</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="implement javafx rendering" />
     <MESSAGE value="update .gitignore" />
-    <option name="LAST_COMMIT_MESSAGE" value="update .gitignore" />
+    <MESSAGE value="update Renderer to use JavaFX" />
+    <option name="LAST_COMMIT_MESSAGE" value="update Renderer to use JavaFX" />
   </component>
 </project>
