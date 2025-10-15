@@ -13,10 +13,9 @@ import org.example.arkanoidFX.gameobject.powerup.ExpandPaddlePowerUp;
 import org.example.arkanoidFX.gameobject.powerup.FastBallPowerUp;
 import org.example.arkanoidFX.renderer.Renderer;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Random;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.*;
 
 /**
  * Main game controller that manages game state, logic, and flow.
@@ -29,7 +28,7 @@ public class GameManager {
     private static final int PADDLE_WIDTH = 100;
     private static final int PADDLE_HEIGHT = 20;
     private static final int BALL_SIZE = 30;
-    private static final int BRICK_WIDTH = 70;
+    private static final int BRICK_WIDTH = 55;
     private static final int BRICK_HEIGHT = 35;
 
     // Game objects
@@ -163,22 +162,37 @@ public class GameManager {
     }
 
     private void createBricks() {
-        int rows = 5 + level;
-        int cols = 8;
         int startY = 80;  // Moved down from 2 to 80
         int spacing = 5;  // Increased spacing from 1 to 5
-
-        for (int row = 0; row < rows; row++) {
-            for (int col = 0; col < cols; col++) {
-                int x = col * (BRICK_WIDTH + spacing) + 5;  // Added slight left margin
-                int y = row * (BRICK_HEIGHT + spacing) + startY;
-
-                if (random.nextInt(100) < 20) {
-                    bricks.add(new StrongBrick(x, y, BRICK_WIDTH, BRICK_HEIGHT));
-                } else {
-                    bricks.add(new NormalBrick(x, y, BRICK_WIDTH, BRICK_HEIGHT));
+        try {
+            File file = new File("src/main/resources/levelofGame/level9.txt");
+            Scanner sc = new Scanner(file);
+            int cols = 0;
+            int rows = 0;
+            int x = cols * (BRICK_WIDTH + spacing) +spacing ;  // Added slight left margin
+            int y = rows * (BRICK_HEIGHT + spacing) +startY;
+            while (sc.hasNextLine()) {
+                String line = sc.nextLine();
+                String st[] = line.split(" ");
+                cols = 0;
+                for (String s : st) {
+                    x = cols * (BRICK_WIDTH + spacing) + spacing;  // Added slight left margin
+                    y = rows * (BRICK_HEIGHT + spacing) + startY;
+                    int i = Integer.parseInt(s);
+                    if (i == 0) {
+                        bricks.add(new NormalBrick(x,y,BRICK_WIDTH,BRICK_HEIGHT));
+                    }
+                    else if (i == 1) {
+                        bricks.add(new StrongBrick(x,y,BRICK_WIDTH,BRICK_HEIGHT));
+                    }
+                    cols++;
                 }
+                rows++;
             }
+
+        }
+        catch (FileNotFoundException e) {
+            System.out.println("Loi" + e.getMessage());
         }
     }
 
@@ -195,7 +209,7 @@ public class GameManager {
         } else {
             paddle.stop();
         }
-        
+
         paddle.update();
         ball.update();
 
