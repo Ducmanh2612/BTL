@@ -4,19 +4,18 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="98c97097-7428-4867-a374-2e7f83d5d4cb" name="Changes" comment="update Renderer to use JavaFX">
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/arkanoidFX/gameobject/brick/BrickState.java" afterDir="false" />
+    <list default="true" id="98c97097-7428-4867-a374-2e7f83d5d4cb" name="Changes" comment="update .gitignore">
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/arkanoidFX/gamemanager/GameStateManager.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/org/example/arkanoidFX/gameOver-view.fxml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/org/example/arkanoidFX/menu-view.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/module-info.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/arkanoidFX/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/arkanoidFX/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/arkanoidFX/gamemanager/GameManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/arkanoidFX/gamemanager/GameManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/arkanoidFX/gameobject/GameObject.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/arkanoidFX/gameobject/GameObject.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/arkanoidFX/gameobject/brick/Brick.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/arkanoidFX/gameobject/brick/Brick.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/arkanoidFX/gameobject/brick/NormalBrick.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/arkanoidFX/gameobject/brick/NormalBrick.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/arkanoidFX/gameobject/brick/StrongBrick.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/arkanoidFX/gameobject/brick/StrongBrick.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/arkanoidFX/gameobject/movable/Ball.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/arkanoidFX/gameobject/movable/Ball.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/arkanoidFX/gameobject/movable/Paddle.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/arkanoidFX/gameobject/movable/Paddle.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/arkanoidFX/gameobject/powerup/ExpandPaddlePowerUp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/arkanoidFX/gameobject/powerup/ExpandPaddlePowerUp.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/arkanoidFX/gameobject/powerup/FastBallPowerUp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/arkanoidFX/gameobject/powerup/FastBallPowerUp.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/arkanoidFX/renderer/Renderer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/arkanoidFX/renderer/Renderer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/org/example/arkanoidFX/hello-view.fxml" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -31,6 +30,7 @@
       <list>
         <option value="package-info" />
         <option value="Class" />
+        <option value="FxmlFile" />
       </list>
     </option>
   </component>
@@ -50,7 +50,7 @@
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
     &quot;url&quot;: &quot;https://github.com/Ducmanh2612/BTL&quot;,
-    &quot;accountId&quot;: &quot;2e17c1f2-7009-41c7-9723-fa62102c9465&quot;
+    &quot;accountId&quot;: &quot;53686786-a94b-4721-a027-625ba37a2bd2&quot;
   }
 }</component>
   <component name="MavenImportPreferences">
@@ -77,29 +77,29 @@
     <option name="sortByType" value="true" />
     <option name="sortKey" value="BY_TYPE" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Application.Main.executor&quot;: &quot;Run&quot;,
-    &quot;Application.RendererApplication.executor&quot;: &quot;Run&quot;,
-    &quot;Application.org.example.arkanoidFX.Main.executor&quot;: &quot;Run&quot;,
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/Administrator/IdeaProjects/ArkanoidFX&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.Main.executor": "Run",
+    "Application.RendererApplication.executor": "Run",
+    "Application.org.example.arkanoidFX.Main.executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "git-widget-placeholder": "master",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "/home/scopen/IdeaProjects/BTL",
+    "settings.editor.selected.configurable": "preferences.keymap"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\Administrator\IdeaProjects\ArkanoidFX\src\main\resources" />
       <recent name="C:\Users\Administrator\IdeaProjects\demoFX\Deprecated" />
       <recent name="$PROJECT_DIR$/Deprecated" />
       <recent name="$PROJECT_DIR$/src/main/java/org/example/demofx" />
       <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/src" />
     </key>
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
       <recent name="gameobject" />
@@ -108,7 +108,7 @@
   <component name="RunManager">
     <configuration name="Main" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="org.example.arkanoidFX.Main" />
-      <module name="ArkanoidFX" />
+      <module name="demoFX" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -155,37 +155,6 @@
       <option name="presentableId" value="Default" />
       <updated>1759107726247</updated>
     </task>
-    <task id="LOCAL-00001" summary="implement javafx rendering">
-      <option name="closed" value="true" />
-      <created>1759650194235</created>
-      <option name="number" value="00001" />
-      <option name="presentableId" value="LOCAL-00001" />
-      <option name="project" value="LOCAL" />
-      <updated>1759650194235</updated>
-    </task>
-    <task id="LOCAL-00002" summary="update .gitignore">
-      <option name="closed" value="true" />
-      <created>1759650210018</created>
-      <option name="number" value="00002" />
-      <option name="presentableId" value="LOCAL-00002" />
-      <option name="project" value="LOCAL" />
-      <updated>1759650210018</updated>
-    </task>
-    <task id="LOCAL-00003" summary="update Renderer to use JavaFX">
-      <option name="closed" value="true" />
-      <created>1759652383945</created>
-      <option name="number" value="00003" />
-      <option name="presentableId" value="LOCAL-00003" />
-      <option name="project" value="LOCAL" />
-      <updated>1759652383945</updated>
-    </task>
-    <option name="localTasksCounter" value="4" />
     <servers />
-  </component>
-  <component name="VcsManagerConfiguration">
-    <MESSAGE value="implement javafx rendering" />
-    <MESSAGE value="update .gitignore" />
-    <MESSAGE value="update Renderer to use JavaFX" />
-    <option name="LAST_COMMIT_MESSAGE" value="update Renderer to use JavaFX" />
   </component>
 </project>

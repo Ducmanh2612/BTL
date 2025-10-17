@@ -9,13 +9,15 @@ import javafx.scene.image.ImageView;
  */
 public class Ball extends MovableObject {
     private int speed;
+    private final int originalSpeed;
     private int gameWidth;
     private int gameHeight;
     private boolean active;
 
-    public Ball(int x, int y, int width, int height, int gameWidth, int gameHeight) {
+    public Ball(int x, int y, int width, int height, int gameWidth, int gameHeight, int speed) {
         super(x, y, width, height);
-        this.speed = 8;
+        this.speed = speed;
+        this.originalSpeed = speed;
         this.gameWidth = gameWidth;
         this.gameHeight = gameHeight;
         this.dx = speed;
@@ -34,12 +36,12 @@ public class Ball extends MovableObject {
     }
 
     public void increaseSpeed() {
-        speed = 2;
+        speed += 10;
         updateVelocity();
     }
 
     public void normalSpeed() {
-        speed = 1;
+        speed = originalSpeed;
         updateVelocity();
     }
 

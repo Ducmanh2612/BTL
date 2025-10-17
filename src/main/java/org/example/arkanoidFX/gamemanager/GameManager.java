@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * Main game controller that manages game state, logic, and flow.
+ * Main game controller that manages game objects, logic, and flow.
  * Demonstrates OOP principle: Encapsulation (manages all game objects internally)
  */
 public class GameManager {
@@ -29,25 +29,26 @@ public class GameManager {
     private static final int PADDLE_WIDTH = 100;
     private static final int PADDLE_HEIGHT = 20;
     private static final int BALL_SIZE = 30;
+    private static final int BALL_SPEED = 10;
     private static final int BRICK_WIDTH = 70;
     private static final int BRICK_HEIGHT = 35;
 
     // Game objects
     private Paddle paddle;
     private Ball ball;
-    private List<Brick> bricks;
-    private List<PowerUp> powerUps;
-    private List<ActivePowerUp> activePowerUps;
+    private final List<Brick> bricks;
+    private final List<PowerUp> powerUps;
+    private final List<ActivePowerUp> activePowerUps;
 
     // Game state
     private int score;
     private int lives;
     private int level;
-    private String gameState;
-    private Renderer renderer;
-    private Stage primaryStage;
-    private Random random;
+    private final GameStateManager stateManager;
+    private final Renderer renderer;
+    private final Random random;
     private AnimationTimer gameLoop;
+
     // Input state for smooth movement
     private boolean leftPressed = false;
     private boolean rightPressed = false;
@@ -64,31 +65,38 @@ public class GameManager {
     }
 
     public GameManager(Stage primaryStage) {
-        this.primaryStage = primaryStage;
         this.renderer = new Renderer(GAME_WIDTH, GAME_HEIGHT, primaryStage);
+        this.stateManager = new GameStateManager(renderer, this);
         this.random = new Random();
         this.bricks = new ArrayList<>();
         this.powerUps = new ArrayList<>();
         this.activePowerUps = new ArrayList<>();
-        this.gameState = "MENU";
+    }
+
+    public void startMenu() {
+        stateManager.showMenu();
     }
 
     public void startGame() {
         this.score = 0;
         this.lives = 3;
         this.level = 1;
-        this.gameState = "PLAYING";
+        stateManager.startPlaying();
         initializeLevel();
         handleInput();
         startGameLoop();
-        renderGame();
+    }
+
+    public void restartGame() {
+        gameLoop.stop();
+        startGame();
     }
 
     private void handleInput() {
-        renderer.getScene().setOnKeyPressed(event -> {
+        renderer.getGameScene().setOnKeyPressed(event -> {
             KeyCode code = event.getCode();
 
-            if (gameState.equals("PLAYING")) {
+            if (stateManager.isPlaying()) {
                 switch (code) {
                     case A:
                     case LEFT:
@@ -99,17 +107,17 @@ public class GameManager {
                         rightPressed = true;
                         break;
                     case P:
-                        gameState = "PAUSED";
+                        stateManager.pause();
                         break;
                 }
-            } else if (gameState.equals("PAUSED")) {
+            } else if (stateManager.isPaused()) {
                 if (code == KeyCode.P) {
-                    gameState = "PLAYING";
+                    stateManager.resume();
                 }
             }
         });
 
-        renderer.getScene().setOnKeyReleased(event -> {
+        renderer.getGameScene().setOnKeyReleased(event -> {
             KeyCode code = event.getCode();
 
             switch (code) {
@@ -134,8 +142,7 @@ public class GameManager {
                 // Run at approximately 60 FPS
                 if (now - lastUpdate >= 16_666_666) {
                     updateGame();
-                    renderer.clear();
-                    renderGame();
+                    render();
                     lastUpdate = now;
                 }
             }
@@ -152,7 +159,7 @@ public class GameManager {
         // Create ball
         int ballX = GAME_WIDTH / 2;
         int ballY = GAME_HEIGHT - PADDLE_HEIGHT - BALL_SIZE - 40;
-        ball = new Ball(ballX, ballY, BALL_SIZE, BALL_SIZE, GAME_WIDTH, GAME_HEIGHT);
+        ball = new Ball(ballX, ballY, BALL_SIZE, BALL_SIZE, GAME_WIDTH, GAME_HEIGHT, BALL_SPEED);
 
         // Create bricks
         bricks.clear();
@@ -165,12 +172,12 @@ public class GameManager {
     private void createBricks() {
         int rows = 5 + level;
         int cols = 8;
-        int startY = 80;  // Moved down from 2 to 80
-        int spacing = 5;  // Increased spacing from 1 to 5
+        int startY = 80;
+        int spacing = 5;
 
         for (int row = 0; row < rows; row++) {
             for (int col = 0; col < cols; col++) {
-                int x = col * (BRICK_WIDTH + spacing) + 5;  // Added slight left margin
+                int x = col * (BRICK_WIDTH + spacing) + 5;
                 int y = row * (BRICK_HEIGHT + spacing) + startY;
 
                 if (random.nextInt(100) < 20) {
@@ -183,7 +190,7 @@ public class GameManager {
     }
 
     public void updateGame() {
-        if (!gameState.equals("PLAYING")) {
+        if (!stateManager.isPlaying()) {
             return;
         }
 
@@ -195,7 +202,7 @@ public class GameManager {
         } else {
             paddle.stop();
         }
-        
+
         paddle.update();
         ball.update();
 
@@ -293,7 +300,6 @@ public class GameManager {
             gameOver();
         } else {
             int paddleX = (GAME_WIDTH - paddle.getWidth()) / 2;
-            int paddleY = GAME_HEIGHT - PADDLE_HEIGHT - 30;
             paddle.setX(paddleX);
             paddle.stop();
 
@@ -309,7 +315,7 @@ public class GameManager {
     }
 
     public void gameOver() {
-        gameState = "GAME_OVER";
+        stateManager.gameOver();
     }
 
     public void stopGame() {
@@ -318,12 +324,21 @@ public class GameManager {
         }
     }
 
-    private void renderGame() {
-        for (Brick brick : bricks) {
-            renderer.draw(brick);
-        }
+    private void render() {
+        renderer.renderGame(bricks, paddle, ball, powerUps);
+        renderer.renderUI(score, lives, level, stateManager.isPaused());
+    }
 
-        renderer.draw(paddle);
-        renderer.draw(ball);
+    // Getters for state information
+    public int getScore() {
+        return score;
+    }
+
+    public int getLives() {
+        return lives;
+    }
+
+    public int getLevel() {
+        return level;
     }
 }

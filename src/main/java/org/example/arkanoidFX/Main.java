@@ -8,6 +8,8 @@ import org.example.arkanoidFX.gamemanager.GameManager;
 public class Main extends Application {
     public void start(Stage primaryStage) {
         GameManager gameManager = new GameManager(primaryStage);
+        gameManager.startMenu();
+
 
         // Handle window close event to properly shut down the game
         primaryStage.setOnCloseRequest(event -> {
@@ -15,8 +17,6 @@ public class Main extends Application {
             Platform.exit();
             System.exit(0);
         });
-
-        gameManager.startGame();
     }
 
     public static void main(String[] args){
