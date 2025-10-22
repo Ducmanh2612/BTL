@@ -2,9 +2,9 @@ package org.OOPproject.ArkanoidFX;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import org.OOPproject.ArkanoidFX.controller.GameController;
 
 
 public class ArkanoidGame extends Application {
@@ -15,12 +15,17 @@ public class ArkanoidGame extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        Label label = new Label("Hello, JavaFX!");
-        StackPane root = new StackPane(label);
-        Scene scene = new Scene(root, 400, 300);
+        primaryStage.setTitle("ArkanoidFX");
 
-        primaryStage.setTitle("Sample JavaFX App");
-        primaryStage.setScene(scene);
+        Scene gameScene = new Scene(new StackPane(), 800, 600);
+        GameController gameController = GameController.getInstance(gameScene);
+        gameScene.setOnKeyPressed(gameController::handlePressedKeys);
+        gameScene.setOnKeyReleased(gameController::handleReleasedKeys);
+
+
+        primaryStage.setScene(gameScene);
         primaryStage.show();
+
+        gameController.startGameLoop();
     }
 }
