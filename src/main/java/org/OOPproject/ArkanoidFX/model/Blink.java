@@ -6,7 +6,7 @@ public class Blink extends GameObject {
     private int maxFrameX = 8;  // 8 frames wide
     private int maxFrameY = 3;  // 3 frames tall
     private boolean finished;  // Has animation completed?
-    
+    //TODO: make this shit inherits sprite class
     private double animationSpeed = 0.05; // Seconds per frame (fast animation)
     private double animationTimer = 0.0;  // Accumulated time
     

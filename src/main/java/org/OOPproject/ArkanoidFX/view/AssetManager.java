@@ -112,7 +112,7 @@ public class AssetManager {
 
     private Image loadImage(String filename, double width, double height) {
         try {
-            String path = "/textures/" + filename;
+            String path = "/textures/assets/" + filename;
             Image img = new Image(getClass().getResourceAsStream(path), width, height, true, false);
             imageCache.put(filename, img);
             return img;

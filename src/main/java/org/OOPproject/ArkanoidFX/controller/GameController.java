@@ -43,6 +43,7 @@ public class GameController {
     }
 
     public void startGameLoop() {
+        gameEngine.startGame();
         gameLoop.start();
     }
 

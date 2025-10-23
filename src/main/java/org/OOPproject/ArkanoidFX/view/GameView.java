@@ -16,20 +16,6 @@ import org.OOPproject.ArkanoidFX.model.PowerUps.*;
 import static org.OOPproject.ArkanoidFX.utils.Configs.GAME_HEIGHT;
 import static org.OOPproject.ArkanoidFX.utils.Configs.GAME_WIDTH;
 
-/**
- * GameView - The VIEW in Model-View-Controller architecture.
- * 
- * WHAT IS THIS?
- * - Handles all rendering (drawing) of game objects
- * - Displays UI elements (score, lives, level)
- * - Shows game states (menu, paused, game over)
- * - Uses JARKANOID-style graphics
- * 
- * MVC RESPONSIBILITIES:
- * - VIEW: Only draws what the Model tells it
- * - Does NOT handle game logic (that's GameEngine)
- * - Does NOT process input (that's GameController)
- */
 public class GameView extends StackPane {
     private static GameEngine gameEngineRef;
     private static GameView instance;

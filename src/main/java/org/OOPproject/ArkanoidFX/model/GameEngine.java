@@ -15,13 +15,11 @@ import java.util.Random;
 
 //TODO: handle the ball passing bricks bugs
 public class GameEngine {
-    // Game constants - size of objects in pixels
     private static final int PADDLE_WIDTH = 100;   // Paddle width in pixels
     private static final int PADDLE_HEIGHT = 15;   // Paddle height in pixels
     private static final int BALL_SIZE = 15;       // Ball diameter in pixels
     private static final int UI_HEIGHT = 50;       // Height of UI panel at top
     // TODO: move these constants to Configs class instead of here
-    // Game objects - the actual things in the game
     private Paddle paddle;                         // The player's paddle
     private Ball ball;                             // The bouncing ball
     private List<Brick> bricks;                    // List of all bricks
@@ -72,7 +70,6 @@ public class GameEngine {
         this.powerUps = new ArrayList<>();
         this.activePowerUps = new ArrayList<>();
 
-        // Start in menu state
         this.gameState = "PLAYING";
         this.ballReleased = false; // Ball not released yet
     }
@@ -95,6 +92,7 @@ public class GameEngine {
         this.gameState = "PLAYING";
         this.particleSystem.clear();
         this.ballReleased = false; // Ball starts stuck to paddle
+
         initializeLevel();
     }
 
@@ -111,7 +109,7 @@ public class GameEngine {
         int ballX = gameWidth / 2 - BALL_SIZE / 2;
         int ballY = gameHeight - 100;  // 100 pixels from bottom
         ball = new Ball(ballX, ballY, BALL_SIZE, BALL_SIZE, gameWidth, playAreaHeight + UI_HEIGHT);
-
+        //TODO: since we already attach to paddle here, we don't need to create ball at specific position
         ball.attachToPaddle(paddle);
         this.ballReleased = false;
         //TODO: ballReleased is set to false too much times, find a way to set it only once at the start of the game
@@ -311,9 +309,6 @@ public class GameEngine {
         powerUps.add(powerUp);
     }
 
-    /**
-     * Activate a power-up effect.
-     */
     private void activatePowerUp(PowerUp powerUp) {
         powerUp.applyEffect(paddle);
         // Power-up duration is in frames, convert to seconds (assuming 60 FPS)
