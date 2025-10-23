@@ -4,6 +4,7 @@ import javafx.animation.AnimationTimer;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyEvent;
 
+import javafx.scene.layout.Pane;
 import org.OOPproject.ArkanoidFX.model.GameEngine;
 import org.OOPproject.ArkanoidFX.utils.InputSignal;
 import org.OOPproject.ArkanoidFX.view.GameView;
@@ -19,6 +20,8 @@ public class GameController {
     private GameController (Scene scene) {
         gameEngine = GameEngine.getInstance();
         gameView = GameView.getInstance();
+        Pane root = (Pane) scene.getRoot();
+        root.getChildren().add(gameView);
         gameLoop = new AnimationTimer() {
             @Override
             public void handle(long now) {

@@ -1,6 +1,5 @@
 package org.OOPproject.ArkanoidFX.model;
 
-import javafx.scene.input.KeyCode;
 import org.OOPproject.ArkanoidFX.utils.Configs;
 import org.OOPproject.ArkanoidFX.model.Bricks.*;
 import org.OOPproject.ArkanoidFX.model.PowerUps.*;
@@ -36,8 +35,8 @@ public class GameEngine {
     private ParticleSystem particleSystem;
 
     // Game state variables
-    private int score;                             // Player's score
-    private int lives;                             // Remaining lives
+    private int score;
+    private int lives;
     private int level;                             // Current level number
     private String gameState;                      // Current state: PLAYING, PAUSED, GAME_OVER
 
@@ -48,6 +47,8 @@ public class GameEngine {
     private int playAreaHeight;                    // Height of actual play area
 
     private static GameEngine instance = null;
+
+    private boolean ballReleased;
 
     private class ActivePowerUp {
         PowerUp powerUp;           // The power-up object
@@ -73,6 +74,7 @@ public class GameEngine {
 
         // Start in menu state
         this.gameState = "PLAYING";
+        this.ballReleased = false; // Ball not released yet
     }
 
     public static GameEngine getInstance() {
@@ -92,6 +94,7 @@ public class GameEngine {
         this.level = 1;
         this.gameState = "PLAYING";
         this.particleSystem.clear();
+        this.ballReleased = false; // Ball starts stuck to paddle
         initializeLevel();
     }
 
@@ -109,6 +112,10 @@ public class GameEngine {
         int ballY = gameHeight - 100;  // 100 pixels from bottom
         ball = new Ball(ballX, ballY, BALL_SIZE, BALL_SIZE, gameWidth, playAreaHeight + UI_HEIGHT);
 
+        ball.attachToPaddle(paddle);
+        this.ballReleased = false;
+        //TODO: ballReleased is set to false too much times, find a way to set it only once at the start of the game
+
         // Clear old objects
         bricks.clear();
         powerUps.clear();
@@ -125,14 +132,6 @@ public class GameEngine {
      * Update game state - called every frame with delta time.
      *
      * @param deltaTime - Time elapsed since last frame in seconds
-     *
-     * WHAT HAPPENS EACH FRAME:
-     * 1. Update paddle position
-     * 2. Update ball position
-     * 3. Update power-ups (make them fall)
-     * 4. Update particle effects
-     * 5. Check for collisions
-     * 6. Check win/lose conditions
      */
     public void updateGame(double deltaTime) {
         // Only update if game is being played
@@ -140,8 +139,22 @@ public class GameEngine {
             return;
         }
 
-        // Update game objects with delta time
+        // If ball is stuck and paddle is moving, release the ball
+        if (!ballReleased && ball.isStuckToPaddle()) {
+            // Check if paddle is moving
+            if (Math.abs(paddle.getVelocityX()) > 0) {
+                ball.releaseFromPaddle();
+                ballReleased = true;
+            }
+        }
+
+        // Update paddle
         paddle.update(deltaTime);
+
+
+        checkCollisions(deltaTime);
+
+        // NOW update ball position (after collision handling)
         ball.update(deltaTime);
 
         // Update falling power-ups
@@ -154,9 +167,6 @@ public class GameEngine {
 
         // Update particle system
         particleSystem.update(deltaTime);
-
-        // Check for collisions
-        checkCollisions();
 
         // Check if ball fell off bottom of screen
         if (ball.getY() >= gameHeight) {
@@ -208,51 +218,55 @@ public class GameEngine {
      * 2. Ball vs Brick - destroy brick, bounce ball, create particles
      * 3. Paddle vs Power-up - activate power-up effect
      */
-    public void checkCollisions() {
-        // 1. Ball-Paddle collision
+    public void checkCollisions(double deltaTime) {
+        // 1. Ball-Paddle collision (simple bounds check is fine for paddle)
         if (ball.collidesWith(paddle)) {
             ball.bounceOffPaddle(paddle);
         }
 
-        // 2. Ball-Brick collision (with cooldown to prevent multi-brick breaking)
+        // 2. Ball-Brick collision using trajectory prediction
+        // Check if ball's path WILL hit any brick
         if (ball.canCollideWithBricks()) {
-            Iterator<Brick> brickIterator = bricks.iterator();
-            while (brickIterator.hasNext()) {
-                Brick brick = brickIterator.next();
+            boolean hitBrick = false; // Only hit one brick per frame
 
-                if (ball.collidesWith(brick)) {
-                    // Determine collision side for accurate bouncing
+            for (Brick brick : bricks) {
+                // JARKANOID: Check if trajectory will cross brick
+                if (ball.willHitBrick(brick, deltaTime)) {
+                    // Determine collision side
                     String side = ball.getCollisionSide(brick);
+
+                    // Correct position to be outside brick
+                    ball.correctPositionAfterBrickHit(brick, side);
+
+                    // Bounce the ball
                     ball.bounceOffBrick(side);
 
-                    // Get brick color for particles
+                    // Create particle effect
                     Color particleColor = getBrickColor(brick);
-
-                    // Create particle effect at hit location
                     particleSystem.createBurstEffect(
                             brick.getX() + brick.getWidth() / 2.0,
                             brick.getY() + brick.getHeight() / 2.0,
                             particleColor,
-                            15 // Number of particles
+                            15
                     );
 
-                    // Take hit on brick
+                    // Damage brick
                     brick.takeHit();
 
-                    // If brick is destroyed
+                    // Remove if destroyed
                     if (brick.isDestroyed()) {
                         score += brick.getScoreValue();
 
-                        // 15% chance to spawn power-up (not for unbreakable bricks)
+                        // Spawn power-up chance
                         if (!(brick instanceof UnbreakableBrick) && random.nextInt(100) < 15) {
                             spawnPowerUp(brick.getX(), brick.getY());
                         }
 
-                        brickIterator.remove();
+                        bricks.remove(brick);
                     }
 
-                    // IMPORTANT: Only collide with ONE brick per frame
-                    break;
+                    hitBrick = true;
+                    break; // Only hit one brick
                 }
             }
         }
@@ -279,19 +293,24 @@ public class GameEngine {
     /**
      * Get color for particles based on brick type.
      */
-    private Color getBrickColor(Brick brick) {
-        if (brick instanceof UnbreakableBrick) {
-            return Color.GRAY;
-        } else if (brick instanceof ExtraStrongBrick) {
-            return Color.PURPLE;
-        } else if (brick instanceof StrongBrick) {
-            int hp = brick.getHitPoints();
-            if (hp == 3) return Color.DARKRED;
-            if (hp == 2) return Color.RED;
-            return Color.ORANGERED;
-        } else {
-            return Color.DODGERBLUE;
-        }
+     private Color getBrickColor(Brick brick) {
+         switch (brick) {
+             case UnbreakableBrick unbreakableBrick -> {
+                 return Color.GRAY;
+             }
+             case ExtraStrongBrick extraStrongBrick -> {
+                 return Color.PURPLE;
+             }
+             case StrongBrick strongBrick -> {
+                 int hp = brick.getHitPoints();
+                 if (hp == 3) return Color.DARKRED;
+                 if (hp == 2) return Color.RED;
+                 return Color.ORANGERED;
+             }
+             case null, default -> {
+                 return Color.DODGERBLUE;
+             }
+         }
     }
 
     /**
