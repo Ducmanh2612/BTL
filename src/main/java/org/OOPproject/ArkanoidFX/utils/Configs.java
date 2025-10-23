@@ -1,4 +1,4 @@
-package org.OOPproject.ArkanoidFX;
+package org.OOPproject.ArkanoidFX.utils;
 
 public final class Configs {
     public static final int GAME_WIDTH = 800;

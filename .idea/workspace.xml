@@ -4,28 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b4a01cc4-7030-45a1-99f5-c23131b78ed9" name="Changes" comment="delete everything, fix pom.xml file, add more javafx dependencies">
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/OOPproject/ArkanoidFX/Configs.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/OOPproject/ArkanoidFX/controller/GameController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/OOPproject/ArkanoidFX/model/Ball.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/OOPproject/ArkanoidFX/model/Bricks/Brick.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/OOPproject/ArkanoidFX/model/Bricks/ExtraStrongBrick.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/OOPproject/ArkanoidFX/model/Bricks/NormalBrick.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/OOPproject/ArkanoidFX/model/Bricks/StrongBrick.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/OOPproject/ArkanoidFX/model/Bricks/UnbreakableBrick.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/OOPproject/ArkanoidFX/model/GameEngine.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/OOPproject/ArkanoidFX/model/GameObject.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/OOPproject/ArkanoidFX/model/Level.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/OOPproject/ArkanoidFX/model/MovableObject.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/OOPproject/ArkanoidFX/model/Paddle.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/OOPproject/ArkanoidFX/model/Particle.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/OOPproject/ArkanoidFX/model/ParticleSystem.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/OOPproject/ArkanoidFX/model/PowerUps/ExpandPaddlePowerUp.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/OOPproject/ArkanoidFX/model/PowerUps/FastBallPowerUp.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/OOPproject/ArkanoidFX/model/PowerUps/PowerUp.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/OOPproject/ArkanoidFX/view/GameView.java" afterDir="false" />
+    <list default="true" id="b4a01cc4-7030-45a1-99f5-c23131b78ed9" name="Changes" comment="add Configs.java storing all game constants &amp; implement GameController.java">
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/OOPproject/ArkanoidFX/utils/InputSignal.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/OOPproject/ArkanoidFX/ArkanoidGame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/OOPproject/ArkanoidFX/ArkanoidGame.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/OOPproject/ArkanoidFX/Configs.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/OOPproject/ArkanoidFX/utils/Configs.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/OOPproject/ArkanoidFX/controller/GameController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/OOPproject/ArkanoidFX/controller/GameController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/OOPproject/ArkanoidFX/model/GameEngine.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/OOPproject/ArkanoidFX/model/GameEngine.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/OOPproject/ArkanoidFX/model/Paddle.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/OOPproject/ArkanoidFX/model/Paddle.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -38,6 +23,7 @@
         <option value="JavaFXApplication" />
         <option value="Task" />
         <option value="Class" />
+        <option value="Enum" />
       </list>
     </option>
   </component>
@@ -100,7 +86,7 @@
       <module name="ArkanoidFX" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="org.OOPproject.ArkanoidFX.*" />
+          <option name="PATTERN" value="org.OOPproject.ArkanoidFX.utils.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -131,7 +117,7 @@
       <workItem from="1761054336762" duration="49000" />
       <workItem from="1761054420620" duration="5005000" />
       <workItem from="1761126085676" duration="15000" />
-      <workItem from="1761130499960" duration="11877000" />
+      <workItem from="1761130499960" duration="22075000" />
     </task>
     <task id="LOCAL-00001" summary="delete everything, fix pom.xml file, add more javafx dependencies">
       <option name="closed" value="true" />
@@ -141,7 +127,15 @@
       <option name="project" value="LOCAL" />
       <updated>1760919841358</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="add Configs.java storing all game constants &amp; implement GameController.java">
+      <option name="closed" value="true" />
+      <created>1761143991519</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1761143991520</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -166,6 +160,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="delete everything, fix pom.xml file, add more javafx dependencies" />
-    <option name="LAST_COMMIT_MESSAGE" value="delete everything, fix pom.xml file, add more javafx dependencies" />
+    <MESSAGE value="add Configs.java storing all game constants &amp; implement GameController.java" />
+    <option name="LAST_COMMIT_MESSAGE" value="add Configs.java storing all game constants &amp; implement GameController.java" />
   </component>
 </project>

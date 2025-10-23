@@ -1,9 +1,13 @@
 package org.OOPproject.ArkanoidFX.model;
 
-import org.OOPproject.ArkanoidFX.Configs;
+import javafx.scene.input.KeyCode;
+import org.OOPproject.ArkanoidFX.utils.Configs;
 import org.OOPproject.ArkanoidFX.model.Bricks.*;
 import org.OOPproject.ArkanoidFX.model.PowerUps.*;
 import javafx.scene.paint.Color;
+import org.OOPproject.ArkanoidFX.utils.InputSignal;
+
+import java.lang.constant.Constable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -35,7 +39,7 @@ public class GameEngine {
     private int score;                             // Player's score
     private int lives;                             // Remaining lives
     private int level;                             // Current level number
-    private String gameState;                      // Current state: PLAYING, PAUSED
+    private String gameState;                      // Current state: PLAYING, PAUSED, GAME_OVER
 
     // Utilities
     private Random random;                         // For random number generation
@@ -355,37 +359,18 @@ public class GameEngine {
         gameState = "GAME_OVER";
     }
 
-    /**
-     * Handle input from keyboard.
-     *
-     * @param input - the command ("left", "right", "stop", "pause")
-     */
-    public void handleInput(String input) {
-        if (input == null) return;
-
-        switch (input.toLowerCase()) {
-            case "left":
-                if (gameState.equals("PLAYING")) {
-                    paddle.moveLeft();
-                }
-                break;
-            case "right":
-                if (gameState.equals("PLAYING")) {
-                    paddle.moveRight();
-                }
-                break;
-            case "stop":
-                if (gameState.equals("PLAYING")) {
-                    paddle.stop();
-                }
-                break;
-            case "pause":
-                if (gameState.equals("PLAYING")) {
-                    gameState = "PAUSED";
-                } else if (gameState.equals("PAUSED")) {
-                    gameState = "PLAYING";
-                }
-                break;
+    public void handleInput(InputSignal inputSignal) {
+        //TODO: remove the two if statements and put them into the innner switch
+        if (gameState.equals("PLAYING")) {
+            switch (inputSignal) {
+                case MOVE_LEFT -> paddle.moveLeft();
+                case MOVE_RIGHT -> paddle.moveRight();
+                case STOP_LEFT -> paddle.stopLeft();
+                case STOP_RIGHT -> paddle.stopRight();
+                case PAUSE_RESUME -> gameState = "PAUSE";
+            }
+        } else if (gameState.equals("PAUSED")) {
+            if(inputSignal.equals(InputSignal.PAUSE_RESUME)) gameState = "PLAYING";
         }
     }
 

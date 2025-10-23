@@ -18,16 +18,18 @@ public class Paddle extends MovableObject {
     }
 
     public void moveLeft() {
-        velocityX = -speed;
+        velocityX -= speed;
     }
 
     public void moveRight() {
-        velocityX = speed;
+        velocityX += speed;
     }
 
-    public void stop() {
-        velocityX = 0;
-    }
+    public void stop() { velocityX = 0; }
+
+    public void stopRight() { velocityX += speed; }
+
+    public void stopLeft() { velocityX -= speed; }
 
     public void applyPowerUp(PowerUp powerUp) {
         this.currentPowerUp = powerUp;

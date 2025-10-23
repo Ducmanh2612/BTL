@@ -5,6 +5,7 @@ import javafx.scene.Scene;
 import javafx.scene.input.KeyEvent;
 
 import org.OOPproject.ArkanoidFX.model.GameEngine;
+import org.OOPproject.ArkanoidFX.utils.InputSignal;
 import org.OOPproject.ArkanoidFX.view.GameView;
 
 public class GameController {
@@ -16,7 +17,6 @@ public class GameController {
     private long lastFrameUpdate = 0;
 
     private GameController (Scene scene) {
-        // Initialize game state and start game loop
         gameEngine = GameEngine.getInstance();
         gameView = GameView.getInstance();
         gameLoop = new AnimationTimer() {
@@ -47,10 +47,22 @@ public class GameController {
     }
 
     public void handlePressedKeys(KeyEvent event) {
-
+        // This method merge the action of pressing A and LEFT and D and RIGHT into one signal
+        // and delegates the responsibility of handling input to the GameEngine
+        switch (event.getCode()) {
+            case A -> gameEngine.handleInput(InputSignal.MOVE_LEFT);
+            case D -> gameEngine.handleInput(InputSignal.MOVE_RIGHT);
+            case P -> gameEngine.handleInput(InputSignal.PAUSE_RESUME);
+        }
     }
 
     public void handleReleasedKeys(KeyEvent event) {
+        // This method merge the action of releasing A and LEFT and D and RIGHT into one signal
+        // and delegates the responsibility of handling input to the GameEngine
+        switch (event.getCode()) {
+            case A -> gameEngine.handleInput(InputSignal.STOP_LEFT);
+            case D -> gameEngine.handleInput(InputSignal.STOP_RIGHT);
+        }
     }
 
 }
