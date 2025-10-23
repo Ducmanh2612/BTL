@@ -33,9 +33,6 @@ public class ParticleSystem {
         }
     }
 
-    /**
-     * Update all particles.
-     */
     public void update(double deltaTime) {
         Iterator<Particle> iterator = particles.iterator();
         while (iterator.hasNext()) {
@@ -48,16 +45,10 @@ public class ParticleSystem {
         }
     }
 
-    /**
-     * Get all active particles for rendering.
-     */
     public List<Particle> getParticles() {
         return particles;
     }
 
-    /**
-     * Clear all particles.
-     */
     public void clear() {
         particles.clear();
     }

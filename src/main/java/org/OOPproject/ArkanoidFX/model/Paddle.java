@@ -36,6 +36,8 @@ public class Paddle extends MovableObject {
         powerUp.applyEffect(this);
     }
 
+    public boolean isExpanded() { return this.width > originalWidth; }
+
     public void expandPaddle() {
         this.width = originalWidth * 2;
     }

@@ -3,23 +3,21 @@ package org.OOPproject.ArkanoidFX.controller;
 import javafx.animation.AnimationTimer;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyEvent;
-
 import javafx.scene.layout.Pane;
 import org.OOPproject.ArkanoidFX.model.GameEngine;
 import org.OOPproject.ArkanoidFX.utils.InputSignal;
 import org.OOPproject.ArkanoidFX.view.GameView;
 
 public class GameController {
-    private AnimationTimer gameLoop;
+    private final AnimationTimer gameLoop;
     private static GameEngine gameEngine;
     private static GameView gameView;
     private static GameController instance;
-
     private long lastFrameUpdate = 0;
 
-    private GameController (Scene scene) {
+    private GameController(Scene scene) {
         gameEngine = GameEngine.getInstance();
-        gameView = GameView.getInstance();
+        gameView = GameView.getInstance(gameEngine);
         Pane root = (Pane) scene.getRoot();
         root.getChildren().add(gameView);
         gameLoop = new AnimationTimer() {
@@ -29,11 +27,10 @@ public class GameController {
                     lastFrameUpdate = now;
                     return;
                 }
-
-                double deltaTime = (now - lastFrameUpdate) / 1_000_000_000.0; // Convert nanoseconds to seconds
+                double deltaTime = (now - lastFrameUpdate) / 1_000_000_000.0;
                 lastFrameUpdate = now;
                 gameEngine.updateGame(deltaTime);
-                //gameView.render();
+                gameView.render();
             }
         };
     }
@@ -50,8 +47,6 @@ public class GameController {
     }
 
     public void handlePressedKeys(KeyEvent event) {
-        // This method merge the action of pressing A and LEFT and D and RIGHT into one signal
-        // and delegates the responsibility of handling input to the GameEngine
         switch (event.getCode()) {
             case A -> gameEngine.handleInput(InputSignal.MOVE_LEFT);
             case D -> gameEngine.handleInput(InputSignal.MOVE_RIGHT);
@@ -60,12 +55,9 @@ public class GameController {
     }
 
     public void handleReleasedKeys(KeyEvent event) {
-        // This method merge the action of releasing A and LEFT and D and RIGHT into one signal
-        // and delegates the responsibility of handling input to the GameEngine
         switch (event.getCode()) {
             case A -> gameEngine.handleInput(InputSignal.STOP_LEFT);
             case D -> gameEngine.handleInput(InputSignal.STOP_RIGHT);
         }
     }
-
 }

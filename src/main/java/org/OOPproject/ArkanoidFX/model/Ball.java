@@ -1,6 +1,7 @@
 package org.OOPproject.ArkanoidFX.model;
 
 //TODO: rewrite attachPaddle, releaseFromPaddle, willBrickHit, getCollisionSide methods
+//TODO: remove stuckToPaddle or attachedPaddle if not needed anymore
 public class Ball extends MovableObject {
     private static final double COOLDOWN_TIME = 0.05; // 50ms cooldown between brick collisions
     private static final double NORMAL_SPEED = 450.0;
@@ -187,7 +188,6 @@ public class Ball extends MovableObject {
         velocityX = Math.cos(bounceAngleRad) * speed;
         velocityY = Math.sin(bounceAngleRad) * speed;
 
-        // JARKANOID FEATURE: Paddle movement influences ball
         // If paddle is moving, add some of that velocity to the ball
         if (paddle.getVelocityX() != 0) {
             double paddleInfluence = 0.3; // 30% of paddle velocity transferred

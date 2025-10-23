@@ -1,9 +1,14 @@
 package org.OOPproject.ArkanoidFX.utils;
 
 public enum InputSignal {
-    MOVE_LEFT,
-    MOVE_RIGHT,
-    STOP_LEFT,
-    STOP_RIGHT,
-    PAUSE_RESUME,
+    // Paddle movement
+    MOVE_LEFT,      // Start moving paddle left
+    MOVE_RIGHT,     // Start moving paddle right
+    STOP_LEFT,      // Stop moving paddle left
+    STOP_RIGHT,     // Stop moving paddle right
+    
+    // Game control
+    PAUSE_RESUME,   // Toggle pause state
+    SPACE,          // Start game, release ball, etc.
+    ESCAPE,         // Return to menu
 }

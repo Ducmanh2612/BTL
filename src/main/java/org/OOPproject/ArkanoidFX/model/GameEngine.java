@@ -20,7 +20,7 @@ public class GameEngine {
     private static final int PADDLE_HEIGHT = 15;   // Paddle height in pixels
     private static final int BALL_SIZE = 15;       // Ball diameter in pixels
     private static final int UI_HEIGHT = 50;       // Height of UI panel at top
-
+    // TODO: move these constants to Configs class instead of here
     // Game objects - the actual things in the game
     private Paddle paddle;                         // The player's paddle
     private Ball ball;                             // The bouncing ball
@@ -147,25 +147,13 @@ public class GameEngine {
                 ballReleased = true;
             }
         }
-
-        // Update paddle
         paddle.update(deltaTime);
-
-
         checkCollisions(deltaTime);
-
-        // NOW update ball position (after collision handling)
         ball.update(deltaTime);
-
-        // Update falling power-ups
         for (PowerUp powerUp : powerUps) {
             powerUp.update(deltaTime);
         }
-
-        // Update active power-up durations
         updateActivePowerUps(deltaTime);
-
-        // Update particle system
         particleSystem.update(deltaTime);
 
         // Check if ball fell off bottom of screen
@@ -230,18 +218,11 @@ public class GameEngine {
             boolean hitBrick = false; // Only hit one brick per frame
 
             for (Brick brick : bricks) {
-                // JARKANOID: Check if trajectory will cross brick
                 if (ball.willHitBrick(brick, deltaTime)) {
-                    // Determine collision side
                     String side = ball.getCollisionSide(brick);
-
-                    // Correct position to be outside brick
                     ball.correctPositionAfterBrickHit(brick, side);
-
-                    // Bounce the ball
                     ball.bounceOffBrick(side);
 
-                    // Create particle effect
                     Color particleColor = getBrickColor(brick);
                     particleSystem.createBurstEffect(
                             brick.getX() + brick.getWidth() / 2.0,
@@ -250,9 +231,7 @@ public class GameEngine {
                             15
                     );
 
-                    // Damage brick
                     brick.takeHit();
-
                     // Remove if destroyed
                     if (brick.isDestroyed()) {
                         score += brick.getScoreValue();
