@@ -15,21 +15,17 @@ public class Paddle extends MovableObject {
         this.speed = DEFAULT_SPEED; // 500 pixels per second
         this.originalWidth = width;
         this.gameWidth = gameWidth;
+        velocityX = 0;
     }
 
-    public void moveLeft() {
-        velocityX -= speed;
-    }
+    public void moveLeft() { velocityX = -speed; }
 
-    public void moveRight() {
-        velocityX += speed;
-    }
 
     public void stop() { velocityX = 0; }
 
-    public void stopRight() { velocityX += speed; }
-
-    public void stopLeft() { velocityX -= speed; }
+    public void moveRight() {
+        velocityX = speed;
+    }
 
     public void applyPowerUp(PowerUp powerUp) {
         this.currentPowerUp = powerUp;

@@ -140,7 +140,7 @@ public class GameEngine {
         // If ball is stuck and paddle is moving, release the ball
         if (!ballReleased && ball.isStuckToPaddle()) {
             // Check if paddle is moving
-            if (Math.abs(paddle.getVelocityX()) > 0) {
+            if (paddle.getVelocityX() != 0) {
                 ball.releaseFromPaddle();
                 ballReleased = true;
             }
@@ -358,8 +358,7 @@ public class GameEngine {
             switch (inputSignal) {
                 case MOVE_LEFT -> paddle.moveLeft();
                 case MOVE_RIGHT -> paddle.moveRight();
-                case STOP_LEFT -> paddle.stopLeft();
-                case STOP_RIGHT -> paddle.stopRight();
+                case STOP -> paddle.stop();
                 case PAUSE_RESUME -> gameState = "PAUSE";
             }
         } else if (gameState.equals("PAUSED")) {

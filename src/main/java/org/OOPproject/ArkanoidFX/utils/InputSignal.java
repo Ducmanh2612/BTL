@@ -6,6 +6,7 @@ public enum InputSignal {
     MOVE_RIGHT,     // Start moving paddle right
     STOP_LEFT,      // Stop moving paddle left
     STOP_RIGHT,     // Stop moving paddle right
+    STOP,
     
     // Game control
     PAUSE_RESUME,   // Toggle pause state

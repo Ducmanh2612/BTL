@@ -2,11 +2,15 @@ package org.OOPproject.ArkanoidFX.controller;
 
 import javafx.animation.AnimationTimer;
 import javafx.scene.Scene;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import org.OOPproject.ArkanoidFX.model.GameEngine;
 import org.OOPproject.ArkanoidFX.utils.InputSignal;
 import org.OOPproject.ArkanoidFX.view.GameView;
+
+import java.util.HashSet;
+import java.util.Set;
 
 public class GameController {
     private final AnimationTimer gameLoop;
@@ -14,12 +18,14 @@ public class GameController {
     private static GameView gameView;
     private static GameController instance;
     private long lastFrameUpdate = 0;
+    private Set<KeyCode> pressedKeys;
 
     private GameController(Scene scene) {
         gameEngine = GameEngine.getInstance();
         gameView = GameView.getInstance(gameEngine);
         Pane root = (Pane) scene.getRoot();
         root.getChildren().add(gameView);
+        pressedKeys = new HashSet<>();
         gameLoop = new AnimationTimer() {
             @Override
             public void handle(long now) {
@@ -29,6 +35,7 @@ public class GameController {
                 }
                 double deltaTime = (now - lastFrameUpdate) / 1_000_000_000.0;
                 lastFrameUpdate = now;
+                handleCurrentKeys();
                 gameEngine.updateGame(deltaTime);
                 gameView.render();
             }
@@ -47,18 +54,23 @@ public class GameController {
         gameLoop.start();
     }
 
-    public void handlePressedKeys(KeyEvent event) {
-        switch (event.getCode()) {
-            case A -> gameEngine.handleInput(InputSignal.MOVE_LEFT);
-            case D -> gameEngine.handleInput(InputSignal.MOVE_RIGHT);
-            case P -> gameEngine.handleInput(InputSignal.PAUSE_RESUME);
+    public void handleCurrentKeys() {
+        if (pressedKeys.contains(KeyCode.A)) {
+            gameEngine.handleInput(InputSignal.MOVE_LEFT);
+        }
+        if (pressedKeys.contains(KeyCode.D)) {
+            gameEngine.handleInput(InputSignal.MOVE_RIGHT);
+        }
+        if(!pressedKeys.contains(KeyCode.A) && !pressedKeys.contains(KeyCode.D)) {
+            gameEngine.handleInput(InputSignal.STOP);
         }
     }
 
+    public void handlePressedKeys(KeyEvent event) {
+        pressedKeys.add(event.getCode());
+    }
+
     public void handleReleasedKeys(KeyEvent event) {
-        switch (event.getCode()) {
-            case A -> gameEngine.handleInput(InputSignal.STOP_LEFT);
-            case D -> gameEngine.handleInput(InputSignal.STOP_RIGHT);
-        }
+        pressedKeys.remove(event.getCode());
     }
 }
