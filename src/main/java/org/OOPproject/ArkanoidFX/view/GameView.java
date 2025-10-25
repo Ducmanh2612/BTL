@@ -56,14 +56,13 @@ public class GameView extends StackPane {
     }
 
     private void drawLevelBackground() {
-        int level = gameEngineRef.getLevel();
+        int level = gameEngineRef.getLevelNumber();
         Image pattern = assetManager.getBackgroundPattern(level);
         if (pattern != null) {
             ImagePattern patternFill = new ImagePattern(pattern, 0, 0, 
                 pattern.getWidth(), pattern.getHeight(), false);
-            int uiHeight = gameEngineRef.getUIHeight();
             gc.setFill(patternFill);
-            gc.fillRect(0, uiHeight, GAME_WIDTH, GAME_HEIGHT - uiHeight);
+            gc.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
         }
     }
 
@@ -75,7 +74,7 @@ public class GameView extends StackPane {
         gc.setFill(Color.WHITE);
         gc.setFont(Font.font("Arial", FontWeight.NORMAL, 24));
         gc.fillText("Final Score: " + gameEngineRef.getScore(), GAME_WIDTH / 2 - 80, GAME_HEIGHT / 2 + 20);
-        gc.fillText("Level Reached: " + gameEngineRef.getLevel(), GAME_WIDTH / 2 - 90, GAME_HEIGHT / 2 + 60);
+        gc.fillText("Level Reached: " + gameEngineRef.getLevelNumber(), GAME_WIDTH / 2 - 90, GAME_HEIGHT / 2 + 60);
         gc.setFont(Font.font("Arial", FontWeight.NORMAL, 20));
         gc.fillText("Press SPACE to Play Again", GAME_WIDTH / 2 - 120, GAME_HEIGHT / 2 + 120);
     }
@@ -100,7 +99,7 @@ public class GameView extends StackPane {
         
         Ball ball = gameEngineRef.getBall();
         if (ball.isStuckToPaddle()) {
-            gc.setFill(Color.YELLOW);
+            gc.setFill(Color.WHITE);
             gc.setFont(Font.font("Arial", FontWeight.BOLD, 20));
             gc.fillText("Move LEFT or RIGHT to release ball", GAME_WIDTH / 2 - 180, GAME_HEIGHT / 2 + 100);
         }

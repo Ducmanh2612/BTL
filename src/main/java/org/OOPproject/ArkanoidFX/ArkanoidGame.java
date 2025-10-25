@@ -9,7 +9,8 @@ import org.OOPproject.ArkanoidFX.controller.GameController;
 import static org.OOPproject.ArkanoidFX.utils.Constants.WINDOW_HEIGHT;
 import static org.OOPproject.ArkanoidFX.utils.Constants.WINDOW_WIDTH;
 
-
+//TODO: add sound for the game
+//TODO: add start menu and end screen
 public class ArkanoidGame extends Application {
 
     public static void main(String[] args) {

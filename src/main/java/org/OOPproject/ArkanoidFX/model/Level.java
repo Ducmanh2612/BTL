@@ -24,7 +24,7 @@ import java.util.List;
 public class Level {
     private int levelNumber;
     private String name;
-    private int[][] layout; // 2D array: 0=empty, 1=normal, 2=strong, 3=extra_strong, 9=unbreakable
+    private int[][] layout;
 
     // Brick dimensions
     private static final int BRICK_WIDTH = 75;

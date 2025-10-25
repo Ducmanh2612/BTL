@@ -31,7 +31,7 @@ public class GameEngine {
     // Game state variables
     private int score;
     private int lives;
-    private int level;                             // Current level number
+    private int levelNumber;                             // Current level number
     private String gameState;                      // Current state: PLAYING, PAUSED, GAME_OVER
 
     // Utilities
@@ -83,7 +83,7 @@ public class GameEngine {
     public void startGame() {
         this.score = 0;
         this.lives = 3;
-        this.level = 1;
+        this.levelNumber = 1;
         this.gameState = "PLAYING";
         this.particleSystem.clear();
         this.ballReleased = false; // Ball starts stuck to paddle
@@ -116,8 +116,8 @@ public class GameEngine {
         particleSystem.clear();
 
         // Create bricks using Level system
-        currentLevel = new Level(level);
-        bricks = currentLevel.createBricks(gameWidth, UI_HEIGHT + 10); // Start below UI
+        currentLevel = new Level(levelNumber);
+        bricks = currentLevel.createBricks(gameWidth, 50);
     }
     //TODO: create a new level generator and delete this method to it
 
@@ -304,7 +304,7 @@ public class GameEngine {
      private Color getBrickColor(Brick brick) {
          switch (brick) {
              case UnbreakableBrick unbreakableBrick -> {
-                 return Color.GRAY;
+                 return Color.GOLD;
              }
              case ExtraStrongBrick extraStrongBrick -> {
                  return Color.PURPLE;
@@ -375,7 +375,7 @@ public class GameEngine {
      * Level complete - advance to next level.
      */
     private void levelComplete() {
-        level++;
+        levelNumber++;
         initializeLevel();
     }
 
@@ -413,6 +413,6 @@ public class GameEngine {
     public void setGameState(String state) { this.gameState = state; }
     public int getScore() { return score; }
     public int getLives() { return lives; }
-    public int getLevel() { return level; }
+    public int getLevelNumber() { return levelNumber; }
     public int getUIHeight() { return UI_HEIGHT; }
 }

@@ -19,6 +19,7 @@ public class GameController {
     private static GameController instance;
     private long lastFrameUpdate = 0;
     private Set<KeyCode> pressedKeys;
+    private boolean gameIsPaused;
 
     private GameController(Scene scene) {
         gameEngine = GameEngine.getInstance();
@@ -40,6 +41,7 @@ public class GameController {
                 gameView.render();
             }
         };
+        gameIsPaused = false;
     }
 
     public static GameController getInstance(Scene scene) {
@@ -65,24 +67,31 @@ public class GameController {
         if(!pressedKeys.contains(KeyCode.A) && !pressedKeys.contains(KeyCode.D)) {
             gameEngine.handleInput(InputSignal.STOP);
         }
-//        if (pressedKeys.contains(KeyCode.P)) {
-//            gameEngine.handleInput(InputSignal.PAUSE_RESUME);
-//            // Remove P key to prevent multiple toggles in one press
-//            pressedKeys.remove(KeyCode.P);
-//            //TODO: check if this thing works as intended even when we hold P key dow
-//               It should toggle pause only once per press
-//               Maybe add a boolean flag to check if P was already processed
-//        }
+        //TODO: handle the bug when pressing P, the game freezes and not not unfreeze on next P press
+        if (pressedKeys.contains(KeyCode.P)) {
+            gameEngine.handleInput(InputSignal.PAUSE_RESUME);
+            // Remove P key to prevent multiple toggles in one press
+            pressedKeys.remove(KeyCode.P);
+        }
     }
 
     public void handlePressedKeys(KeyEvent event) {
         KeyCode key = event.getCode();
-        if(key == KeyCode.A || key == KeyCode.D || key == KeyCode.P) {
-            pressedKeys.add(key);
+        switch (key) {
+            case P -> {
+                if(!gameIsPaused){
+                    pressedKeys.add(key);
+                    gameIsPaused = true;
+                }
+            }
+            case A, D -> pressedKeys.add(key);
         }
     }
 
     public void handleReleasedKeys(KeyEvent event) {
         pressedKeys.remove(event.getCode());
+        if(event.getCode().equals(KeyCode.P)){
+            gameIsPaused = false;
+        }
     }
 }

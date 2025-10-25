@@ -1,7 +1,6 @@
 package org.OOPproject.ArkanoidFX.model.Bricks;
 
 public class UnbreakableBrick extends Brick {
-    //TODO: this brick type has gold color and it is applied blinking effect when being hit
     public UnbreakableBrick(int x, int y, int width, int height) {
         super(x, y, width, height);
         this.hitPoints = Integer.MAX_VALUE; // Cannot be destroyed
