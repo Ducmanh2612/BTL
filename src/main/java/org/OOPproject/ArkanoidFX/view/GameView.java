@@ -13,8 +13,8 @@ import org.OOPproject.ArkanoidFX.model.*;
 import org.OOPproject.ArkanoidFX.model.Bricks.*;
 import org.OOPproject.ArkanoidFX.model.PowerUps.*;
 
-import static org.OOPproject.ArkanoidFX.utils.Configs.GAME_HEIGHT;
-import static org.OOPproject.ArkanoidFX.utils.Configs.GAME_WIDTH;
+import static org.OOPproject.ArkanoidFX.utils.Constants.GAME_HEIGHT;
+import static org.OOPproject.ArkanoidFX.utils.Constants.GAME_WIDTH;
 
 public class GameView extends StackPane {
     private static GameEngine gameEngineRef;

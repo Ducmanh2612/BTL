@@ -1,32 +1,27 @@
 package org.OOPproject.ArkanoidFX.model;
 
-import org.OOPproject.ArkanoidFX.utils.Configs;
+import org.OOPproject.ArkanoidFX.utils.Constants;
 import org.OOPproject.ArkanoidFX.model.Bricks.*;
 import org.OOPproject.ArkanoidFX.model.PowerUps.*;
 import javafx.scene.paint.Color;
 import org.OOPproject.ArkanoidFX.utils.InputSignal;
 
-import java.lang.constant.Constable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
+import static org.OOPproject.ArkanoidFX.utils.Constants.*;
+
 
 //TODO: handle the ball passing bricks bugs
 public class GameEngine {
-    private static final int PADDLE_WIDTH = 100;   // Paddle width in pixels
-    private static final int PADDLE_HEIGHT = 15;   // Paddle height in pixels
-    private static final int BALL_SIZE = 15;       // Ball diameter in pixels
-    private static final int UI_HEIGHT = 50;       // Height of UI panel at top
-    // TODO: move these constants to Configs class instead of here
     private Paddle paddle;                         // The player's paddle
     private Ball ball;                             // The bouncing ball
     private List<Brick> bricks;                    // List of all bricks
     private List<PowerUp> powerUps;                // List of falling power-ups
     private List<ActivePowerUp> activePowerUps;    // Power-ups currently active
 
-    // Level system
     private Level currentLevel;                    // Current level definition
 
     // Particle system for visual effects
@@ -42,7 +37,6 @@ public class GameEngine {
     private Random random;                         // For random number generation
     private int gameWidth;                         // Width of game area
     private int gameHeight;                        // Height of game area (including UI)
-    private int playAreaHeight;                    // Height of actual play area
 
     private static GameEngine instance = null;
 
@@ -59,9 +53,8 @@ public class GameEngine {
     }
 
     private GameEngine() {
-        this.gameWidth = Configs.GAME_WIDTH;
-        this.gameHeight = Configs.GAME_HEIGHT;
-        this.playAreaHeight = gameHeight - UI_HEIGHT;
+        this.gameWidth = Constants.GAME_WIDTH;
+        this.gameHeight = Constants.GAME_HEIGHT;
         this.random = new Random();
         this.particleSystem = new ParticleSystem();
 
@@ -108,7 +101,7 @@ public class GameEngine {
         // Create ball just above the paddle
         int ballX = gameWidth / 2 - BALL_SIZE / 2;
         int ballY = gameHeight - 100;  // 100 pixels from bottom
-        ball = new Ball(ballX, ballY, BALL_SIZE, BALL_SIZE, gameWidth, playAreaHeight + UI_HEIGHT);
+        ball = new Ball(ballX, ballY, BALL_SIZE, BALL_SIZE);
         //TODO: since we already attach to paddle here, we don't need to create ball at specific position
         ball.attachToPaddle(paddle);
         this.ballReleased = false;
@@ -230,6 +223,8 @@ public class GameEngine {
                     );
 
                     brick.takeHit();
+
+                    
                     // Remove if destroyed
                     if (brick.isDestroyed()) {
                         score += brick.getScoreValue();
@@ -244,6 +239,8 @@ public class GameEngine {
 
                     hitBrick = true;
                     break; // Only hit one brick
+
+
                 }
             }
         }
@@ -265,6 +262,8 @@ public class GameEngine {
                 powerUpIterator.remove();
             }
         }
+
+
     }
 
     /**
@@ -335,6 +334,9 @@ public class GameEngine {
             int ballY = gameHeight - 100;
             ball.reset(ballX, ballY);
         }
+
+        ball.attachToPaddle(paddle);
+        ballReleased = false;
     }
 
     /**

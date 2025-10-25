@@ -1,5 +1,7 @@
 package org.OOPproject.ArkanoidFX.model;
 
+import static org.OOPproject.ArkanoidFX.utils.Constants.GAME_WIDTH;
+
 //TODO: rewrite attachPaddle, releaseFromPaddle, willBrickHit, getCollisionSide methods
 //TODO: remove stuckToPaddle or attachedPaddle if not needed anymore
 public class Ball extends MovableObject {
@@ -8,24 +10,17 @@ public class Ball extends MovableObject {
     private static final double FAST_SPEED = 600.0;
 
     private double speed; // Speed in pixels per second
-    private int gameWidth;
-    private int gameHeight;
-    //TODO: change gameWidth and gameHeight to use GameSettings
     private boolean active;
     private double collisionCooldown; // Cooldown to prevent multi-brick breaking
 
     private boolean stuckToPaddle; // Is ball stuck to paddle?
     private Paddle attachedPaddle; // Reference to paddle when stuck
 
-    public Ball(int x, int y, int width, int height, int gameWidth, int gameHeight) {
+    public Ball(int x, int y, int width, int height) {
         super(x, y, width, height);
         this.speed = NORMAL_SPEED;
-        this.gameWidth = gameWidth;
-        this.gameHeight = gameHeight;
-
-        // Set initial velocity at 45-degree angle
         this.active = false;
-        this.stuckToPaddle = true; // NEW: Ball is stuck until player moves
+        this.stuckToPaddle = true;
         this.velocityX = 0;
         this.velocityY = 0;
     }
@@ -331,8 +326,8 @@ public class Ball extends MovableObject {
         if (x <= 0) {
             x = 0;
             velocityX = Math.abs(velocityX);
-        } else if (x + width >= gameWidth) {
-            x = gameWidth - width;
+        } else if (x + width >= GAME_WIDTH) {
+            x = GAME_WIDTH - width;
             velocityX = -Math.abs(velocityX);
         }
 

@@ -1,11 +1,13 @@
 package org.OOPproject.ArkanoidFX.utils;
 
-public final class Configs {
+public final class Constants {
     public static final int GAME_WIDTH = 800;
     public static final int GAME_HEIGHT = 600;
 
     public static final int WINDOW_WIDTH = 800;
     public static final int WINDOW_HEIGHT = 600;
+
+    public static final int UI_HEIGHT = 50;
 
     public static final int PADDLE_WIDTH = 100;
     public static final int PADDLE_HEIGHT = 20;
@@ -22,7 +24,7 @@ public final class Configs {
     public static final int BRICK_PADDING = 5;
     public static final int BRICK_TOP_OFFSET = 50;
 
-    private Configs() {
+    private Constants() {
         // Prevent instantiation
     }
 }

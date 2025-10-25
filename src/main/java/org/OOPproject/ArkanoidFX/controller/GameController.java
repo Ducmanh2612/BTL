@@ -55,6 +55,7 @@ public class GameController {
     }
 
     public void handleCurrentKeys() {
+        //TODO: dive deeper in to logic of this
         if (pressedKeys.contains(KeyCode.A)) {
             gameEngine.handleInput(InputSignal.MOVE_LEFT);
         }
@@ -64,10 +65,21 @@ public class GameController {
         if(!pressedKeys.contains(KeyCode.A) && !pressedKeys.contains(KeyCode.D)) {
             gameEngine.handleInput(InputSignal.STOP);
         }
+//        if (pressedKeys.contains(KeyCode.P)) {
+//            gameEngine.handleInput(InputSignal.PAUSE_RESUME);
+//            // Remove P key to prevent multiple toggles in one press
+//            pressedKeys.remove(KeyCode.P);
+//            //TODO: check if this thing works as intended even when we hold P key dow
+//               It should toggle pause only once per press
+//               Maybe add a boolean flag to check if P was already processed
+//        }
     }
 
     public void handlePressedKeys(KeyEvent event) {
-        pressedKeys.add(event.getCode());
+        KeyCode key = event.getCode();
+        if(key == KeyCode.A || key == KeyCode.D || key == KeyCode.P) {
+            pressedKeys.add(key);
+        }
     }
 
     public void handleReleasedKeys(KeyEvent event) {

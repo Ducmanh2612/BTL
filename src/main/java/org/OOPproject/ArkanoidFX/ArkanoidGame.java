@@ -5,10 +5,9 @@ import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import org.OOPproject.ArkanoidFX.controller.GameController;
-import org.OOPproject.ArkanoidFX.utils.Configs;
 
-import static org.OOPproject.ArkanoidFX.utils.Configs.WINDOW_HEIGHT;
-import static org.OOPproject.ArkanoidFX.utils.Configs.WINDOW_WIDTH;
+import static org.OOPproject.ArkanoidFX.utils.Constants.WINDOW_HEIGHT;
+import static org.OOPproject.ArkanoidFX.utils.Constants.WINDOW_WIDTH;
 
 
 public class ArkanoidGame extends Application {
