@@ -20,6 +20,7 @@ public class ColoredBrick extends Brick {
         this.scoreValue = scoreValue;
         this.type = color + "_BRICK";
     }
+    //TODO: the color field can be changed to enum for better type safety and more efficient comparisons
     
 
     public String getColor() {

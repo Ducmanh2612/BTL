@@ -57,14 +57,11 @@ public class Level {
                 return generateRandomLayout(level);
         }
     }
+    //TODO: refactor these hardcoded layouts to external JSON or XML files for easier editing
+    //  or add a new level
     private int[][] getLevel1Layout() {
         return new int[][] {
-                {2, 2, 2, 2, 2, 2, 2, 2, 2, 2},
-                {10, 10, 10, 10, 10, 10, 10, 10, 10, 10}, // Red
-                {11, 11, 11, 11, 11, 11, 11, 11, 11, 11}, // Yellow
-                {12, 12, 12, 12, 12, 12, 12, 12, 12, 12}, // Blue
-                {13, 13, 13, 13, 13, 13, 13, 13, 13, 13}, // Magenta
-                {14, 14, 14, 14, 14, 14, 14, 14, 14, 14}  // Lime
+                {2, 2, 2, 2, 2, 2, 2, 2, 2, 2}
         };
     }
     private int[][] getLevel2Layout() {

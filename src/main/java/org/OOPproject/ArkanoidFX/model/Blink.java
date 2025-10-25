@@ -1,53 +1,35 @@
 package org.OOPproject.ArkanoidFX.model;
 
+import org.OOPproject.ArkanoidFX.model.Bricks.Brick;
+
 public class Blink extends GameObject {
-    private int frameX;  // Current frame X (0-7)
-    private int frameY;  // Current frame Y (0-2)
-    private int maxFrameX = 8;  // 8 frames wide
-    private int maxFrameY = 3;  // 3 frames tall
-    private boolean finished;  // Has animation completed?
-    //TODO: make this shit inherits sprite class
-    private double animationSpeed = 0.05; // Seconds per frame (fast animation)
-    private double animationTimer = 0.0;  // Accumulated time
-    
+    private Sprite sprite;
+    private Brick attachedBrick; // The brick this blink is attached to
+
     /**
      * Create a blink effect at brick position.
      * 
-     * @param x X position (same as brick)
-     * @param y Y position (same as brick)
-     * @param width Width (same as brick)
-     * @param height Height (same as brick)
+     * @param brick The brick to attach this blink effect to
      */
-    public Blink(int x, int y, int width, int height) {
-        super(x, y, width, height);
-        this.frameX = 0;
-        this.frameY = 0;
-        this.finished = false;
+    public Blink(Brick brick) {
+        super(brick.getX(), brick.getY(), brick.getWidth(), brick.getHeight());
+        this.attachedBrick = brick;
+        // Blink sprite: 8 frames wide, 3 frames tall, fast animation (0.05s per frame), no loop
+        this.sprite = new Sprite(8, 3, 0.05, false);
     }
     
     /**
      * Update animation frame based on elapsed time.
-     * 
+     * Also updates position to match attached brick.
+     *
      * @param deltaTime Time since last update in seconds
      */
     public void update(double deltaTime) {
-        animationTimer += deltaTime;
-        
-        // Advance frame when timer exceeds speed threshold
-        if (animationTimer >= animationSpeed) {
-            animationTimer = 0.0;
-            frameX++;
-            
-            // Move to next row when reaching end of current row
-            if (frameX >= maxFrameX) {
-                frameX = 0;
-                frameY++;
-                
-                // Animation complete when all rows finished
-                if (frameY >= maxFrameY) {
-                    finished = true;
-                }
-            }
+        sprite.update(deltaTime);
+        // Keep blink position synced with brick
+        if (attachedBrick != null) {
+            this.x = attachedBrick.getX();
+            this.y = attachedBrick.getY();
         }
     }
     
@@ -57,12 +39,21 @@ public class Blink extends GameObject {
      * @return true if animation has played through all frames
      */
     public boolean isFinished() {
-        return finished;
+        return sprite.isFinished();
+    }
+
+    /**
+     * Get the brick this blink is attached to.
+     *
+     * @return The attached brick
+     */
+    public Brick getAttachedBrick() {
+        return attachedBrick;
     }
     
-    // Getters for animation frame coordinates
-    public int getFrameX() { return frameX; }
-    public int getFrameY() { return frameY; }
-    public int getMaxFrameX() { return maxFrameX; }
-    public int getMaxFrameY() { return maxFrameY; }
+    // Getters for sprite animation (delegate to Sprite)
+    public int getFrameX() { return sprite.getFrameX(); }
+    public int getFrameY() { return sprite.getFrameY(); }
+    public int getMaxFrameX() { return sprite.getMaxFrameX(); }
+    public int getMaxFrameY() { return sprite.getMaxFrameY(); }
 }

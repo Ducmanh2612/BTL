@@ -2,6 +2,7 @@ package org.OOPproject.ArkanoidFX.model.PowerUps;
 
 import org.OOPproject.ArkanoidFX.model.GameObject;
 import org.OOPproject.ArkanoidFX.model.Paddle;
+import org.OOPproject.ArkanoidFX.model.Sprite;
 
 public abstract class PowerUp extends GameObject {
     protected final double DEFAULT_FALL_SPEED = 150.0;
@@ -11,29 +12,23 @@ public abstract class PowerUp extends GameObject {
     protected boolean falling;
     protected double fallSpeed; // Pixels per second
 
-    //TODO: abstract this thing to use spirte sheet animation
-    protected int frameX;  // Current frame X (0-4)
-    protected int frameY;  // Current frame Y (0-3)
-    protected int maxFrameX = 5;
-    protected int maxFrameY = 4;
-    protected double animationSpeed = 0.1; // Seconds per frame
-    protected double animationTimer = 0.0;
+    protected Sprite sprite;
 
     public PowerUp(int x, int y, int width, int height) {
         super(x, y, width, height);
         this.falling = true;
         this.fallSpeed = DEFAULT_FALL_SPEED;
-        this.frameX = 0;
-        this.frameY = 0;
+        // PowerUp sprite: 5 frames wide, 4 frames tall, 0.1s per frame, loops
+        this.sprite = new Sprite(5, 4, 0.1, true);
     }
 
     public PowerUpTypes getType() {
         return type;
     }
-    public int getFrameX() { return frameX; }
-    public int getFrameY() { return frameY; }
-    public int getMaxFrameX() { return maxFrameX; }
-    public int getMaxFrameY() { return maxFrameY; }
+
+    // Getters for sprite animation (delegate to Sprite)
+    public int getFrameX() { return sprite.getFrameX(); }
+    public int getFrameY() { return sprite.getFrameY(); }
 
     public boolean isFalling() {
         return falling;
@@ -51,19 +46,7 @@ public abstract class PowerUp extends GameObject {
         if (falling) {
             y += fallSpeed * deltaTime;
         }
-
-        animationTimer += deltaTime;
-        if (animationTimer >= animationSpeed) {
-            animationTimer = 0.0;
-            frameX++;
-            if (frameX >= maxFrameX) {
-                frameX = 0;
-                frameY++;
-                if (frameY >= maxFrameY) {
-                    frameY = 0;
-                }
-            }
-        }
+        sprite.update(deltaTime);
     }
 
     public void update(double deltaTime) {

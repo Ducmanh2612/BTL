@@ -21,6 +21,7 @@ public class GameEngine {
     private List<Brick> bricks;                    // List of all bricks
     private List<PowerUp> powerUps;                // List of falling power-ups
     private List<ActivePowerUp> activePowerUps;    // Power-ups currently active
+    private List<Blink> blinks;                    // List of active blink effects
 
     private Level currentLevel;                    // Current level definition
 
@@ -62,6 +63,7 @@ public class GameEngine {
         this.bricks = new ArrayList<>();
         this.powerUps = new ArrayList<>();
         this.activePowerUps = new ArrayList<>();
+        this.blinks = new ArrayList<>();
 
         this.gameState = "PLAYING";
         this.ballReleased = false; // Ball not released yet
@@ -110,6 +112,7 @@ public class GameEngine {
         bricks.clear();
         powerUps.clear();
         activePowerUps.clear();
+        blinks.clear();
         particleSystem.clear();
 
         // Create bricks using Level system
@@ -144,6 +147,7 @@ public class GameEngine {
             powerUp.update(deltaTime);
         }
         updateActivePowerUps(deltaTime);
+        updateBlinks(deltaTime);
         particleSystem.update(deltaTime);
 
         // Check if ball fell off bottom of screen
@@ -180,9 +184,24 @@ public class GameEngine {
             ActivePowerUp active = iterator.next();
             active.remainingTime -= deltaTime;
 
-            // If expired, remove effect
             if (active.remainingTime <= 0) {
                 active.powerUp.removeEffect(paddle);
+                iterator.remove();
+            }
+        }
+    }
+
+    /**
+     * Update blink effects - animate them and remove when finished or brick destroyed.
+     */
+    private void updateBlinks(double deltaTime) {
+        Iterator<Blink> iterator = blinks.iterator();
+        while (iterator.hasNext()) {
+            Blink blink = iterator.next();
+            blink.update(deltaTime);
+
+            // Remove blink if animation finished or attached brick was destroyed
+            if (blink.isFinished() || !bricks.contains(blink.getAttachedBrick())) {
                 iterator.remove();
             }
         }
@@ -223,7 +242,21 @@ public class GameEngine {
 
                     brick.takeHit();
 
-                    
+                    // Create blink effect for strong bricks when hit
+                    if (brick instanceof StrongBrick || brick instanceof ExtraStrongBrick || brick instanceof UnbreakableBrick) {
+                        // Only create new blink if this brick doesn't already have one
+                        boolean alreadyHasBlink = false;
+                        for (Blink existingBlink : blinks) {
+                            if (existingBlink.getAttachedBrick() == brick) {
+                                alreadyHasBlink = true;
+                                break;
+                            }
+                        }
+                        if (!alreadyHasBlink) {
+                            blinks.add(new Blink(brick));
+                        }
+                    }
+
                     // Remove if destroyed
                     if (brick.isDestroyed()) {
                         score += brick.getScoreValue();
@@ -372,6 +405,7 @@ public class GameEngine {
 
     public List<Brick> getBricks() { return bricks; }
     public List<PowerUp> getPowerUps() { return powerUps; }
+    public List<Blink> getBlinks() { return blinks; }
     public Paddle getPaddle() { return paddle; }
     public Ball getBall() { return ball; }
     public ParticleSystem getParticleSystem() { return particleSystem; }

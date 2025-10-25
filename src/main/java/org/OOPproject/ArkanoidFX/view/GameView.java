@@ -85,6 +85,11 @@ public class GameView extends StackPane {
             renderBrickWithImage(brick);
         }
         
+        // Render blink effects on top of bricks
+        for (Blink blink : gameEngineRef.getBlinks()) {
+            renderBlink(blink);
+        }
+
         for (PowerUp powerUp : gameEngineRef.getPowerUps()) {
             renderAnimatedPowerUp(powerUp);
         }
@@ -268,6 +273,28 @@ public class GameView extends StackPane {
             gc.fillOval(bx, by, bw, bh);
             gc.setFill(Color.WHITE);
             gc.fillOval(bx + 2, by + 2, 3, 3);
+        }
+    }
+
+    private void renderBlink(Blink blink) {
+        int blinkX = blink.getX();
+        int blinkY = blink.getY();
+        int blinkWidth = blink.getWidth();
+        int blinkHeight = blink.getHeight();
+
+        Image blinkMapImg = assetManager.getBlinkMapImg();
+
+        if (blinkMapImg != null) {
+            // Blink sprite sheet: 8 frames wide (38px each), 3 frames tall (20px each)
+            int frameWidth = 38;
+            int frameHeight = 20;
+            int frameX = blink.getFrameX();
+            int frameY = blink.getFrameY();
+            int sourceX = frameX * frameWidth;
+            int sourceY = frameY * frameHeight;
+
+            gc.drawImage(blinkMapImg, sourceX, sourceY, frameWidth, frameHeight,
+                        blinkX, blinkY, blinkWidth, blinkHeight);
         }
     }
 }
