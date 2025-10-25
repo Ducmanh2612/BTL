@@ -30,7 +30,6 @@ public class GameView extends StackPane {
         gc = canvas.getGraphicsContext2D();
         assetManager = AssetManager.getInstance();
         getChildren().add(canvas);
-        setFocusTraversable(true);
     }
 
     public static GameView getInstance(GameEngine gameEngine) {
@@ -122,7 +121,7 @@ public class GameView extends StackPane {
             gc.drawImage(shadowImg, px, py + 2, 38, 18);
         }
         
-        String powerUpType = powerUp.getType();
+        PowerUpTypes powerUpType = powerUp.getType();
         Image spriteMap = assetManager.getPowerUpSpriteMap(powerUpType);
         
         if (spriteMap != null) {

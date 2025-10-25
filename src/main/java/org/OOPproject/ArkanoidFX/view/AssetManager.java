@@ -1,6 +1,8 @@
 package org.OOPproject.ArkanoidFX.view;
 
 import javafx.scene.image.Image;
+import org.OOPproject.ArkanoidFX.model.PowerUps.PowerUpTypes;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -157,33 +159,19 @@ public class AssetManager {
     public Image getPaddleWideImg() { return paddleWideImg; }
     public Image getPaddleWideShadowImg() { return paddleWideShadowImg; }
 
-    public Image getPowerUpSpriteMap(String powerUpType) {
-        if (powerUpType == null) return bonusBlockFMapImg;
-        
-        String typeUpper = powerUpType.toUpperCase();
-        switch (typeUpper) {
-            case "EXPAND":
-            case "E":
-            case "F":
+    public Image getPowerUpSpriteMap(PowerUpTypes powerUpType) {
+        switch (powerUpType) {
+            case EXPAND_PADDLE:
                 return bonusBlockFMapImg;  // Wide paddle
-            case "FAST":
-            case "SPEED":
-            case "S":
-                return bonusBlockSMapImg; // Slow down (S in jarkanoid)
-            case "CATCH":
-            case "C":
-                return bonusBlockCMapImg;         // Catch ball
-            case "DUPLICATE":
-            case "D":
+            case FAST_BALL:
+                return bonusBlockSMapImg;
+            case MULTI_BALL:
                 return bonusBlockDMapImg;     // Duplicate balls
-            case "LASER":
-            case "L":
+            case LASER_PADDLE:
                 return bonusBlockLMapImg;         // Laser
-            case "BREAK":
-            case "B":
+            case SKIP_LEVEL:
                 return bonusBlockBMapImg;         // Break through
-            case "LIFE":
-            case "P":
+            case EXTRA_LIFE:
                 return bonusBlockPMapImg;          // Extra life
             default:
                 return bonusBlockFMapImg;  // Default to expand

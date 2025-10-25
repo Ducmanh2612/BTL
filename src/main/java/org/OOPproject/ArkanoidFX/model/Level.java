@@ -3,6 +3,24 @@ import org.OOPproject.ArkanoidFX.model.Bricks.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * BRICK TYPE ENCODING:
+ * 0 = Empty space
+ * 1 = Normal (cyan - 100 pts)
+ * 2 = Strong Gray (2 hits - 50 pts)
+ * 3 = Extra Strong Purple (5 hits - 200 pts)
+ * 9 = Unbreakable Gold (cannot be destroyed)
+ *
+ * COLORED BRICKS (1 hit each):
+ * 10 = Red/Ruby (90 pts)
+ * 11 = Yellow (120 pts)
+ * 12 = Blue (100 pts)
+ * 13 = Magenta (110 pts)
+ * 14 = Lime/Green (80 pts)
+ * 15 = White (10 pts)
+ * 16 = Orange (60 pts)
+ * 17 = Cyan (70 pts)
+ */
 public class Level {
     private int levelNumber;
     private String name;
@@ -39,22 +57,16 @@ public class Level {
                 return generateRandomLayout(level);
         }
     }
-
-    /**
-     * Level 1 - Simple pattern, mostly normal bricks.
-     */
     private int[][] getLevel1Layout() {
         return new int[][] {
-                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-                {1, 1, 2, 1, 1, 1, 1, 2, 1, 1},
-                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
+                {2, 2, 2, 2, 2, 2, 2, 2, 2, 2},
+                {10, 10, 10, 10, 10, 10, 10, 10, 10, 10}, // Red
+                {11, 11, 11, 11, 11, 11, 11, 11, 11, 11}, // Yellow
+                {12, 12, 12, 12, 12, 12, 12, 12, 12, 12}, // Blue
+                {13, 13, 13, 13, 13, 13, 13, 13, 13, 13}, // Magenta
+                {14, 14, 14, 14, 14, 14, 14, 14, 14, 14}  // Lime
         };
     }
-
-    /**
-     * Level 2 - More strong bricks.
-     */
     private int[][] getLevel2Layout() {
         return new int[][] {
                 {2, 1, 1, 1, 1, 1, 1, 1, 1, 2},
@@ -64,10 +76,6 @@ public class Level {
                 {1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
         };
     }
-
-    /**
-     * Level 3 - Pattern with gaps and extra strong bricks.
-     */
     private int[][] getLevel3Layout() {
         return new int[][] {
                 {2, 0, 2, 0, 2, 2, 0, 2, 0, 2},
@@ -78,10 +86,6 @@ public class Level {
                 {2, 2, 2, 0, 0, 0, 0, 2, 2, 2}
         };
     }
-
-    /**
-     * Level 4 - Fortress pattern with unbreakable walls.
-     */
     private int[][] getLevel4Layout() {
         return new int[][] {
                 {9, 1, 1, 1, 1, 1, 1, 1, 1, 9},
@@ -92,10 +96,6 @@ public class Level {
                 {9, 9, 9, 9, 3, 3, 9, 9, 9, 9}
         };
     }
-
-    /**
-     * Level 5 - Checkerboard pattern with mixed brick types.
-     */
     private int[][] getLevel5Layout() {
         return new int[][] {
                 {2, 0, 2, 0, 2, 0, 2, 0, 2, 0},
@@ -107,10 +107,6 @@ public class Level {
                 {9, 9, 0, 0, 3, 3, 0, 0, 9, 9}
         };
     }
-
-    /**
-     * Generate random layout for higher levels.
-     */
     private int[][] generateRandomLayout(int level) {
         int rows = Math.min(4 + level, 10); // Max 10 rows
         int cols = 10;
@@ -169,6 +165,30 @@ public class Level {
                         break;
                     case 9:
                         brick = new UnbreakableBrick(x, y, BRICK_WIDTH, BRICK_HEIGHT);
+                        break;
+                    case 10: // Red
+                        brick = new ColoredBrick(x, y, BRICK_WIDTH, BRICK_HEIGHT, "RED", 90);
+                        break;
+                    case 11: // Yellow
+                        brick = new ColoredBrick(x, y, BRICK_WIDTH, BRICK_HEIGHT, "YELLOW", 120);
+                        break;
+                    case 12: // Blue
+                        brick = new ColoredBrick(x, y, BRICK_WIDTH, BRICK_HEIGHT, "BLUE", 100);
+                        break;
+                    case 13: // Magenta
+                        brick = new ColoredBrick(x, y, BRICK_WIDTH, BRICK_HEIGHT, "MAGENTA", 110);
+                        break;
+                    case 14: // Lime
+                        brick = new ColoredBrick(x, y, BRICK_WIDTH, BRICK_HEIGHT, "LIME", 80);
+                        break;
+                    case 15: // White
+                        brick = new ColoredBrick(x, y, BRICK_WIDTH, BRICK_HEIGHT, "WHITE", 50);
+                        break;
+                    case 16: // Orange
+                        brick = new ColoredBrick(x, y, BRICK_WIDTH, BRICK_HEIGHT, "ORANGE", 60);
+                        break;
+                    case 17: // Cyan
+                        brick = new ColoredBrick(x, y, BRICK_WIDTH, BRICK_HEIGHT, "CYAN", 70);
                         break;
                 }
 

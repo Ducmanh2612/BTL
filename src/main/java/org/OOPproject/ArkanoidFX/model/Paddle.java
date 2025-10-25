@@ -1,6 +1,7 @@
 package org.OOPproject.ArkanoidFX.model;
 
 import org.OOPproject.ArkanoidFX.model.PowerUps.PowerUp;
+import org.OOPproject.ArkanoidFX.utils.Constants;
 
 public class Paddle extends MovableObject {
     private static final double DEFAULT_SPEED = 500.0;
@@ -8,13 +9,12 @@ public class Paddle extends MovableObject {
     private double speed; // Speed in pixels per second
     private PowerUp currentPowerUp;
     private int originalWidth;
-    private int gameWidth;
+    private int boundingBoxWidth = Constants.GAME_WIDTH;
 
-    public Paddle(int x, int y, int width, int height, int gameWidth) {
+    public Paddle(int x, int y, int width, int height) {
         super(x, y, width, height);
         this.speed = DEFAULT_SPEED; // 500 pixels per second
         this.originalWidth = width;
-        this.gameWidth = gameWidth;
         velocityX = 0;
     }
 
@@ -51,6 +51,6 @@ public class Paddle extends MovableObject {
         x += velocityX * deltaTime;
         // Keep paddle within game boundaries
         if (x < 0) x = 0;
-        if (x + width > gameWidth) x = gameWidth - width;
+        if (x + width > boundingBoxWidth) x = boundingBoxWidth - width;
     }
 }

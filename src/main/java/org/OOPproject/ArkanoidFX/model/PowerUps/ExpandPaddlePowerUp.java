@@ -5,7 +5,7 @@ import org.OOPproject.ArkanoidFX.model.Paddle;
 public class ExpandPaddlePowerUp extends PowerUp {
     public ExpandPaddlePowerUp(int x, int y, int width, int height) {
         super(x, y, width, height);
-        this.type = "ExpandPaddle";
+        this.type = PowerUpTypes.EXPAND_PADDLE;
         this.duration = 300; // Duration in frames (5 seconds at 60 FPS)
     }
 

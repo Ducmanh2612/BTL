@@ -6,8 +6,8 @@ import static org.OOPproject.ArkanoidFX.utils.Constants.GAME_WIDTH;
 //TODO: remove stuckToPaddle or attachedPaddle if not needed anymore
 public class Ball extends MovableObject {
     private static final double COOLDOWN_TIME = 0.05; // 50ms cooldown between brick collisions
-    private static final double NORMAL_SPEED = 450.0;
-    private static final double FAST_SPEED = 600.0;
+    private static final double NORMAL_SPEED = 350.0;
+    private static final double FAST_SPEED = 500.0;
 
     private double speed; // Speed in pixels per second
     private boolean active;
@@ -15,6 +15,8 @@ public class Ball extends MovableObject {
 
     private boolean stuckToPaddle; // Is ball stuck to paddle?
     private Paddle attachedPaddle; // Reference to paddle when stuck
+
+    private int boundingBoxWidth = GAME_WIDTH;
 
     public Ball(int x, int y, int width, int height) {
         super(x, y, width, height);
@@ -298,7 +300,7 @@ public class Ball extends MovableObject {
      */
     @Override
     public void move(double deltaTime) {
-        // NEW: If stuck to paddle, position ball on top of paddle
+        // If stuck to paddle, position ball on top of paddle
         if (stuckToPaddle && attachedPaddle != null) {
             // Center ball on paddle, just above it
             x = attachedPaddle.getX() + (attachedPaddle.getWidth() - width) / 2;
@@ -326,9 +328,11 @@ public class Ball extends MovableObject {
         if (x <= 0) {
             x = 0;
             velocityX = Math.abs(velocityX);
-        } else if (x + width >= GAME_WIDTH) {
-            x = GAME_WIDTH - width;
-            velocityX = -Math.abs(velocityX);
+        } else {
+            if (x + width >= boundingBoxWidth) {
+                x = boundingBoxWidth - width;
+                velocityX = -Math.abs(velocityX);
+            }
         }
 
         // Bounce off top wall

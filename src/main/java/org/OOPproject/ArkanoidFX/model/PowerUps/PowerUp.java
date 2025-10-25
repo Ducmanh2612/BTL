@@ -6,7 +6,7 @@ import org.OOPproject.ArkanoidFX.model.Paddle;
 public abstract class PowerUp extends GameObject {
     protected final double DEFAULT_FALL_SPEED = 150.0;
 
-    protected String type;
+    protected PowerUpTypes type;
     protected int duration;
     protected boolean falling;
     protected double fallSpeed; // Pixels per second
@@ -27,7 +27,7 @@ public abstract class PowerUp extends GameObject {
         this.frameY = 0;
     }
 
-    public String getType() {
+    public PowerUpTypes getType() {
         return type;
     }
     public int getFrameX() { return frameX; }

@@ -1,14 +1,10 @@
 package org.OOPproject.ArkanoidFX.model.Bricks;
 
+/**
+ * Normal brick will be rendered without using assets.
+ * the default color for normal brick is blue
+ */
 public class NormalBrick extends Brick {
-    /*
-     * TODO: this brick type has several colors
-     *  white -> 50 points
-     *  orange -> 60 points
-     *  cyan -> 70 points
-     *  lime -> 80 points
-     *  red -> 90 points
-     */
     public NormalBrick(int x, int y, int width, int height) {
         super(x, y, width, height);
         this.hitPoints = 1;

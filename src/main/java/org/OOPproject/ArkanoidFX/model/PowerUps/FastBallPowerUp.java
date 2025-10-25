@@ -8,7 +8,7 @@ public class FastBallPowerUp extends PowerUp {
 
     public FastBallPowerUp(int x, int y, int width, int height) {
         super(x, y, width, height);
-        this.type = "FastBall";
+        this.type = PowerUpTypes.FAST_BALL;
         this.duration = 300; // Duration in frames (5 seconds at 60 FPS)
     }
 

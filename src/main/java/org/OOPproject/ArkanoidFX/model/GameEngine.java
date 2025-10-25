@@ -96,13 +96,12 @@ public class GameEngine {
         // Create paddle in the center bottom of play area
         int paddleX = (gameWidth - PADDLE_WIDTH) / 2;
         int paddleY = gameHeight - 50;  // 50 pixels from bottom
-        paddle = new Paddle(paddleX, paddleY, PADDLE_WIDTH, PADDLE_HEIGHT, gameWidth);
+        paddle = new Paddle(paddleX, paddleY, PADDLE_WIDTH, PADDLE_HEIGHT);
 
         // Create ball just above the paddle
         int ballX = gameWidth / 2 - BALL_SIZE / 2;
         int ballY = gameHeight - 100;  // 100 pixels from bottom
         ball = new Ball(ballX, ballY, BALL_SIZE, BALL_SIZE);
-        //TODO: since we already attach to paddle here, we don't need to create ball at specific position
         ball.attachToPaddle(paddle);
         this.ballReleased = false;
         //TODO: ballReleased is set to false too much times, find a way to set it only once at the start of the game
