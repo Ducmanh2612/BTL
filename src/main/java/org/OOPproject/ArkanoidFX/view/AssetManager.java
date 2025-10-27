@@ -6,6 +6,9 @@ import org.OOPproject.ArkanoidFX.model.PowerUps.PowerUpTypes;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.OOPproject.ArkanoidFX.utils.Constants.PADDLE_HEIGHT;
+import static org.OOPproject.ArkanoidFX.utils.Constants.PADDLE_WIDTH;
+
 public class AssetManager {
     private static AssetManager instance;
     
@@ -37,7 +40,9 @@ public class AssetManager {
     private Image paddleStdShadowImg;
     private Image paddleWideImg;
     private Image paddleWideShadowImg;
-    
+    private Image paddleStdSpriteMapImg;
+    private Image paddleWideSpriteMapImg;
+
     // PowerUp sprite maps (animated)
     private Image bonusBlockCMapImg;  // Catch
     private Image bonusBlockFMapImg;  // Expand (F for wide)
@@ -87,13 +92,15 @@ public class AssetManager {
 
             ballImg = loadImage("ball.png", 12, 12);
             ballShadowImg = loadImage("ball_shadow.png", 12, 12);
-            
 
+            //TODO: update this thing to use game constants for paddle sizes
             paddleStdImg = loadImage("paddle_std.png", 80, 22);
             paddleStdShadowImg = loadImage("paddle_std_shadow.png", 80, 22);
+            paddleStdSpriteMapImg = loadImage("paddlemap_std.png", 80 * 8, 22 * 8);
 
             paddleWideImg = loadImage("paddle_wide.png", 121, 22);
             paddleWideShadowImg = loadImage("paddle_wide_shadow.png", 121, 22);
+            paddleWideSpriteMapImg = loadImage("paddlemap_wide.png", 121 * 8, 22 * 8);
             
 
             bonusBlockCMapImg = loadImage("block_map_bonus_c.png", 190, 72);
@@ -156,8 +163,10 @@ public class AssetManager {
     public Image getBallShadowImg() { return ballShadowImg; }
     public Image getPaddleStdImg() { return paddleStdImg; }
     public Image getPaddleStdShadowImg() { return paddleStdShadowImg; }
+    public Image getPaddleStdSpriteMapImg() { return paddleStdSpriteMapImg; }
     public Image getPaddleWideImg() { return paddleWideImg; }
     public Image getPaddleWideShadowImg() { return paddleWideShadowImg; }
+    public Image getPaddleWideSpriteMapImg() { return paddleWideSpriteMapImg; }
 
     public Image getPowerUpSpriteMap(PowerUpTypes powerUpType) {
         switch (powerUpType) {
