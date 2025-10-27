@@ -393,7 +393,7 @@ public class GameEngine {
                 case MOVE_LEFT -> paddle.moveLeft();
                 case MOVE_RIGHT -> paddle.moveRight();
                 case STOP -> paddle.stop();
-                case PAUSE_RESUME -> gameState = "PAUSE";
+                case PAUSE_RESUME -> gameState = "PAUSED";
             }
         } else if (gameState.equals("PAUSED")) {
             if(inputSignal.equals(InputSignal.PAUSE_RESUME)) gameState = "PLAYING";
