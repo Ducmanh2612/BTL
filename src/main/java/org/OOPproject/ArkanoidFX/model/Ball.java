@@ -173,6 +173,7 @@ public class Ball extends MovableObject {
      * => sẽ không có va chạm liên tiếp giữa bóng và paddle trong các nhịp game liên tiếp
      * => không có paddle đè lên ball
      * => đồng thời giả lập được khi mới va chạm với paddle thì quả bóng bay nhanh hơn
+     * sau vòng while sửa lại vận tốc
      */
     public void bounceOffPaddle(Paddle paddle) {
         // Calculate where on paddle the ball hit (-1.0 to 1.0)
