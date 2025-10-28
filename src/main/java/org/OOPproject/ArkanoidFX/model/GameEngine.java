@@ -4,6 +4,7 @@ import org.OOPproject.ArkanoidFX.utils.Constants;
 import org.OOPproject.ArkanoidFX.model.Bricks.*;
 import org.OOPproject.ArkanoidFX.model.PowerUps.*;
 import javafx.scene.paint.Color;
+import org.OOPproject.ArkanoidFX.utils.GameState;
 import org.OOPproject.ArkanoidFX.utils.InputSignal;
 
 import java.util.ArrayList;
@@ -32,7 +33,7 @@ public class GameEngine {
     private int score;
     private int lives;
     private int levelNumber;                             // Current level number
-    private String gameState;                      // Current state: PLAYING, PAUSED, GAME_OVER
+    private GameState gameState;                      // Current state: PLAYING, PAUSED, GAME_OVER
 
     // Utilities
     private Random random;                         // For random number generation
@@ -65,7 +66,7 @@ public class GameEngine {
         this.activePowerUps = new ArrayList<>();
         this.blinks = new ArrayList<>();
 
-        this.gameState = "PLAYING";
+        this.gameState = GameState.PLAYING;
         this.ballReleased = false; // Ball not released yet
     }
 
@@ -84,7 +85,7 @@ public class GameEngine {
         this.score = 0;
         this.lives = 3;
         this.levelNumber = 1;
-        this.gameState = "PLAYING";
+        this.gameState = GameState.PLAYING;
         this.particleSystem.clear();
         this.ballReleased = false; // Ball starts stuck to paddle
 
@@ -128,7 +129,7 @@ public class GameEngine {
      */
     public void updateGame(double deltaTime) {
         // Only update if game is being played
-        if (!gameState.equals("PLAYING")) {
+        if (!gameState.equals(GameState.PLAYING)) {
             return;
         }
 
@@ -383,20 +384,20 @@ public class GameEngine {
      * Game over - set state to GAME_OVER.
      */
     public void gameOver() {
-        gameState = "GAME_OVER";
+        gameState = GameState.GAME_OVER;
     }
 
     public void handleInput(InputSignal inputSignal) {
         //TODO: remove the two if statements and put them into the innner switch
-        if (gameState.equals("PLAYING")) {
+        if (gameState.equals(GameState.PLAYING)) {
             switch (inputSignal) {
                 case MOVE_LEFT -> paddle.moveLeft();
                 case MOVE_RIGHT -> paddle.moveRight();
                 case STOP -> paddle.stop();
-                case PAUSE_RESUME -> gameState = "PAUSED";
+                case PAUSE_RESUME -> gameState = GameState.PAUSED;
             }
-        } else if (gameState.equals("PAUSED")) {
-            if(inputSignal.equals(InputSignal.PAUSE_RESUME)) gameState = "PLAYING";
+        } else if (gameState.equals(GameState.PAUSED)) {
+            if(inputSignal.equals(InputSignal.PAUSE_RESUME)) gameState = GameState.PLAYING;
         }
     }
 
@@ -409,8 +410,8 @@ public class GameEngine {
     public Paddle getPaddle() { return paddle; }
     public Ball getBall() { return ball; }
     public ParticleSystem getParticleSystem() { return particleSystem; }
-    public String getGameState() { return gameState; }
-    public void setGameState(String state) { this.gameState = state; }
+    public GameState getGameState() { return gameState; }
+    public void setGameState(GameState state) { this.gameState = state; }
     public int getScore() { return score; }
     public int getLives() { return lives; }
     public int getLevelNumber() { return levelNumber; }
