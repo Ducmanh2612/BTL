@@ -225,7 +225,7 @@ public class GameEngine {
 
         //Đảm bảo sẽ không có va chạm trong nhiều nhịp game
         if (ball.y + ball.height > paddle.y - paddle.height && ball.specialMode) {
-            ball.velocityX = (500 + 20) * (ball.velocityX / Math.abs(ball.velocityX));
+            ball.velocityX = (700 + 20) * (ball.velocityX / Math.abs(ball.velocityX));
         }
         else {
             ball.specialMode = false;
@@ -236,6 +236,14 @@ public class GameEngine {
         boolean hitBrick = false; // Only hit one brick per frame
 
         if(ball.velocityY < 0) {
+            int m = bricks.size();
+            for (int i = m - 1; i >= 0; i--) {
+                if(ball.willHitBrick(bricks.get(i), deltaTime)) {
+                    brickAndBallProcess(bricks.get(i));
+                    hitBrick = true;
+                    break;
+                }
+            }
             for (Brick brick : bricks) {
                 /** key */
                 if (ball.willHitBrick(brick, deltaTime)) {
@@ -245,12 +253,12 @@ public class GameEngine {
                 }
             }
         } else {
-            int m = bricks.size();
-            for (int i = m - 1; i >= 0; i--) {
-                if(ball.willHitBrick(bricks.get(i), deltaTime)) {
-                    brickAndBallProcess(bricks.get(i));
+            for (Brick brick : bricks) {
+                /** key */
+                if (ball.willHitBrick(brick, deltaTime)) {
+                    brickAndBallProcess(brick);
                     hitBrick = true;
-                    break;
+                    break; // Only hit one brick
                 }
             }
         }

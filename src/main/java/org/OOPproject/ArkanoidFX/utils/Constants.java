@@ -9,7 +9,7 @@ public final class Constants {
 
     public static final int UI_HEIGHT = 50;
 
-    public static final int PADDLE_WIDTH = 100;
+    public static final int PADDLE_WIDTH = 1000;
     public static final int PADDLE_HEIGHT = 20;
 
     public static final int BALL_SIZE = 15;

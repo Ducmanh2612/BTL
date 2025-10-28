@@ -6,7 +6,7 @@ import static org.OOPproject.ArkanoidFX.utils.Constants.GAME_WIDTH;
 //TODO: remove stuckToPaddle or attachedPaddle if not needed anymore
 public class Ball extends MovableObject {
     private static final double COOLDOWN_TIME = 0.05; // 50ms cooldown between brick collisions
-    private static final double NORMAL_SPEED = 450.0;
+    private static final double NORMAL_SPEED = 700;
     private static final double FAST_SPEED = 500.0;
 
     private double speed; // Speed in pixels per second
@@ -242,24 +242,22 @@ public class Ball extends MovableObject {
      */
     public void correctPositionAfterBrickHit(GameObject brick, String side) {
         // Small push distance to ensure ball is outside brick
-        double pushDistance = 0.1;
-
         switch (side) {
             case "top":
                 // Ball hit top of brick, push it upward
-                y = brick.getY() - height - pushDistance;
+                y = brick.getY() - height;
                 break;
             case "bottom":
                 // Ball hit bottom of brick, push it downward
-                y = brick.getY() + brick.getHeight() + pushDistance;
+                y = brick.getY() + brick.getHeight();
                 break;
             case "left":
                 // Ball hit left of brick, push it leftward
-                x = brick.getX() - width - pushDistance;
+                x = brick.getX() - width;
                 break;
             case "right":
                 // Ball hit right of brick, push it rightward
-                x = brick.getX() + brick.getWidth() + pushDistance;
+                x = brick.getX() + brick.getWidth();
                 break;
         }
     }
