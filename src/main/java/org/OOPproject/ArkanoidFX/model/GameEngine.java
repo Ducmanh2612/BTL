@@ -83,7 +83,7 @@ public class GameEngine {
     public void startGame() {
         this.score = 0;
         this.lives = 3;
-        this.levelNumber = 1;
+        this.levelNumber = 4;
         this.gameState = "PLAYING";
         this.particleSystem.clear();
         this.ballReleased = false; // Ball starts stuck to paddle
@@ -209,7 +209,7 @@ public class GameEngine {
 
     /**
      * Check for collisions between game objects.
-     *
+     * <p>
      * COLLISION TYPES:
      * 1. Ball vs Paddle - bounce the ball
      * 2. Ball vs Brick - destroy brick, bounce ball, create particles
@@ -223,59 +223,29 @@ public class GameEngine {
 
         // 2. Ball-Brick collision using trajectory prediction
         // Check if ball's path WILL hit any brick
-        if (ball.canCollideWithBricks()) {
-            boolean hitBrick = false; // Only hit one brick per frame
+        boolean hitBrick = false; // Only hit one brick per frame
 
+        if(ball.velocityY < 0) {
             for (Brick brick : bricks) {
+                /** key */
                 if (ball.willHitBrick(brick, deltaTime)) {
-                    String side = ball.getCollisionSide(brick);
-                    ball.correctPositionAfterBrickHit(brick, side);
-                    ball.bounceOffBrick(side);
-
-                    Color particleColor = getBrickColor(brick);
-                    particleSystem.createBurstEffect(
-                            brick.getX() + brick.getWidth() / 2.0,
-                            brick.getY() + brick.getHeight() / 2.0,
-                            particleColor,
-                            15
-                    );
-
-                    brick.takeHit();
-
-                    // Create blink effect for strong bricks when hit
-                    if (brick instanceof StrongBrick || brick instanceof ExtraStrongBrick || brick instanceof UnbreakableBrick) {
-                        // Only create new blink if this brick doesn't already have one
-                        boolean alreadyHasBlink = false;
-                        for (Blink existingBlink : blinks) {
-                            if (existingBlink.getAttachedBrick() == brick) {
-                                alreadyHasBlink = true;
-                                break;
-                            }
-                        }
-                        if (!alreadyHasBlink) {
-                            blinks.add(new Blink(brick));
-                        }
-                    }
-
-                    // Remove if destroyed
-                    if (brick.isDestroyed()) {
-                        score += brick.getScoreValue();
-
-                        // Spawn power-up chance
-                        if (!(brick instanceof UnbreakableBrick) && random.nextInt(100) < 15) {
-                            spawnPowerUp(brick.getX(), brick.getY());
-                        }
-
-                        bricks.remove(brick);
-                    }
-
+                    brickAndBallProcess(brick);
                     hitBrick = true;
                     break; // Only hit one brick
 
-
+                }
+            }
+        } else {
+            int m = bricks.size();
+            for (int i = m - 1; i >= 0; i--) {
+                if(ball.willHitBrick(bricks.get(i), deltaTime)) {
+                    brickAndBallProcess(bricks.get(i));
+                    hitBrick = true;
+                    break;
                 }
             }
         }
+
 
         // 3. Paddle-PowerUp collision
         Iterator<PowerUp> powerUpIterator = powerUps.iterator();
@@ -295,30 +265,73 @@ public class GameEngine {
             }
         }
 
+    }
+
+    public void brickAndBallProcess(Brick brick) {
+        String side = ball.getCollisionSide(brick);
+        ball.correctPositionAfterBrickHit(brick, side); /** key */
+        ball.bounceOffBrick(side);
+
+        Color particleColor = getBrickColor(brick);
+        particleSystem.createBurstEffect(
+                brick.getX() + brick.getWidth() / 2.0,
+                brick.getY() + brick.getHeight() / 2.0,
+                particleColor,
+                15
+        );
+
+        brick.takeHit();
+
+        // Create blink effect for strong bricks when hit
+        if (brick instanceof StrongBrick || brick instanceof ExtraStrongBrick || brick instanceof UnbreakableBrick) {
+            // Only create new blink if this brick doesn't already have one
+            boolean alreadyHasBlink = false;
+            for (Blink existingBlink : blinks) {
+                if (existingBlink.getAttachedBrick() == brick) {
+                    alreadyHasBlink = true;
+                    break;
+                }
+            }
+            if (!alreadyHasBlink) {
+                blinks.add(new Blink(brick));
+            }
+        }
+
+        // Remove if destroyed
+        if (brick.isDestroyed()) {
+            score += brick.getScoreValue();
+
+            // Spawn power-up chance
+            if (!(brick instanceof UnbreakableBrick) && random.nextInt(100) < 15) {
+                spawnPowerUp(brick.getX(), brick.getY());
+            }
+
+            bricks.remove(brick);
+        }
 
     }
 
     /**
      * Get color for particles based on brick type.
      */
-     private Color getBrickColor(Brick brick) {
-         switch (brick) {
-             case UnbreakableBrick unbreakableBrick -> {
-                 return Color.GOLD;
-             }
-             case ExtraStrongBrick extraStrongBrick -> {
-                 return Color.PURPLE;
-             }
-             case StrongBrick strongBrick -> {
-                 int hp = brick.getHitPoints();
-                 if (hp == 3) return Color.DARKRED;
-                 if (hp == 2) return Color.RED;
-                 return Color.ORANGERED;
-             }
-             case null, default -> {
-                 return Color.DODGERBLUE;
-             }
-         }
+    private Color getBrickColor(Brick brick) {
+        switch (brick) {
+            case UnbreakableBrick unbreakableBrick -> {
+                return Color.GOLD;
+            }
+            case ExtraStrongBrick extraStrongBrick -> {
+                return Color.PURPLE;
+            }
+            case StrongBrick strongBrick -> {
+                int hp = brick.getHitPoints();
+                if (hp == 3) return Color.DARKRED;
+                if (hp == 2) return Color.RED;
+                return Color.ORANGERED;
+            }
+            case null, default -> {
+                return Color.DODGERBLUE;
+            }
+        }
     }
 
     /**
@@ -396,23 +409,58 @@ public class GameEngine {
                 case PAUSE_RESUME -> gameState = "PAUSE";
             }
         } else if (gameState.equals("PAUSED")) {
-            if(inputSignal.equals(InputSignal.PAUSE_RESUME)) gameState = "PLAYING";
+            if (inputSignal.equals(InputSignal.PAUSE_RESUME)) gameState = "PLAYING";
         }
     }
 
     // ========== GETTER METHODS ==========
     // These allow GameView to access game objects for rendering
 
-    public List<Brick> getBricks() { return bricks; }
-    public List<PowerUp> getPowerUps() { return powerUps; }
-    public List<Blink> getBlinks() { return blinks; }
-    public Paddle getPaddle() { return paddle; }
-    public Ball getBall() { return ball; }
-    public ParticleSystem getParticleSystem() { return particleSystem; }
-    public String getGameState() { return gameState; }
-    public void setGameState(String state) { this.gameState = state; }
-    public int getScore() { return score; }
-    public int getLives() { return lives; }
-    public int getLevelNumber() { return levelNumber; }
-    public int getUIHeight() { return UI_HEIGHT; }
+    public List<Brick> getBricks() {
+        return bricks;
+    }
+
+    public List<PowerUp> getPowerUps() {
+        return powerUps;
+    }
+
+    public List<Blink> getBlinks() {
+        return blinks;
+    }
+
+    public Paddle getPaddle() {
+        return paddle;
+    }
+
+    public Ball getBall() {
+        return ball;
+    }
+
+    public ParticleSystem getParticleSystem() {
+        return particleSystem;
+    }
+
+    public String getGameState() {
+        return gameState;
+    }
+
+    public void setGameState(String state) {
+        this.gameState = state;
+    }
+
+    public int getScore() {
+        return score;
+    }
+
+    public int getLives() {
+        return lives;
+    }
+
+    public int getLevelNumber() {
+        return levelNumber;
+    }
+
+    public int getUIHeight() {
+        return UI_HEIGHT;
+    }
 }
