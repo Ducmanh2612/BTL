@@ -6,7 +6,7 @@ import static org.OOPproject.ArkanoidFX.utils.Constants.GAME_WIDTH;
 //TODO: remove stuckToPaddle or attachedPaddle if not needed anymore
 public class Ball extends MovableObject {
     private static final double COOLDOWN_TIME = 0.05; // 50ms cooldown between brick collisions
-    private static final double NORMAL_SPEED = 450;
+    private static final double NORMAL_SPEED = 450.0;
     private static final double FAST_SPEED = 500.0;
 
     private double speed; // Speed in pixels per second
@@ -166,6 +166,14 @@ public class Ball extends MovableObject {
      * Bounce off paddle with improved physics.
      * The bounce angle depends on where the ball hits the paddle.
      */
+
+    /**
+     * while tọa độ nửa dưới của ball còn nhỏ hơn tọa độ nửa trên của paddle,
+     * giữ tốc độ theo phương x của ball > tốc độ phương x của paddle
+     * => sẽ không có va chạm liên tiếp giữa bóng và paddle trong các nhịp game liên tiếp
+     * => không có paddle đè lên ball
+     * => đồng thời giả lập được khi mới va chạm với paddle thì quả bóng bay nhanh hơn
+     */
     public void bounceOffPaddle(Paddle paddle) {
         // Calculate where on paddle the ball hit (-1.0 to 1.0)
         double ballCenterX = x + width / 2.0;
@@ -188,7 +196,7 @@ public class Ball extends MovableObject {
         // If paddle is moving, add some of that velocity to the ball
         if (paddle.getVelocityX() != 0) {
             double paddleInfluence = 0.3; // 30% of paddle velocity transferred
-            velocityX += paddle.getVelocityX() * paddleInfluence;
+            velocityX = paddle.getVelocityX() * paddleInfluence;
 
             // Re-normalize to maintain speed
             double currentSpeed = Math.sqrt(velocityX * velocityX + velocityY * velocityY);

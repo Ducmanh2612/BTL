@@ -219,6 +219,7 @@ public class GameEngine {
         // 1. Ball-Paddle collision (simple bounds check is fine for paddle)
         if (ball.collidesWith(paddle)) {
             ball.bounceOffPaddle(paddle);
+            return ;
         }
 
         // 2. Ball-Brick collision using trajectory prediction
