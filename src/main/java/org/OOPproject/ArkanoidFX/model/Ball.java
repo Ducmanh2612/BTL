@@ -13,6 +13,7 @@ public class Ball extends MovableObject {
     private boolean active;
     private double collisionCooldown; // Cooldown to prevent multi-brick breaking
 
+    public boolean specialMode = false;
     private boolean stuckToPaddle; // Is ball stuck to paddle?
     private Paddle attachedPaddle; // Reference to paddle when stuck
 
@@ -180,6 +181,7 @@ public class Ball extends MovableObject {
         double ballCenterX = x + width / 2.0;
         double paddleCenterX = paddle.getX() + paddle.getWidth() / 2.0;
         double hitPosition = (ballCenterX - paddleCenterX) / (paddle.getWidth() / 2.0);
+        boolean specialMode = false;
 
         // Clamp hit position to prevent extreme angles
         hitPosition = Math.max(-1.0, Math.min(1.0, hitPosition));
@@ -240,7 +242,7 @@ public class Ball extends MovableObject {
      */
     public void correctPositionAfterBrickHit(GameObject brick, String side) {
         // Small push distance to ensure ball is outside brick
-        double pushDistance = 1.0;
+        double pushDistance = 0.1;
 
         switch (side) {
             case "top":

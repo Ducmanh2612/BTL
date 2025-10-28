@@ -219,7 +219,16 @@ public class GameEngine {
         // 1. Ball-Paddle collision (simple bounds check is fine for paddle)
         if (ball.collidesWith(paddle)) {
             ball.bounceOffPaddle(paddle);
+            ball.specialMode = true;
             return ;
+        }
+
+        //Đảm bảo sẽ không có va chạm trong nhiều nhịp game
+        if (ball.y + ball.height > paddle.y - paddle.height && ball.specialMode) {
+            ball.velocityX = (500 + 20) * (ball.velocityX / Math.abs(ball.velocityX));
+        }
+        else {
+            ball.specialMode = false;
         }
 
         // 2. Ball-Brick collision using trajectory prediction
@@ -233,7 +242,6 @@ public class GameEngine {
                     brickAndBallProcess(brick);
                     hitBrick = true;
                     break; // Only hit one brick
-
                 }
             }
         } else {
