@@ -2,5 +2,6 @@ package org.OOPproject.ArkanoidFX.utils;
 
 public enum GameState {
     PLAYING,
-    PAUSED
+    PAUSED,
+    GAME_OVER
 }
