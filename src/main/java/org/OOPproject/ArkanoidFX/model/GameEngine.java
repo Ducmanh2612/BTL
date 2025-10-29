@@ -6,7 +6,6 @@ import org.OOPproject.ArkanoidFX.model.PowerUps.*;
 import javafx.scene.paint.Color;
 import org.OOPproject.ArkanoidFX.utils.GameState;
 import org.OOPproject.ArkanoidFX.utils.InputSignal;
-import org.OOPproject.ArkanoidFX.view.SoundManager;
 
 import java.util.ArrayList;
 import java.util.Iterator;
