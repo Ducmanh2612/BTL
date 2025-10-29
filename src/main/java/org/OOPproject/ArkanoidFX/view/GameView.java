@@ -43,7 +43,7 @@ public class GameView extends StackPane {
         gc.setFill(Color.rgb(20, 20, 40));
         gc.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
         drawLevelBackground();
-        
+
         String state = gameEngineRef.getGameState();
         if (state.equals("GAME_OVER")) {
             renderGameOver();
@@ -59,7 +59,7 @@ public class GameView extends StackPane {
         int level = gameEngineRef.getLevelNumber();
         Image pattern = assetManager.getBackgroundPattern(level);
         if (pattern != null) {
-            ImagePattern patternFill = new ImagePattern(pattern, 0, 0, 
+            ImagePattern patternFill = new ImagePattern(pattern, 0, 0,
                 pattern.getWidth(), pattern.getHeight(), false);
             gc.setFill(patternFill);
             gc.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
@@ -70,7 +70,7 @@ public class GameView extends StackPane {
         gc.setFill(Color.RED);
         gc.setFont(Font.font("Arial", FontWeight.BOLD, 48));
         gc.fillText("GAME OVER", GAME_WIDTH / 2 - 130, GAME_HEIGHT / 2 - 50);
-        
+
         gc.setFill(Color.WHITE);
         gc.setFont(Font.font("Arial", FontWeight.NORMAL, 24));
         gc.fillText("Final Score: " + gameEngineRef.getScore(), GAME_WIDTH / 2 - 80, GAME_HEIGHT / 2 + 20);
@@ -83,7 +83,7 @@ public class GameView extends StackPane {
         for (Brick brick : gameEngineRef.getBricks()) {
             renderBrickWithImage(brick);
         }
-        
+
         // Render blink effects on top of bricks
         for (Blink blink : gameEngineRef.getBlinks()) {
             renderBlink(blink);
@@ -92,11 +92,11 @@ public class GameView extends StackPane {
         for (PowerUp powerUp : gameEngineRef.getPowerUps()) {
             renderAnimatedPowerUp(powerUp);
         }
-        
+
         renderPaddle(gameEngineRef.getPaddle());
         renderBall(gameEngineRef.getBall());
         renderParticles();
-        
+
         Ball ball = gameEngineRef.getBall();
         if (ball.isStuckToPaddle()) {
             gc.setFill(Color.WHITE);
@@ -119,15 +119,15 @@ public class GameView extends StackPane {
     private void renderAnimatedPowerUp(PowerUp powerUp) {
         int px = powerUp.getX();
         int py = powerUp.getY();
-        
+
         Image shadowImg = assetManager.getBonusBlockShadowImg();
         if (shadowImg != null) {
             gc.drawImage(shadowImg, px, py + 2, 38, 18);
         }
-        
+
         PowerUpTypes powerUpType = powerUp.getType();
         Image spriteMap = assetManager.getPowerUpSpriteMap(powerUpType);
-        
+
         if (spriteMap != null) {
             int frameWidth = 38;
             int frameHeight = 18;
@@ -167,12 +167,12 @@ public class GameView extends StackPane {
         int by = brick.getY();
         int bw = brick.getWidth();
         int bh = brick.getHeight();
-        
+
         Image shadowImg = assetManager.getBlockShadowImg();
         if (shadowImg != null) {
             gc.drawImage(shadowImg, bx + 2, by + 2, bw, bh);
         }
-        
+
         Image brickImg = null;
         if (brick instanceof ColoredBrick) {
             ColoredBrick coloredBrick = (ColoredBrick) brick;
@@ -182,7 +182,7 @@ public class GameView extends StackPane {
         } else if (brick instanceof StrongBrick || brick instanceof ExtraStrongBrick) {
             brickImg = assetManager.getBrickImage("GRAY");
         }
-        
+
         if (brickImg != null) {
             gc.drawImage(brickImg, bx, by, bw, bh);
         } else {
@@ -222,7 +222,7 @@ public class GameView extends StackPane {
         } else {
             gc.setFill(Color.DODGERBLUE);
         }
-        
+
         gc.fillRect(brick.getX(), brick.getY(), brick.getWidth(), brick.getHeight());
         gc.setStroke(Color.WHITE);
         gc.setLineWidth(2);
@@ -235,15 +235,15 @@ public class GameView extends StackPane {
         int pw = paddle.getWidth();
         int ph = paddle.getHeight();
         boolean isExpanded = paddle.isExpanded();
-        
+
         Image shadowImg = isExpanded ? assetManager.getPaddleWideShadowImg() : assetManager.getPaddleStdShadowImg();
         if (shadowImg != null) {
             gc.drawImage(shadowImg, px + 2, py + 2, pw, ph);
         }
-        
+
         Image paddleImg = isExpanded ? assetManager.getPaddleWideSpriteMapImg() : assetManager.getPaddleStdSpriteMapImg();
         if (paddleImg != null) {
-            System.out.println(1);
+//            System.out.println(1);
             int frameWidth = 80;
             int frameHeight = 22;
             if(paddle.isExpanded()){
@@ -270,12 +270,12 @@ public class GameView extends StackPane {
         int by = ball.getY();
         int bw = ball.getWidth();
         int bh = ball.getHeight();
-        
+
         Image shadowImg = assetManager.getBallShadowImg();
         if (shadowImg != null) {
             gc.drawImage(shadowImg, bx + 1, by + 1, bw, bh);
         }
-        
+
         Image ballImg = assetManager.getBallImg();
         if (ballImg != null) {
             gc.drawImage(ballImg, bx, by, bw, bh);
