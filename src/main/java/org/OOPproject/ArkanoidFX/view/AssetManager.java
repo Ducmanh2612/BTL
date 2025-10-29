@@ -11,13 +11,13 @@ import static org.OOPproject.ArkanoidFX.utils.Constants.PADDLE_WIDTH;
 
 public class AssetManager {
     private static AssetManager instance;
-    
+
     // Cache for loaded images
     private Map<String, Image> imageCache;
-    
+
     // Background patterns for different levels
     private Image[] backgroundPatterns;
-    
+
     // Brick images
     private Image goldBlockImg;
     private Image grayBlockImg;
@@ -30,11 +30,11 @@ public class AssetManager {
     private Image orangeBlockImg;
     private Image cyanBlockImg;
     private Image blockShadowImg;
-    
+
     // Ball images
     private Image ballImg;
     private Image ballShadowImg;
-    
+
     // Paddle images
     private Image paddleStdImg;
     private Image paddleStdShadowImg;
@@ -52,7 +52,7 @@ public class AssetManager {
     private Image bonusBlockBMapImg;  // Break through
     private Image bonusBlockPMapImg;  // Extra life (P for player)
     private Image bonusBlockShadowImg;
-    
+
     // Blink effect sprite map
     private Image blinkMapImg;
 
@@ -76,7 +76,7 @@ public class AssetManager {
             backgroundPatterns[1] = loadImage("backgroundPattern_2.png", 64, 64);
             backgroundPatterns[2] = loadImage("backgroundPattern_3.png", 64, 64);
             backgroundPatterns[3] = loadImage("backgroundPattern_4.png", 64, 64);
-            
+
             // Load brick images (38x20 pixels each)
             goldBlockImg = loadImage("goldBlock.png", 38, 20);
             grayBlockImg = loadImage("grayBlock.png", 38, 20);
@@ -101,7 +101,7 @@ public class AssetManager {
             paddleWideImg = loadImage("paddle_wide.png", 121, 22);
             paddleWideShadowImg = loadImage("paddle_wide_shadow.png", 121, 22);
             paddleWideSpriteMapImg = loadImage("paddlemap_wide.png", 121 * 8, 22 * 8);
-            
+
 
             bonusBlockCMapImg = loadImage("block_map_bonus_c.png", 190, 72);
             bonusBlockFMapImg = loadImage("block_map_bonus_f.png", 190, 72);
@@ -156,7 +156,7 @@ public class AssetManager {
             default: return null;
         }
     }
-    
+
     // Getters for all image assets
     public Image getBlockShadowImg() { return blockShadowImg; }
     public Image getBallImg() { return ballImg; }
@@ -186,7 +186,8 @@ public class AssetManager {
                 return bonusBlockFMapImg;  // Default to expand
         }
     }
-    
+
     public Image getBonusBlockShadowImg() { return bonusBlockShadowImg; }
     public Image getBlinkMapImg() { return blinkMapImg; }
 }
+
