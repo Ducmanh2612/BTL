@@ -1,15 +1,16 @@
 package org.OOPproject.ArkanoidFX.view;
 
 import javafx.scene.image.Image;
+import org.OOPproject.ArkanoidFX.model.Bricks.BrickType;
 import org.OOPproject.ArkanoidFX.model.PowerUps.PowerUpTypes;
-import org.OOPproject.ArkanoidFX.utils.newConstants;
+
+import javafx.scene.media.Media;
+import org.OOPproject.ArkanoidFX.utils.Constants;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import static org.OOPproject.ArkanoidFX.utils.Constants.PADDLE_HEIGHT;
-import static org.OOPproject.ArkanoidFX.utils.Constants.PADDLE_WIDTH;
-import static org.OOPproject.ArkanoidFX.utils.newConstants.*;
 
 public class AssetManager {
     private static AssetManager instance;
@@ -17,6 +18,9 @@ public class AssetManager {
     // Cache for loaded images
     private Map<String, Image> imageCache;
     
+    // Cache for loaded audio
+    private Map<String, Media> audioCache;
+
     // Background patterns for different levels
     private Image[] backgroundPatterns;
     
@@ -60,6 +64,7 @@ public class AssetManager {
 
     private AssetManager() {
         imageCache = new HashMap<>();
+        audioCache = new HashMap<>();
         loadAllAssets();
     }
 
@@ -80,41 +85,48 @@ public class AssetManager {
             backgroundPatterns[3] = loadImage("backgroundPattern_4.png", 64, 64);
             
             // Load brick images (38x20 pixels each)
-            goldBlockImg = loadImage("goldBlock.png", BLOCK_WIDTH, BLOCK_HEIGHT);
-            grayBlockImg = loadImage("grayBlock.png", BLOCK_WIDTH, BLOCK_HEIGHT);
-            redBlockImg = loadImage("redBlock.png", BLOCK_WIDTH, BLOCK_HEIGHT);
-            yellowBlockImg = loadImage("yellowBlock.png", BLOCK_WIDTH, BLOCK_HEIGHT);
-            blueBlockImg = loadImage("blueBlock.png", BLOCK_WIDTH, BLOCK_HEIGHT);
-            magentaBlockImg = loadImage("magentaBlock.png", BLOCK_WIDTH, BLOCK_HEIGHT);
-            limeBlockImg = loadImage("limeBlock.png", BLOCK_WIDTH, BLOCK_HEIGHT);
-            whiteBlockImg = loadImage("whiteBlock.png", BLOCK_WIDTH, BLOCK_HEIGHT);
-            orangeBlockImg = loadImage("orangeBlock.png", BLOCK_WIDTH, BLOCK_HEIGHT);
-            cyanBlockImg = loadImage("cyanBlock.png", BLOCK_WIDTH, BLOCK_HEIGHT);
-            blockShadowImg = loadImage("block_shadow.png", BLOCK_WIDTH, BLOCK_HEIGHT);
+            goldBlockImg = loadImage("goldBlock.png", Constants.BRICK_WIDTH, Constants.BRICK_HEIGHT);
+            grayBlockImg = loadImage("grayBlock.png", Constants.BRICK_WIDTH, Constants.BRICK_HEIGHT);
+            redBlockImg = loadImage("redBlock.png", Constants.BRICK_WIDTH, Constants.BRICK_HEIGHT);
+            yellowBlockImg = loadImage("yellowBlock.png", Constants.BRICK_WIDTH, Constants.BRICK_HEIGHT);
+            blueBlockImg = loadImage("blueBlock.png", Constants.BRICK_WIDTH, Constants.BRICK_HEIGHT);
+            magentaBlockImg = loadImage("magentaBlock.png", Constants.BRICK_WIDTH, Constants.BRICK_HEIGHT);
+            limeBlockImg = loadImage("limeBlock.png", Constants.BRICK_WIDTH, Constants.BRICK_HEIGHT);
+            whiteBlockImg = loadImage("whiteBlock.png", Constants.BRICK_WIDTH, Constants.BRICK_HEIGHT);
+            orangeBlockImg = loadImage("orangeBlock.png", Constants.BRICK_WIDTH, Constants.BRICK_HEIGHT);
+            cyanBlockImg = loadImage("cyanBlock.png", Constants.BRICK_WIDTH, Constants.BRICK_HEIGHT);
+            blockShadowImg = loadImage("block_shadow.png", Constants.BRICK_WIDTH, Constants.BRICK_HEIGHT);
 
-            ballImg = loadImage("ball.png", BALL_SIZE, BALL_SIZE);
+            ballImg = loadImage("ball.png", Constants.BALL_SIZE, Constants.BALL_SIZE);
             ballShadowImg = loadImage("ball_shadow.png", 12, 12);
 
-            //TODO: update this thing to use game constants for paddle sizes
-            paddleStdImg = loadImage("paddle_std.png", PADDLE_DEFAULT_WIDTH, PADDLE_DEFAULT_HEIGHT);
-            paddleStdShadowImg = loadImage("paddle_std_shadow.png", PADDLE_DEFAULT_WIDTH, PADDLE_DEFAULT_HEIGHT);
-            paddleStdSpriteMapImg = loadImage("paddlemap_std.png", 80 * 8, 22 * 8);
+            paddleStdImg = loadImage("paddle_std.png", Constants.PADDLE_DEFAULT_WIDTH, Constants.PADDLE_DEFAULT_HEIGHT);
+            paddleStdShadowImg = loadImage("paddle_std_shadow.png", Constants.PADDLE_DEFAULT_WIDTH, Constants.PADDLE_DEFAULT_HEIGHT);
+            paddleStdSpriteMapImg = loadImage("paddlemap_std.png", Constants.PADDLE_DEFAULT_WIDTH * 8, Constants.PADDLE_DEFAULT_HEIGHT * 8);
 
-            paddleWideImg = loadImage("paddle_wide.png", PADDLE_EXPANDED_WIDTH, PADDLE_EXPANDED_HEIGHT);
-            paddleWideShadowImg = loadImage("paddle_wide_shadow.png", PADDLE_EXPANDED_WIDTH, PADDLE_EXPANDED_HEIGHT);
-            paddleWideSpriteMapImg = loadImage("paddlemap_wide.png", 121 * 8, 22 * 8);
+            paddleWideImg = loadImage("paddle_wide.png", Constants.PADDLE_EXPANDED_WIDTH, Constants.PADDLE_EXPANDED_HEIGHT);
+            paddleWideShadowImg = loadImage("paddle_wide_shadow.png", Constants.PADDLE_EXPANDED_WIDTH, Constants.PADDLE_EXPANDED_HEIGHT);
+            paddleWideSpriteMapImg = loadImage("paddlemap_wide.png", Constants.PADDLE_EXPANDED_WIDTH * 8, PADDLE_HEIGHT * 8);
             
 
-            bonusBlockCMapImg = loadImage("block_map_bonus_c.png", BLOCK_MAP_BONUS_WIDTH, BLOCK_MAP_BONUS_HEIGHT);
-            bonusBlockFMapImg = loadImage("block_map_bonus_f.png", BLOCK_MAP_BONUS_WIDTH, BLOCK_MAP_BONUS_HEIGHT);
-            bonusBlockDMapImg = loadImage("block_map_bonus_d.png", BLOCK_MAP_BONUS_WIDTH, BLOCK_MAP_BONUS_HEIGHT);
-            bonusBlockSMapImg = loadImage("block_map_bonus_s.png", BLOCK_MAP_BONUS_WIDTH, BLOCK_MAP_BONUS_HEIGHT);
-            bonusBlockLMapImg = loadImage("block_map_bonus_l.png", BLOCK_MAP_BONUS_WIDTH, BLOCK_MAP_BONUS_HEIGHT);
-            bonusBlockBMapImg = loadImage("block_map_bonus_b.png", BLOCK_MAP_BONUS_WIDTH, BLOCK_MAP_BONUS_HEIGHT);
-            bonusBlockPMapImg = loadImage("block_map_bonus_p.png", BLOCK_MAP_BONUS_WIDTH, BLOCK_MAP_BONUS_HEIGHT);
-            bonusBlockShadowImg = loadImage("bonus_block_shadow.png", BLOCK_SHADOW_BONUS_WIDTH, BLOCK_SHADOW_BONUS_WIDTH);
+            bonusBlockCMapImg = loadImage("block_map_bonus_c.png", Constants.BLOCK_MAP_BONUS_WIDTH, Constants.BLOCK_MAP_BONUS_HEIGHT);
+            bonusBlockFMapImg = loadImage("block_map_bonus_f.png", Constants.BLOCK_MAP_BONUS_WIDTH, Constants.BLOCK_MAP_BONUS_HEIGHT);
+            bonusBlockDMapImg = loadImage("block_map_bonus_d.png", Constants.BLOCK_MAP_BONUS_WIDTH, Constants.BLOCK_MAP_BONUS_HEIGHT);
+            bonusBlockSMapImg = loadImage("block_map_bonus_s.png", Constants.BLOCK_MAP_BONUS_WIDTH, Constants.BLOCK_MAP_BONUS_HEIGHT);
+            bonusBlockLMapImg = loadImage("block_map_bonus_l.png", Constants.BLOCK_MAP_BONUS_WIDTH, Constants.BLOCK_MAP_BONUS_HEIGHT);
+            bonusBlockBMapImg = loadImage("block_map_bonus_b.png", Constants.BLOCK_MAP_BONUS_WIDTH, Constants.BLOCK_MAP_BONUS_HEIGHT);
+            bonusBlockPMapImg = loadImage("block_map_bonus_p.png", Constants.BLOCK_MAP_BONUS_WIDTH, Constants.BLOCK_MAP_BONUS_HEIGHT);
+            bonusBlockShadowImg = loadImage("bonus_block_shadow.png", Constants.BLOCK_SHADOW_BONUS_WIDTH, Constants.BLOCK_SHADOW_BONUS_WIDTH);
 
             blinkMapImg = loadImage("blink_map.png", 304, 60);
+
+            // Load audio files
+            loadMedia("brick_destroyed.wav");
+            loadMedia("click.wav");
+            loadMedia("brick_hit.wav");
+            loadMedia("powerUp.wav");
+            loadMedia("bounce.wav");
+            loadMedia("game_over.wav");
 
         } catch (Exception e) {
             System.err.println("Error loading assets: " + e.getMessage());
@@ -133,6 +145,18 @@ public class AssetManager {
         }
     }
 
+    private Media loadMedia(String filename) {
+        try {
+            String path = "/assets/sfx/" + filename;
+            Media media = new Media(getClass().getResource(path).toExternalForm());
+            audioCache.put(filename, media);
+            return media;
+        } catch (Exception e) {
+            System.err.println("Failed to load media: " + filename);
+            return null;
+        }
+    }
+
     public Image getBackgroundPattern(int level) {
         if (backgroundPatterns == null || backgroundPatterns.length == 0) {
             return null;
@@ -141,19 +165,19 @@ public class AssetManager {
         return backgroundPatterns[index];
     }
 
-    public Image getBrickImage(newConstants.BlockType type) {
+    public Image getBrickImage(BrickType type) {
         if (type == null) return null;
         switch (type) {
-            case newConstants.BlockType.RUBY: return redBlockImg;
-            case newConstants.BlockType.YLLW: return yellowBlockImg;
-            case newConstants.BlockType.BLUE: return blueBlockImg;
-            case newConstants.BlockType.MGNT: return magentaBlockImg;
-            case newConstants.BlockType.LIME: return limeBlockImg;
-            case newConstants.BlockType.WHIT: return whiteBlockImg;
-            case newConstants.BlockType.ORNG: return orangeBlockImg;
-            case newConstants.BlockType.CYAN: return cyanBlockImg;
-            case newConstants.BlockType.GOLD: return goldBlockImg;
-            case newConstants.BlockType.GRAY: return grayBlockImg;
+            case BrickType.RUBY: return redBlockImg;
+            case BrickType.YLLW: return yellowBlockImg;
+            case BrickType.BLUE: return blueBlockImg;
+            case BrickType.MGNT: return magentaBlockImg;
+            case BrickType.LIME: return limeBlockImg;
+            case BrickType.WHIT: return whiteBlockImg;
+            case BrickType.ORNG: return orangeBlockImg;
+            case BrickType.CYAN: return cyanBlockImg;
+            case BrickType.GOLD: return goldBlockImg;
+            case BrickType.GRAY: return grayBlockImg;
             default: return null;
         }
     }
@@ -190,4 +214,8 @@ public class AssetManager {
     
     public Image getBonusBlockShadowImg() { return bonusBlockShadowImg; }
     public Image getBlinkMapImg() { return blinkMapImg; }
+
+    public Media getMedia(String filename) {
+        return audioCache.get(filename);
+    }
 }

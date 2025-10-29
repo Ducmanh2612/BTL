@@ -4,9 +4,8 @@ import org.OOPproject.ArkanoidFX.utils.Constants;
 import org.OOPproject.ArkanoidFX.model.Bricks.*;
 import org.OOPproject.ArkanoidFX.model.PowerUps.*;
 import javafx.scene.paint.Color;
+import org.OOPproject.ArkanoidFX.utils.GameState;
 import org.OOPproject.ArkanoidFX.utils.InputSignal;
-import org.OOPproject.ArkanoidFX.utils.newConstants;
-import org.OOPproject.ArkanoidFX.utils.newLevel;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -16,7 +15,6 @@ import java.util.Random;
 import static org.OOPproject.ArkanoidFX.utils.Constants.*;
 
 
-//TODO: handle the ball passing bricks bugs
 public class GameEngine {
     private Paddle paddle;                         // The player's paddle
     private Ball ball;                             // The bouncing ball
@@ -24,8 +22,9 @@ public class GameEngine {
     private List<PowerUp> powerUps;                // List of falling power-ups
     private List<ActivePowerUp> activePowerUps;    // Power-ups currently active
     private List<Blink> blinks;                    // List of active blink effects
+    private List<Enemy> enemies;
 
-    private newLevel currentLevel;                    // Current level definition
+    private Level currentLevel;                    // Current level definition
 
     // Particle system for visual effects
     private ParticleSystem particleSystem;
@@ -34,7 +33,7 @@ public class GameEngine {
     private int score;
     private int lives;
     private int levelNumber;                             // Current level number
-    private String gameState;                      // Current state: PLAYING, PAUSED, GAME_OVER
+    private GameState gameState;                      // Current state: PLAYING, PAUSED, GAME_OVER
 
     // Utilities
     private Random random;                         // For random number generation
@@ -45,7 +44,8 @@ public class GameEngine {
 
     private boolean ballReleased;
 
-    private class ActivePowerUp {
+
+    private static class ActivePowerUp {
         PowerUp powerUp;           // The power-up object
         double remainingTime;      // How many seconds until it expires
 
@@ -66,9 +66,10 @@ public class GameEngine {
         this.powerUps = new ArrayList<>();
         this.activePowerUps = new ArrayList<>();
         this.blinks = new ArrayList<>();
+        this.enemies = new ArrayList<>();
 
-        this.gameState = "PLAYING";
-        this.ballReleased = false; // Ball not released yet
+        this.gameState = GameState.PLAYING;
+        this.ballReleased = false;
     }
 
     public static GameEngine getInstance() {
@@ -86,11 +87,12 @@ public class GameEngine {
         this.score = 0;
         this.lives = 3;
         this.levelNumber = 1;
-        this.gameState = "PLAYING";
+        this.gameState = GameState.PLAYING;
         this.particleSystem.clear();
         this.ballReleased = false; // Ball starts stuck to paddle
 
         initializeLevel();
+
     }
 
     /**
@@ -98,9 +100,9 @@ public class GameEngine {
      */
     private void initializeLevel() {
         // Create paddle in the center bottom of play area
-        int paddleX = (gameWidth - PADDLE_WIDTH) / 2;
+        int paddleX = (gameWidth - PADDLE_DEFAULT_WIDTH) / 2;
         int paddleY = gameHeight - 50;  // 50 pixels from bottom
-        paddle = new Paddle(paddleX, paddleY, PADDLE_WIDTH, PADDLE_HEIGHT);
+        paddle = new Paddle(paddleX, paddleY, PADDLE_DEFAULT_WIDTH, PADDLE_DEFAULT_HEIGHT);
 
         // Create ball just above the paddle
         int ballX = gameWidth / 2 - BALL_SIZE / 2;
@@ -118,7 +120,7 @@ public class GameEngine {
         particleSystem.clear();
 
         // Create bricks using Level system
-        currentLevel = new newLevel(levelNumber);
+        currentLevel = new Level(levelNumber);
         bricks = currentLevel.createBricks(gameWidth, 50);
     }
     //TODO: create a new level generator and delete this method to it
@@ -130,7 +132,7 @@ public class GameEngine {
      */
     public void updateGame(double deltaTime) {
         // Only update if game is being played
-        if (!gameState.equals("PLAYING")) {
+        if (!gameState.equals(GameState.PLAYING)) {
             return;
         }
 
@@ -149,7 +151,7 @@ public class GameEngine {
             powerUp.update(deltaTime);
         }
         updateActivePowerUps(deltaTime);
-        updateBlinks(deltaTime); //TODO sửa lại để blink hoạt động
+        updateBlinks(deltaTime);
         particleSystem.update(deltaTime);
 
         // Check if ball fell off bottom of screen
@@ -211,7 +213,7 @@ public class GameEngine {
 
     /**
      * Check for collisions between game objects.
-     * <p>
+     *
      * COLLISION TYPES:
      * 1. Ball vs Paddle - bounce the ball
      * 2. Ball vs Brick - destroy brick, bounce ball, create particles
@@ -221,47 +223,35 @@ public class GameEngine {
         // 1. Ball-Paddle collision (simple bounds check is fine for paddle)
         if (ball.collidesWith(paddle)) {
             ball.bounceOffPaddle(paddle);
-            if(ball.velocityX < 520) ball.specialMode = true;
+            SoundManager.getInstance().playSound("bounce.wav");
             return ;
         }
 
-        //Đảm bảo sẽ không có va chạm trong nhiều nhịp game
-        if (ball.y + ball.height > paddle.y - paddle.height && ball.specialMode) {
-            ball.velocityX = (500 + 20) * (ball.velocityX) / Math.abs(ball.velocityX);
-        }
-        else {
-            ball.specialMode = false;
-            ball.normalSpeed();
-        }
+//        //Đảm bảo sẽ không có va chạm trong nhiều nhịp game
+//        if (ball.y + ball.height > paddle.y - paddle.height && ball.specialMode) {
+//            ball.velocityX = (500 + 20) * (ball.velocityX) / Math.abs(ball.velocityX);
+//        }
+//        else {
+//            ball.specialMode = false;
+//            ball.normalSpeed();
+//        }
 
         // 2. Ball-Brick collision using trajectory prediction
         // Check if ball's path WILL hit any brick
         boolean hitBrick = false; // Only hit one brick per frame
 
         if(ball.velocityY < 0) {
-            int m = bricks.size();
-            for (int i = m - 1; i >= 0; i--) {
+            for (int i = bricks.size() - 1; i >= 0; i--) {
                 if(ball.willHitBrick(bricks.get(i), deltaTime)) {
                     brickAndBallProcess(bricks.get(i));
-                    hitBrick = true;
                     break;
-                }
-            }
-            for (Brick brick : bricks) {
-                /** key */
-                if (ball.willHitBrick(brick, deltaTime)) {
-                    brickAndBallProcess(brick);
-                    hitBrick = true;
-                    break; // Only hit one brick
                 }
             }
         } else {
             for (Brick brick : bricks) {
-                /** key */
                 if (ball.willHitBrick(brick, deltaTime)) {
                     brickAndBallProcess(brick);
-                    hitBrick = true;
-                    break; // Only hit one brick
+                    break;
                 }
             }
         }
@@ -292,7 +282,7 @@ public class GameEngine {
         ball.correctPositionAfterBrickHit(brick, side); /** key */
         ball.bounceOffBrick(side);
 
-        Color particleColor = getBrickColor(brick); //TODO sửa lại particle phù hợp với màu enum
+        Color particleColor = getBrickColor(brick);
         particleSystem.createBurstEffect(
                 brick.getX() + brick.getWidth() / 2.0,
                 brick.getY() + brick.getHeight() / 2.0,
@@ -323,6 +313,7 @@ public class GameEngine {
         // Remove if destroyed
         if (brick.isDestroyed()) {
             score += brick.getScoreValue();
+            SoundManager.getInstance().playSound("brick_destroyed.wav");
 
             // Spawn power-up chance
             if (!(brick instanceof UnbreakableBrick) && random.nextInt(100) < 15) {
@@ -330,36 +321,43 @@ public class GameEngine {
             }
 
             bricks.remove(brick);
+        } else {
+            // Brick was hit but not destroyed
+            SoundManager.getInstance().playSound("brick_hit.wav");
         }
 
+        // 3. Paddle-PowerUp collision
+        Iterator<PowerUp> powerUpIterator = powerUps.iterator();
+        while (powerUpIterator.hasNext()) {
+            PowerUp powerUp = powerUpIterator.next();
+
+            // Remove power-ups that fell off screen
+            if (powerUp.getY() >= gameHeight) {
+                powerUpIterator.remove();
+                continue;
+            }
+
+            // Check if paddle caught the power-up
+            if (paddle.collidesWith(powerUp)) {
+                activatePowerUp(powerUp);
+                powerUpIterator.remove();
+            }
+        }
     }
-
-    /**
-     * Get color for particles based on brick type.
-     */
-    /** can sua lai */
-
-    /** sua lai bang enum */
     private Color getBrickColor(Brick brick) {
-        switch (brick.getType()) {
-            case newConstants.BlockType.RUBY: // Red
-                return Color.RED;
-            case newConstants.BlockType.YLLW: // Yellow
-                return Color.YELLOW;
-            case newConstants.BlockType.BLUE: // Blue
-                return Color.BLUE;
-            case newConstants.BlockType.MGNT: // Magenta
-                return Color.MAGENTA;
-            case newConstants.BlockType.LIME: // Lime
-                return Color.LIME;
-            case newConstants.BlockType.WHIT: // White
-                return Color.WHITE;
-            case newConstants.BlockType.ORNG: // Orange
-                return Color.ORANGE;
-            case newConstants.BlockType.CYAN: // Cyan
-                return Color.CYAN;
-        }
-        return Color.CYAN; //IN CASE
+        return switch (brick.getType()) {
+            case BrickType.RUBY -> Color.RED;
+            case BrickType.YLLW -> Color.YELLOW;
+            case BrickType.BLUE -> Color.BLUE;
+            case BrickType.MGNT -> Color.MAGENTA;
+            case BrickType.LIME -> Color.LIME;
+            case BrickType.WHIT -> Color.WHITE;
+            case BrickType.ORNG -> Color.ORANGE;
+            case BrickType.CYAN -> Color.CYAN;
+            case BrickType.GRAY -> Color.GRAY;
+            case BrickType.GOLD -> Color.GOLD;
+            default -> Color.GRAY;
+        };
     }
 
     /**
@@ -368,8 +366,6 @@ public class GameEngine {
      */
     private void spawnPowerUp(int x, int y) {
         PowerUp powerUp;
-
-        // 50/50 chance between two power-up types
         if (random.nextBoolean()) {
             powerUp = new ExpandPaddlePowerUp(x, y, 20, 20);
         } else {
@@ -383,6 +379,7 @@ public class GameEngine {
 
     private void activatePowerUp(PowerUp powerUp) {
         powerUp.applyEffect(paddle);
+        SoundManager.getInstance().playSound("powerUp.wav");
         // Power-up duration is in frames, convert to seconds (assuming 60 FPS)
         double durationInSeconds = powerUp.getDuration() / 60.0;
         activePowerUps.add(new ActivePowerUp(powerUp, durationInSeconds));
@@ -424,20 +421,21 @@ public class GameEngine {
      * Game over - set state to GAME_OVER.
      */
     public void gameOver() {
-        gameState = "GAME_OVER";
+        gameState = GameState.GAME_OVER;
+        SoundManager.getInstance().playSound("game_over.wav");
     }
 
     public void handleInput(InputSignal inputSignal) {
         //TODO: remove the two if statements and put them into the innner switch
-        if (gameState.equals("PLAYING")) {
+        if (gameState.equals(GameState.PLAYING)) {
             switch (inputSignal) {
                 case MOVE_LEFT -> paddle.moveLeft();
                 case MOVE_RIGHT -> paddle.moveRight();
                 case STOP -> paddle.stop();
-                case PAUSE_RESUME -> gameState = "PAUSE";
+                case PAUSE_RESUME -> gameState = GameState.PAUSED;
             }
-        } else if (gameState.equals("PAUSED")) {
-            if (inputSignal.equals(InputSignal.PAUSE_RESUME)) gameState = "PLAYING";
+        } else if (gameState.equals(GameState.PAUSED)) {
+            if(inputSignal.equals(InputSignal.PAUSE_RESUME)) gameState = GameState.PLAYING;
         }
     }
 
@@ -468,11 +466,11 @@ public class GameEngine {
         return particleSystem;
     }
 
-    public String getGameState() {
+    public GameState getGameState() {
         return gameState;
     }
 
-    public void setGameState(String state) {
+    public void setGameState(GameState state) {
         this.gameState = state;
     }
 
@@ -486,9 +484,5 @@ public class GameEngine {
 
     public int getLevelNumber() {
         return levelNumber;
-    }
-
-    public int getUIHeight() {
-        return UI_HEIGHT;
     }
 }

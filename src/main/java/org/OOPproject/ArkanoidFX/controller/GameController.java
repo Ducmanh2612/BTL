@@ -57,7 +57,6 @@ public class GameController {
     }
 
     public void handleCurrentKeys() {
-        //TODO: dive deeper in to logic of this
         if (pressedKeys.contains(KeyCode.A)) {
             gameEngine.handleInput(InputSignal.MOVE_LEFT);
         }
@@ -67,7 +66,6 @@ public class GameController {
         if(!pressedKeys.contains(KeyCode.A) && !pressedKeys.contains(KeyCode.D)) {
             gameEngine.handleInput(InputSignal.STOP);
         }
-        //TODO: handle the bug when pressing P, the game freezes and not not unfreeze on next P press
         if (pressedKeys.contains(KeyCode.P)) {
             gameEngine.handleInput(InputSignal.PAUSE_RESUME);
             // Remove P key to prevent multiple toggles in one press
