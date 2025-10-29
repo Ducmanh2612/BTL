@@ -22,6 +22,7 @@ public class GameEngine {
     private List<PowerUp> powerUps;                // List of falling power-ups
     private List<ActivePowerUp> activePowerUps;    // Power-ups currently active
     private List<Blink> blinks;                    // List of active blink effects
+    private List<Enemy> enemies;
 
     private Level currentLevel;                    // Current level definition
 
@@ -42,6 +43,7 @@ public class GameEngine {
     private static GameEngine instance = null;
 
     private boolean ballReleased;
+
 
     private class ActivePowerUp {
         PowerUp powerUp;           // The power-up object
@@ -64,6 +66,7 @@ public class GameEngine {
         this.powerUps = new ArrayList<>();
         this.activePowerUps = new ArrayList<>();
         this.blinks = new ArrayList<>();
+        this.enemies = new ArrayList<>();
 
         this.gameState = "PLAYING";
         this.ballReleased = false; // Ball not released yet
