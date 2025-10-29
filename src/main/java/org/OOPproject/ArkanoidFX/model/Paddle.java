@@ -23,6 +23,7 @@ public class Paddle extends MovableObject {
 
     public void moveLeft() { velocityX = -speed; }
 
+    public double getSpeed() { return speed;}
     public int getFrameX() { return sprite.getFrameX(); }
     public int getFrameY() { return sprite.getFrameY(); }
 

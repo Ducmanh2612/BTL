@@ -6,6 +6,8 @@ import org.OOPproject.ArkanoidFX.model.PowerUps.*;
 import javafx.scene.paint.Color;
 import org.OOPproject.ArkanoidFX.utils.GameState;
 import org.OOPproject.ArkanoidFX.utils.InputSignal;
+import org.OOPproject.ArkanoidFX.utils.newConstants;
+import org.OOPproject.ArkanoidFX.utils.newLevel;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -25,7 +27,7 @@ public class GameEngine {
     private List<Blink> blinks;                    // List of active blink effects
     private List<Enemy> enemies;
 
-    private Level currentLevel;                    // Current level definition
+    private newLevel currentLevel;                    // Current level definition
 
     // Particle system for visual effects
     private ParticleSystem particleSystem;
@@ -121,7 +123,7 @@ public class GameEngine {
         particleSystem.clear();
 
         // Create bricks using Level system
-        currentLevel = new Level(levelNumber);
+        currentLevel = new newLevel(levelNumber);
         bricks = currentLevel.createBricks(gameWidth, 50);
     }
     //TODO: create a new level generator and delete this method to it
@@ -224,55 +226,121 @@ public class GameEngine {
         // 1. Ball-Paddle collision (simple bounds check is fine for paddle)
         if (ball.collidesWith(paddle)) {
             ball.bounceOffPaddle(paddle);
+            if(ball.velocityX < 520) ball.specialMode = true;
+            return ;
+        }
+
+        //Đảm bảo sẽ không có va chạm trong nhiều nhịp game
+        if (ball.y + ball.height > paddle.y - paddle.height && ball.specialMode) {
+            ball.velocityX = (500 + 20) * (ball.velocityX) / Math.abs(ball.velocityX);
+        }
+        else {
+            ball.specialMode = false;
+            ball.normalSpeed();
             SoundManager.getInstance().playSound("bounce.wav");
         }
 
         // 2. Ball-Brick collision using trajectory prediction
         // Check if ball's path WILL hit any brick
-        if (ball.canCollideWithBricks()) {
-            boolean hitBrick = false; // Only hit one brick per frame
+        boolean hitBrick = false; // Only hit one brick per frame
 
+        if(ball.velocityY < 0) {
+            int m = bricks.size();
+            for (int i = m - 1; i >= 0; i--) {
+                if(ball.willHitBrick(bricks.get(i), deltaTime)) {
+                    brickAndBallProcess(bricks.get(i));
+                    hitBrick = true;
+                    break;
+                }
+            }
             for (Brick brick : bricks) {
+                /** key */
                 if (ball.willHitBrick(brick, deltaTime)) {
-                    String side = ball.getCollisionSide(brick);
-                    ball.correctPositionAfterBrickHit(brick, side);
-                    ball.bounceOffBrick(side);
+                    brickAndBallProcess(brick);
+                    hitBrick = true;
+                    break; // Only hit one brick
+                }
+            }
+        } else {
+            for (Brick brick : bricks) {
+                /** key */
+                if (ball.willHitBrick(brick, deltaTime)) {
+                    brickAndBallProcess(brick);
+                    hitBrick = true;
+                    break; // Only hit one brick
+                }
+            }
+        }
 
-                    Color particleColor = getBrickColor(brick);
-                    particleSystem.createBurstEffect(
-                            brick.getX() + brick.getWidth() / 2.0,
-                            brick.getY() + brick.getHeight() / 2.0,
-                            particleColor,
-                            15
-                    );
 
-                    brick.takeHit();
+        // 3. Paddle-PowerUp collision
+        Iterator<PowerUp> powerUpIterator = powerUps.iterator();
+        while (powerUpIterator.hasNext()) {
+            PowerUp powerUp = powerUpIterator.next();
 
-                    // Create blink effect for strong bricks when hit
-                    if (brick instanceof StrongBrick || brick instanceof ExtraStrongBrick || brick instanceof UnbreakableBrick) {
-                        // Only create new blink if this brick doesn't already have one
-                        boolean alreadyHasBlink = false;
-                        for (Blink existingBlink : blinks) {
-                            if (existingBlink.getAttachedBrick() == brick) {
-                                alreadyHasBlink = true;
-                                break;
-                            }
-                        }
-                        if (!alreadyHasBlink) {
-                            blinks.add(new Blink(brick));
-                        }
-                    }
+            // Remove power-ups that fell off screen
+            if (powerUp.getY() >= gameHeight) {
+                powerUpIterator.remove();
+                continue;
+            }
+
+            // Check if paddle caught the power-up
+            if (paddle.collidesWith(powerUp)) {
+                activatePowerUp(powerUp);
+                powerUpIterator.remove();
+            }
+        }
+
+    }
+
+    public void brickAndBallProcess(Brick brick) {
+        String side = ball.getCollisionSide(brick);
+        ball.correctPositionAfterBrickHit(brick, side); /** key */
+        ball.bounceOffBrick(side);
+
+        Color particleColor = getBrickColor(brick); //TODO sửa lại particle phù hợp với màu enum
+        particleSystem.createBurstEffect(
+                brick.getX() + brick.getWidth() / 2.0,
+                brick.getY() + brick.getHeight() / 2.0,
+                particleColor,
+                15
+        );
+
+        brick.takeHit();
+
+        // Create blink effect for strong bricks when hit
+
+        // hàm kiểm tra cũ brick instanceof StrongBrick || brick instanceof ExtraStrongBrick || brick instanceof UnbreakableBrick
+        // Sửa lại thành brick có hitpoint lớn hơn 1
+        if (brick.getHitPoints() > 1) {
+            // Only create new blink if this brick doesn't already have one
+            boolean alreadyHasBlink = false;
+            for (Blink existingBlink : blinks) {
+                if (existingBlink.getAttachedBrick() == brick) {
+                    alreadyHasBlink = true;
+                    break;
+                }
+            }
+            if (!alreadyHasBlink) {
+                blinks.add(new Blink(brick));
+            }
+        }
 
                     // Remove if destroyed
                     if (brick.isDestroyed()) {
                         score += brick.getScoreValue();
                         SoundManager.getInstance().playSound("brick_destroyed.wav");
+        // Remove if destroyed
+        if (brick.isDestroyed()) {
+            score += brick.getScoreValue();
 
-                        // Spawn power-up chance
-                        if (!(brick instanceof UnbreakableBrick) && random.nextInt(100) < 15) {
-                            spawnPowerUp(brick.getX(), brick.getY());
-                        }
+            // Spawn power-up chance
+            if (!(brick instanceof UnbreakableBrick) && random.nextInt(100) < 15) {
+                spawnPowerUp(brick.getX(), brick.getY());
+            }
 
+            bricks.remove(brick);
+        }
                         bricks.remove(brick);
                     } else {
                         // Brick was hit but not destroyed
@@ -311,24 +379,29 @@ public class GameEngine {
     /**
      * Get color for particles based on brick type.
      */
-     private Color getBrickColor(Brick brick) {
-         switch (brick) {
-             case UnbreakableBrick unbreakableBrick -> {
-                 return Color.GOLD;
-             }
-             case ExtraStrongBrick extraStrongBrick -> {
-                 return Color.PURPLE;
-             }
-             case StrongBrick strongBrick -> {
-                 int hp = brick.getHitPoints();
-                 if (hp == 3) return Color.DARKRED;
-                 if (hp == 2) return Color.RED;
-                 return Color.ORANGERED;
-             }
-             case null, default -> {
-                 return Color.DODGERBLUE;
-             }
-         }
+    /** can sua lai */
+
+    /** sua lai bang enum */
+    private Color getBrickColor(Brick brick) {
+        switch (brick.getType()) {
+            case newConstants.BlockType.RUBY: // Red
+                return Color.RED;
+            case newConstants.BlockType.YLLW: // Yellow
+                return Color.YELLOW;
+            case newConstants.BlockType.BLUE: // Blue
+                return Color.BLUE;
+            case newConstants.BlockType.MGNT: // Magenta
+                return Color.MAGENTA;
+            case newConstants.BlockType.LIME: // Lime
+                return Color.LIME;
+            case newConstants.BlockType.WHIT: // White
+                return Color.WHITE;
+            case newConstants.BlockType.ORNG: // Orange
+                return Color.ORANGE;
+            case newConstants.BlockType.CYAN: // Cyan
+                return Color.CYAN;
+        }
+        return Color.CYAN; //IN CASE
     }
 
     /**
@@ -415,16 +488,51 @@ public class GameEngine {
     // ========== GETTER METHODS ==========
     // These allow GameView to access game objects for rendering
 
-    public List<Brick> getBricks() { return bricks; }
-    public List<PowerUp> getPowerUps() { return powerUps; }
-    public List<Blink> getBlinks() { return blinks; }
-    public Paddle getPaddle() { return paddle; }
-    public Ball getBall() { return ball; }
-    public ParticleSystem getParticleSystem() { return particleSystem; }
-    public GameState getGameState() { return gameState; }
-    public void setGameState(GameState state) { this.gameState = state; }
-    public int getScore() { return score; }
-    public int getLives() { return lives; }
-    public int getLevelNumber() { return levelNumber; }
-    public int getUIHeight() { return UI_HEIGHT; }
+    public List<Brick> getBricks() {
+        return bricks;
+    }
+
+    public List<PowerUp> getPowerUps() {
+        return powerUps;
+    }
+
+    public List<Blink> getBlinks() {
+        return blinks;
+    }
+
+    public Paddle getPaddle() {
+        return paddle;
+    }
+
+    public Ball getBall() {
+        return ball;
+    }
+
+    public ParticleSystem getParticleSystem() {
+        return particleSystem;
+    }
+
+    public String getGameState() {
+        return gameState;
+    }
+
+    public void setGameState(String state) {
+        this.gameState = state;
+    }
+
+    public int getScore() {
+        return score;
+    }
+
+    public int getLives() {
+        return lives;
+    }
+
+    public int getLevelNumber() {
+        return levelNumber;
+    }
+
+    public int getUIHeight() {
+        return UI_HEIGHT;
+    }
 }

@@ -1,10 +1,12 @@
 package org.OOPproject.ArkanoidFX.model.Bricks;
 
+import org.OOPproject.ArkanoidFX.utils.newConstants;
+
 public class StrongBrick extends Brick {
     public StrongBrick(int x, int y, int width, int height) {
-        super(x, y, width, height);
+        super(x, y, width, height, newConstants.BlockType.CYAN);
         this.hitPoints = 3;
-        this.type = "Strong";
+        this.type = newConstants.BlockType.NONE;
         this.scoreValue = 30;
     }
     @Override

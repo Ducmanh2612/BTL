@@ -6,13 +6,14 @@ import static org.OOPproject.ArkanoidFX.utils.Constants.GAME_WIDTH;
 //TODO: remove stuckToPaddle or attachedPaddle if not needed anymore
 public class Ball extends MovableObject {
     private static final double COOLDOWN_TIME = 0.05; // 50ms cooldown between brick collisions
-    private static final double NORMAL_SPEED = 350.0;
-    private static final double FAST_SPEED = 500.0;
+    private static final double NORMAL_SPEED = 500;
+    private static final double FAST_SPEED = 600;
 
     private double speed; // Speed in pixels per second
     private boolean active;
     private double collisionCooldown; // Cooldown to prevent multi-brick breaking
 
+    public boolean specialMode = false;
     private boolean stuckToPaddle; // Is ball stuck to paddle?
     private Paddle attachedPaddle; // Reference to paddle when stuck
 
@@ -166,11 +167,21 @@ public class Ball extends MovableObject {
      * Bounce off paddle with improved physics.
      * The bounce angle depends on where the ball hits the paddle.
      */
+
+    /**
+     * while tọa độ nửa dưới của ball còn nhỏ hơn tọa độ nửa trên của paddle,
+     * giữ tốc độ theo phương x của ball > tốc độ phương x của paddle
+     * => sẽ không có va chạm liên tiếp giữa bóng và paddle trong các nhịp game liên tiếp
+     * => không có paddle đè lên ball
+     * => đồng thời giả lập được khi mới va chạm với paddle thì quả bóng bay nhanh hơn
+     * sau vòng while sửa lại vận tốc
+     */
     public void bounceOffPaddle(Paddle paddle) {
         // Calculate where on paddle the ball hit (-1.0 to 1.0)
         double ballCenterX = x + width / 2.0;
         double paddleCenterX = paddle.getX() + paddle.getWidth() / 2.0;
         double hitPosition = (ballCenterX - paddleCenterX) / (paddle.getWidth() / 2.0);
+        boolean specialMode = false;
 
         // Clamp hit position to prevent extreme angles
         hitPosition = Math.max(-1.0, Math.min(1.0, hitPosition));
@@ -188,7 +199,7 @@ public class Ball extends MovableObject {
         // If paddle is moving, add some of that velocity to the ball
         if (paddle.getVelocityX() != 0) {
             double paddleInfluence = 0.3; // 30% of paddle velocity transferred
-            velocityX += paddle.getVelocityX() * paddleInfluence;
+            velocityX = paddle.getVelocityX() * paddleInfluence;
 
             // Re-normalize to maintain speed
             double currentSpeed = Math.sqrt(velocityX * velocityX + velocityY * velocityY);
@@ -231,24 +242,22 @@ public class Ball extends MovableObject {
      */
     public void correctPositionAfterBrickHit(GameObject brick, String side) {
         // Small push distance to ensure ball is outside brick
-        double pushDistance = 1.0;
-
         switch (side) {
             case "top":
                 // Ball hit top of brick, push it upward
-                y = brick.getY() - height - pushDistance;
+                y = brick.getY() - height;
                 break;
             case "bottom":
                 // Ball hit bottom of brick, push it downward
-                y = brick.getY() + brick.getHeight() + pushDistance;
+                y = brick.getY() + brick.getHeight();
                 break;
             case "left":
                 // Ball hit left of brick, push it leftward
-                x = brick.getX() - width - pushDistance;
+                x = brick.getX() - width;
                 break;
             case "right":
                 // Ball hit right of brick, push it rightward
-                x = brick.getX() + brick.getWidth() + pushDistance;
+                x = brick.getX() + brick.getWidth();
                 break;
         }
     }
