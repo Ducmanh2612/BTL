@@ -4,7 +4,7 @@ import org.OOPproject.ArkanoidFX.model.GameObject;
 
 public abstract class Brick extends GameObject {
     protected int hitPoints;
-    protected BrickType type; //TODO: change brick type to enum // Solved
+    protected BrickType type;
     protected int scoreValue;
 
     public Brick(int x, int y, int width, int height, BrickType type) {

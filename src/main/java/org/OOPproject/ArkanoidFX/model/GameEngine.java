@@ -24,7 +24,7 @@ public class GameEngine {
     private List<Blink> blinks;                    // List of active blink effects
     private List<Enemy> enemies;
 
-    private newLevel currentLevel;                    // Current level definition
+    private Level currentLevel;                    // Current level definition
 
     // Particle system for visual effects
     private ParticleSystem particleSystem;
@@ -45,7 +45,7 @@ public class GameEngine {
     private boolean ballReleased;
 
 
-    private class ActivePowerUp {
+    private static class ActivePowerUp {
         PowerUp powerUp;           // The power-up object
         double remainingTime;      // How many seconds until it expires
 
@@ -100,9 +100,9 @@ public class GameEngine {
      */
     private void initializeLevel() {
         // Create paddle in the center bottom of play area
-        int paddleX = (gameWidth - PADDLE_WIDTH) / 2;
+        int paddleX = (gameWidth - PADDLE_DEFAULT_WIDTH) / 2;
         int paddleY = gameHeight - 50;  // 50 pixels from bottom
-        paddle = new Paddle(paddleX, paddleY, PADDLE_WIDTH, PADDLE_HEIGHT);
+        paddle = new Paddle(paddleX, paddleY, PADDLE_DEFAULT_WIDTH, PADDLE_DEFAULT_HEIGHT);
 
         // Create ball just above the paddle
         int ballX = gameWidth / 2 - BALL_SIZE / 2;
@@ -120,7 +120,7 @@ public class GameEngine {
         particleSystem.clear();
 
         // Create bricks using Level system
-        currentLevel = new newLevel(levelNumber);
+        currentLevel = new Level(levelNumber);
         bricks = currentLevel.createBricks(gameWidth, 50);
     }
     //TODO: create a new level generator and delete this method to it
@@ -344,34 +344,20 @@ public class GameEngine {
             }
         }
     }
-
-
-    /**
-     * Get color for particles based on brick type.
-     */
-    /** can sua lai */
-
-    /** sua lai bang enum */
     private Color getBrickColor(Brick brick) {
-        switch (brick.getType()) {
-            case BrickType.RUBY: // Red
-                return Color.RED;
-            case BrickType.YLLW: // Yellow
-                return Color.YELLOW;
-            case BrickType.BLUE: // Blue
-                return Color.BLUE;
-            case BrickType.MGNT: // Magenta
-                return Color.MAGENTA;
-            case BrickType.LIME: // Lime
-                return Color.LIME;
-            case BrickType.WHIT: // White
-                return Color.WHITE;
-            case BrickType.ORNG: // Orange
-                return Color.ORANGE;
-            case BrickType.CYAN: // Cyan
-                return Color.CYAN;
-        }
-        return Color.CYAN; //IN CASE
+        return switch (brick.getType()) {
+            case BrickType.RUBY -> Color.RED;
+            case BrickType.YLLW -> Color.YELLOW;
+            case BrickType.BLUE -> Color.BLUE;
+            case BrickType.MGNT -> Color.MAGENTA;
+            case BrickType.LIME -> Color.LIME;
+            case BrickType.WHIT -> Color.WHITE;
+            case BrickType.ORNG -> Color.ORANGE;
+            case BrickType.CYAN -> Color.CYAN;
+            case BrickType.GRAY -> Color.GRAY;
+            case BrickType.GOLD -> Color.GOLD;
+            default -> Color.GRAY;
+        };
     }
 
     /**

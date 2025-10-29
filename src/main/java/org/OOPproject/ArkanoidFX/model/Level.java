@@ -5,25 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.OOPproject.ArkanoidFX.model.Bricks.BrickType;
 
-/**
- * BRICK TYPE ENCODING:
- * Empty space
- * 1 = Normal (cyan - 100 pts)
- * 2 = Strong Gray (2 hits - 50 pts)
- * 3 = Extra Strong Purple (5 hits - 200 pts)
- * 9 = Unbreakable Gold (cannot be destroyed)
- *
- * COLORED BRICKS (1 hit each):
- * 10 = Red/Ruby (90 pts)
- * 11 = Yellow (120 pts)
- * 12 = Blue (100 pts)
- * 13 = Magenta (110 pts)
- * 14 = Lime/Green (80 pts)
- * 15 = White (10 pts)
- * 16 = Orange (60 pts)
- * 17 = Cyan (70 pts)
- */
-public class newLevel {
+public class Level {
     private int levelNumber;;
     private BrickType[][] layout;
 
@@ -32,7 +14,7 @@ public class newLevel {
     private static final int BRICK_HEIGHT = 20;
     private static final int SPACING = 2;
 
-    public newLevel(int levelNumber) {
+    public Level(int levelNumber) {
         this.levelNumber = levelNumber;
         this.layout = generateLayout(levelNumber);
     }

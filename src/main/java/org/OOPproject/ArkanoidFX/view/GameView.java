@@ -12,11 +12,11 @@ import javafx.scene.text.FontWeight;
 import org.OOPproject.ArkanoidFX.model.*;
 import org.OOPproject.ArkanoidFX.model.Bricks.*;
 import org.OOPproject.ArkanoidFX.model.PowerUps.*;
+import org.OOPproject.ArkanoidFX.utils.Constants;
 import org.OOPproject.ArkanoidFX.utils.GameState;
 
 import static org.OOPproject.ArkanoidFX.utils.Constants.GAME_HEIGHT;
 import static org.OOPproject.ArkanoidFX.utils.Constants.GAME_WIDTH;
-import static org.OOPproject.ArkanoidFX.utils.newConstants.*;
 
 public class GameView extends StackPane {
     private static GameEngine gameEngineRef;
@@ -124,20 +124,20 @@ public class GameView extends StackPane {
         
         Image shadowImg = assetManager.getBonusBlockShadowImg();
         if (shadowImg != null) {
-            gc.drawImage(shadowImg, px, py + 2, POWER_UP_WIDTH, POWER_UP_HEIGHT);
+            gc.drawImage(shadowImg, px, py + 2, Constants.POWER_UP_WIDTH, Constants.POWER_UP_HEIGHT);
         }
         
         PowerUpTypes powerUpType = powerUp.getType();
         Image spriteMap = assetManager.getPowerUpSpriteMap(powerUpType);
         
         if (spriteMap != null) {
-            int frameWidth = POWER_UP_WIDTH;
-            int frameHeight = POWER_UP_HEIGHT;
+            int frameWidth = Constants.POWER_UP_WIDTH;
+            int frameHeight = Constants.POWER_UP_HEIGHT;
             int frameX = powerUp.getFrameX();
             int frameY = powerUp.getFrameY();
             int sourceX = frameX * frameWidth;
             int sourceY = frameY * frameHeight;
-            gc.drawImage(spriteMap, sourceX, sourceY, frameWidth, frameHeight, px, py, POWER_UP_WIDTH, POWER_UP_HEIGHT);
+            gc.drawImage(spriteMap, sourceX, sourceY, frameWidth, frameHeight, px, py, Constants.POWER_UP_WIDTH, Constants.POWER_UP_HEIGHT);
         } else {
             if (powerUp instanceof ExpandPaddlePowerUp) {
                 gc.setFill(Color.GOLD);
@@ -193,7 +193,6 @@ public class GameView extends StackPane {
     }
 
 
-    //todo NEED TO REWRITE TO FIT WITH NEW LOGIC */
     private void renderBrick(Brick brick) {
         if (brick instanceof ColoredBrick) {
             ColoredBrick coloredBrick = (ColoredBrick) brick;
@@ -246,11 +245,11 @@ public class GameView extends StackPane {
         
         Image paddleImg = isExpanded ? assetManager.getPaddleWideSpriteMapImg() : assetManager.getPaddleStdSpriteMapImg();
         if (paddleImg != null) {
-            int frameWidth = PADDLE_DEFAULT_WIDTH;
-            int frameHeight = PADDLE_DEFAULT_HEIGHT;
+            int frameWidth = Constants.PADDLE_DEFAULT_WIDTH;
+            int frameHeight = Constants.PADDLE_DEFAULT_HEIGHT;
             if(paddle.isExpanded()){
-                frameWidth = PADDLE_EXPANDED_WIDTH;
-                frameHeight = PADDLE_EXPANDED_HEIGHT;
+                frameWidth = Constants.PADDLE_EXPANDED_WIDTH;
+                frameHeight = Constants.PADDLE_EXPANDED_HEIGHT;
             }
             //TODO: fix frame size for wide paddle
             int frameX = paddle.getFrameX();
@@ -300,8 +299,8 @@ public class GameView extends StackPane {
 
         if (blinkMapImg != null) {
             // Blink sprite sheet: 8 frames wide (38px each), 3 frames tall (20px each)
-            int frameWidth = BRICK_WIDTH;
-            int frameHeight = BRICK_HEIGHT;
+            int frameWidth = Constants.BRICK_WIDTH;
+            int frameHeight = Constants.BRICK_HEIGHT;
             int frameX = blink.getFrameX();
             int frameY = blink.getFrameY();
             int sourceX = frameX * frameWidth;

@@ -1,7 +1,7 @@
 package org.OOPproject.ArkanoidFX.model.Bricks;
 
-import static org.OOPproject.ArkanoidFX.utils.newConstants.BRICK_HEIGHT;
-import static org.OOPproject.ArkanoidFX.utils.newConstants.BRICK_WIDTH;
+import static org.OOPproject.ArkanoidFX.utils.Constants.BRICK_HEIGHT;
+import static org.OOPproject.ArkanoidFX.utils.Constants.BRICK_WIDTH;
 
 public class BrickFactory {
     public static Brick createBrick(BrickType brickType, int x, int y) {
