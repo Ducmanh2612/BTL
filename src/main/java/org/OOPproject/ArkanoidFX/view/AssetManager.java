@@ -3,6 +3,7 @@ package org.OOPproject.ArkanoidFX.view;
 import javafx.scene.image.Image;
 import org.OOPproject.ArkanoidFX.model.PowerUps.PowerUpTypes;
 
+import javafx.scene.media.Media;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -55,6 +56,8 @@ public class AssetManager {
     
     // Blink effect sprite map
     private Image blinkMapImg;
+
+    private Media testSound;
 
     private AssetManager() {
         imageCache = new HashMap<>();
@@ -114,6 +117,9 @@ public class AssetManager {
 
             blinkMapImg = loadImage("blink_map.png", 304, 60);
 
+            // Load media files
+            testSound = loadMedia("game_start.wav");
+
         } catch (Exception e) {
             System.err.println("Error loading assets: " + e.getMessage());
         }
@@ -127,6 +133,17 @@ public class AssetManager {
             return img;
         } catch (Exception e) {
             System.err.println("Failed to load: " + filename);
+            return null;
+        }
+    }
+
+    private Media loadMedia(String filename) {
+        try {
+            String path = "/textures/assets/" + filename;
+            Media media = new Media(getClass().getResource(path).toExternalForm());
+            return media;
+        } catch (Exception e) {
+            System.err.println("Failed to load media: " + filename);
             return null;
         }
     }
@@ -189,4 +206,11 @@ public class AssetManager {
     
     public Image getBonusBlockShadowImg() { return bonusBlockShadowImg; }
     public Image getBlinkMapImg() { return blinkMapImg; }
+
+    public Media getMedia(String mediaFile) {
+        if (mediaFile.equals("game_start.wav")) {
+            return testSound;
+        }
+        return null;
+    }
 }

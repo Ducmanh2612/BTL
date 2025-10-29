@@ -6,6 +6,7 @@ import org.OOPproject.ArkanoidFX.model.PowerUps.*;
 import javafx.scene.paint.Color;
 import org.OOPproject.ArkanoidFX.utils.GameState;
 import org.OOPproject.ArkanoidFX.utils.InputSignal;
+import org.OOPproject.ArkanoidFX.view.SoundManager;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -90,6 +91,9 @@ public class GameEngine {
         this.ballReleased = false; // Ball starts stuck to paddle
 
         initializeLevel();
+        // Play game start sound
+        SoundManager.getInstance().playSound("game_start.wav");
+
     }
 
     /**
