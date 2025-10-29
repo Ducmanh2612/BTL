@@ -1,5 +1,7 @@
 package org.OOPproject.ArkanoidFX.model;
 import org.OOPproject.ArkanoidFX.model.Bricks.*;
+import org.OOPproject.ArkanoidFX.utils.newConstants;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -186,28 +188,28 @@ public class Level {
                         brick = new UnbreakableBrick(x, y, BRICK_WIDTH, BRICK_HEIGHT);
                         break;
                     case 10: // Red
-                        brick = new ColoredBrick(x, y, BRICK_WIDTH, BRICK_HEIGHT, "RED", 90, 1);
+                        brick = new ColoredBrick(x, y, BRICK_WIDTH, BRICK_HEIGHT, newConstants.BlockType.RUBY, 90, 1);
                         break;
                     case 11: // Yellow
-                        brick = new ColoredBrick(x, y, BRICK_WIDTH, BRICK_HEIGHT, "YELLOW", 120, 1);
+                        brick = new ColoredBrick(x, y, BRICK_WIDTH, BRICK_HEIGHT, newConstants.BlockType.YLLW, 120, 1);
                         break;
                     case 12: // Blue
-                        brick = new ColoredBrick(x, y, BRICK_WIDTH, BRICK_HEIGHT, "BLUE", 100, 1);
+                        brick = new ColoredBrick(x, y, BRICK_WIDTH, BRICK_HEIGHT, newConstants.BlockType.BLUE, 100, 1);
                         break;
                     case 13: // Magenta
-                        brick = new ColoredBrick(x, y, BRICK_WIDTH, BRICK_HEIGHT, "MAGENTA", 110, 1);
+                        brick = new ColoredBrick(x, y, BRICK_WIDTH, BRICK_HEIGHT, newConstants.BlockType.MGNT, 110, 1);
                         break;
                     case 14: // Lime
-                        brick = new ColoredBrick(x, y, BRICK_WIDTH, BRICK_HEIGHT, "LIME", 80, 1);
+                        brick = new ColoredBrick(x, y, BRICK_WIDTH, BRICK_HEIGHT, newConstants.BlockType.LIME, 80, 1);
                         break;
                     case 15: // White
-                        brick = new ColoredBrick(x, y, BRICK_WIDTH, BRICK_HEIGHT, "WHITE", 50, 1);
+                        brick = new ColoredBrick(x, y, BRICK_WIDTH, BRICK_HEIGHT, newConstants.BlockType.WHIT, 50, 1);
                         break;
                     case 16: // Orange
-                        brick = new ColoredBrick(x, y, BRICK_WIDTH, BRICK_HEIGHT, "ORANGE", 60, 1);
+                        brick = new ColoredBrick(x, y, BRICK_WIDTH, BRICK_HEIGHT, newConstants.BlockType.ORNG, 60, 1);
                         break;
                     case 17: // Cyan
-                        brick = new ColoredBrick(x, y, BRICK_WIDTH, BRICK_HEIGHT, "CYAN", 70, 1);
+                        brick = new ColoredBrick(x, y, BRICK_WIDTH, BRICK_HEIGHT, newConstants.BlockType.CYAN, 70, 1);
                         break;
                 }
 

@@ -12,6 +12,7 @@ import javafx.scene.text.FontWeight;
 import org.OOPproject.ArkanoidFX.model.*;
 import org.OOPproject.ArkanoidFX.model.Bricks.*;
 import org.OOPproject.ArkanoidFX.model.PowerUps.*;
+import org.OOPproject.ArkanoidFX.utils.newConstants;
 
 import static org.OOPproject.ArkanoidFX.utils.Constants.GAME_HEIGHT;
 import static org.OOPproject.ArkanoidFX.utils.Constants.GAME_WIDTH;
@@ -176,11 +177,11 @@ public class GameView extends StackPane {
         Image brickImg = null;
         if (brick instanceof ColoredBrick) {
             ColoredBrick coloredBrick = (ColoredBrick) brick;
-            brickImg = assetManager.getBrickImage(coloredBrick.getColor());
+            brickImg = assetManager.getBrickImage(coloredBrick.getType());
         } else if (brick instanceof UnbreakableBrick) {
-            brickImg = assetManager.getBrickImage("GOLD");
+            brickImg = assetManager.getBrickImage(newConstants.BlockType.GOLD);
         } else if (brick instanceof StrongBrick || brick instanceof ExtraStrongBrick) {
-            brickImg = assetManager.getBrickImage("GRAY");
+            brickImg = assetManager.getBrickImage(newConstants.BlockType.GRAY);
         }
         
         if (brickImg != null) {
@@ -193,16 +194,15 @@ public class GameView extends StackPane {
     private void renderBrick(Brick brick) {
         if (brick instanceof ColoredBrick) {
             ColoredBrick coloredBrick = (ColoredBrick) brick;
-            String colorName = coloredBrick.getColor();
-            switch (colorName) {
-                case "RED": gc.setFill(Color.rgb(255, 50, 50)); break;
-                case "YELLOW": gc.setFill(Color.rgb(255, 230, 0)); break;
-                case "BLUE": gc.setFill(Color.rgb(50, 100, 255)); break;
-                case "MAGENTA": gc.setFill(Color.rgb(255, 50, 255)); break;
-                case "LIME": gc.setFill(Color.rgb(100, 255, 50)); break;
-                case "WHITE": gc.setFill(Color.rgb(240, 240, 240)); break;
-                case "ORANGE": gc.setFill(Color.rgb(255, 150, 50)); break;
-                case "CYAN": gc.setFill(Color.rgb(50, 230, 255)); break;
+            switch (brick.getType()) {
+                case newConstants.BlockType.RUBY: gc.setFill(Color.rgb(255, 50, 50)); break;
+                case newConstants.BlockType.YLLW: gc.setFill(Color.rgb(255, 230, 0)); break;
+                case newConstants.BlockType.BLUE: gc.setFill(Color.rgb(50, 100, 255)); break;
+                case newConstants.BlockType.MGNT: gc.setFill(Color.rgb(255, 50, 255)); break;
+                case newConstants.BlockType.LIME: gc.setFill(Color.rgb(100, 255, 50)); break;
+                case newConstants.BlockType.WHIT: gc.setFill(Color.rgb(240, 240, 240)); break;
+                case newConstants.BlockType.ORNG: gc.setFill(Color.rgb(255, 150, 50)); break;
+                case newConstants.BlockType.CYAN: gc.setFill(Color.rgb(50, 230, 255)); break;
                 default: gc.setFill(Color.LIGHTGRAY);
             }
         } else if (brick instanceof UnbreakableBrick) {

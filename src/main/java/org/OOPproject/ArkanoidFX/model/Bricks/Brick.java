@@ -8,15 +8,16 @@ public abstract class Brick extends GameObject {
     protected newConstants.BlockType type; //TODO: change brick type to enum // Solved
     protected int scoreValue;
 
-    public Brick(int x, int y, int width, int height) {
+    public Brick(int x, int y, int width, int height, newConstants.BlockType type) {
         super(x, y, width, height);
+        this.type = type;
     }
 
     public int getHitPoints() {
         return hitPoints;
     }
 
-    public  newConstants.BlockType getType() {
+    public newConstants.BlockType getType() {
         return type;
     }
 

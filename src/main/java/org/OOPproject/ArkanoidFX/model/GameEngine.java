@@ -5,6 +5,7 @@ import org.OOPproject.ArkanoidFX.model.Bricks.*;
 import org.OOPproject.ArkanoidFX.model.PowerUps.*;
 import javafx.scene.paint.Color;
 import org.OOPproject.ArkanoidFX.utils.InputSignal;
+import org.OOPproject.ArkanoidFX.utils.newConstants;
 import org.OOPproject.ArkanoidFX.utils.newLevel;
 
 import java.util.ArrayList;
@@ -291,7 +292,7 @@ public class GameEngine {
         ball.correctPositionAfterBrickHit(brick, side); /** key */
         ball.bounceOffBrick(side);
 
-        Color particleColor = getBrickColor(brick);
+        Color particleColor = getBrickColor(brick); //TODO sửa lại particle phù hợp với màu enum
         particleSystem.createBurstEffect(
                 brick.getX() + brick.getWidth() / 2.0,
                 brick.getY() + brick.getHeight() / 2.0,
@@ -302,7 +303,10 @@ public class GameEngine {
         brick.takeHit();
 
         // Create blink effect for strong bricks when hit
-        if (brick instanceof StrongBrick || brick instanceof ExtraStrongBrick || brick instanceof UnbreakableBrick) {
+
+        // hàm kiểm tra cũ brick instanceof StrongBrick || brick instanceof ExtraStrongBrick || brick instanceof UnbreakableBrick
+        // Sửa lại thành brick có hitpoint lớn hơn 1
+        if (brick.getHitPoints() >= 1) {
             // Only create new blink if this brick doesn't already have one
             boolean alreadyHasBlink = false;
             for (Blink existingBlink : blinks) {
@@ -334,24 +338,28 @@ public class GameEngine {
      * Get color for particles based on brick type.
      */
     /** can sua lai */
+
+    /** sua lai bang enum */
     private Color getBrickColor(Brick brick) {
-        switch (brick) {
-            case UnbreakableBrick unbreakableBrick -> {
-                return Color.GOLD;
-            }
-            case ExtraStrongBrick extraStrongBrick -> {
-                return Color.PURPLE;
-            }
-            case StrongBrick strongBrick -> {
-                int hp = brick.getHitPoints();
-                if (hp == 3) return Color.DARKRED;
-                if (hp == 2) return Color.RED;
-                return Color.ORANGERED;
-            }
-            case null, default -> {
-                return Color.DODGERBLUE;
-            }
+        switch (brick.getType()) {
+            case newConstants.BlockType.RUBY: // Red
+                return Color.RED;
+            case newConstants.BlockType.YLLW: // Yellow
+                return Color.YELLOW;
+            case newConstants.BlockType.BLUE: // Blue
+                return Color.BLUE;
+            case newConstants.BlockType.MGNT: // Magenta
+                return Color.MAGENTA;
+            case newConstants.BlockType.LIME: // Lime
+                return Color.LIME;
+            case newConstants.BlockType.WHIT: // White
+                return Color.WHITE;
+            case newConstants.BlockType.ORNG: // Orange
+                return Color.ORANGE;
+            case newConstants.BlockType.CYAN: // Cyan
+                return Color.CYAN;
         }
+        return Color.CYAN; //IN CASE
     }
 
     /**

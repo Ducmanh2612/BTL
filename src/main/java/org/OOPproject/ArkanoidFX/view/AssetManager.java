@@ -2,6 +2,7 @@ package org.OOPproject.ArkanoidFX.view;
 
 import javafx.scene.image.Image;
 import org.OOPproject.ArkanoidFX.model.PowerUps.PowerUpTypes;
+import org.OOPproject.ArkanoidFX.utils.newConstants;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -139,20 +140,19 @@ public class AssetManager {
         return backgroundPatterns[index];
     }
 
-    public Image getBrickImage(String color) {
-        if (color == null) return null;
-        String colorUpper = color.toUpperCase();
-        switch (colorUpper) {
-            case "RED": return redBlockImg;
-            case "YELLOW": return yellowBlockImg;
-            case "BLUE": return blueBlockImg;
-            case "MAGENTA": return magentaBlockImg;
-            case "LIME": return limeBlockImg;
-            case "WHITE": return whiteBlockImg;
-            case "ORANGE": return orangeBlockImg;
-            case "CYAN": return cyanBlockImg;
-            case "GOLD": return goldBlockImg;
-            case "GRAY": return grayBlockImg;
+    public Image getBrickImage(newConstants.BlockType type) {
+        if (type == null) return null;
+        switch (type) {
+            case newConstants.BlockType.RUBY: return redBlockImg;
+            case newConstants.BlockType.YLLW: return yellowBlockImg;
+            case newConstants.BlockType.BLUE: return blueBlockImg;
+            case newConstants.BlockType.MGNT: return magentaBlockImg;
+            case newConstants.BlockType.LIME: return limeBlockImg;
+            case newConstants.BlockType.WHIT: return whiteBlockImg;
+            case newConstants.BlockType.ORNG: return orangeBlockImg;
+            case newConstants.BlockType.CYAN: return cyanBlockImg;
+            case newConstants.BlockType.GOLD: return goldBlockImg;
+            case newConstants.BlockType.GRAY: return grayBlockImg;
             default: return null;
         }
     }

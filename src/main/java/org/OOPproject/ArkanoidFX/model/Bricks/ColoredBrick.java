@@ -1,8 +1,9 @@
 package org.OOPproject.ArkanoidFX.model.Bricks;
 
+import org.OOPproject.ArkanoidFX.utils.newConstants;
 
 public class ColoredBrick extends Brick {
-    private String color; // Color name: RED, YELLOW, BLUE, etc.
+    // Color name: RED, YELLOW, BLUE, etc.
     /**
      * Create a colored brick.
      *
@@ -10,12 +11,11 @@ public class ColoredBrick extends Brick {
      * @param y Y position
      * @param width Width in pixels
      * @param height Height in pixels
-     * @param color Color name (RED, YELLOW, BLUE, MAGENTA, LIME, WHITE, ORANGE, CYAN)
+     * @param type Color name (RED, YELLOW, BLUE, MAGENTA, LIME, WHITE, ORANGE, CYAN)
      * @param scoreValue Points awarded when destroyed
      */
-    public ColoredBrick(int x, int y, int width, int height, String color, int scoreValue, int hitPoints) {
-        super(x, y, width, height);
-        this.color = color;
+    public ColoredBrick(int x, int y, int width, int height, newConstants.BlockType type, int scoreValue, int hitPoints) {
+        super(x, y, width, height, type);
         // Sua lai hit points theo mau chuan
         this.hitPoints = hitPoints;
         this.scoreValue = scoreValue;
@@ -24,11 +24,7 @@ public class ColoredBrick extends Brick {
 
     }
     //TODO: the color field can be changed to enum for better type safety and more efficient comparisons
-    
 
-    public String getColor() {
-        return color;
-    }
 
     @Override
     public void takeHit() {
