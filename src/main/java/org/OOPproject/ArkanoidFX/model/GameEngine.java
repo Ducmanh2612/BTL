@@ -85,7 +85,7 @@ public class GameEngine {
     public void startGame() {
         this.score = 0;
         this.lives = 3;
-        this.levelNumber = 20;
+        this.levelNumber = 1;
         this.gameState = "PLAYING";
         this.particleSystem.clear();
         this.ballReleased = false; // Ball starts stuck to paddle
@@ -306,7 +306,7 @@ public class GameEngine {
 
         // hàm kiểm tra cũ brick instanceof StrongBrick || brick instanceof ExtraStrongBrick || brick instanceof UnbreakableBrick
         // Sửa lại thành brick có hitpoint lớn hơn 1
-        if (brick.getHitPoints() >= 1) {
+        if (brick.getHitPoints() > 1) {
             // Only create new blink if this brick doesn't already have one
             boolean alreadyHasBlink = false;
             for (Blink existingBlink : blinks) {

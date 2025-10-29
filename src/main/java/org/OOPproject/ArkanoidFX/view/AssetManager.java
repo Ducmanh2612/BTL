@@ -9,6 +9,7 @@ import java.util.Map;
 
 import static org.OOPproject.ArkanoidFX.utils.Constants.PADDLE_HEIGHT;
 import static org.OOPproject.ArkanoidFX.utils.Constants.PADDLE_WIDTH;
+import static org.OOPproject.ArkanoidFX.utils.newConstants.*;
 
 public class AssetManager {
     private static AssetManager instance;
@@ -79,39 +80,39 @@ public class AssetManager {
             backgroundPatterns[3] = loadImage("backgroundPattern_4.png", 64, 64);
             
             // Load brick images (38x20 pixels each)
-            goldBlockImg = loadImage("goldBlock.png", 38, 20);
-            grayBlockImg = loadImage("grayBlock.png", 38, 20);
-            redBlockImg = loadImage("redBlock.png", 38, 20);
-            yellowBlockImg = loadImage("yellowBlock.png", 38, 20);
-            blueBlockImg = loadImage("blueBlock.png", 38, 20);
-            magentaBlockImg = loadImage("magentaBlock.png", 38, 20);
-            limeBlockImg = loadImage("limeBlock.png", 38, 20);
-            whiteBlockImg = loadImage("whiteBlock.png", 38, 20);
-            orangeBlockImg = loadImage("orangeBlock.png", 38, 20);
-            cyanBlockImg = loadImage("cyanBlock.png", 38, 20);
-            blockShadowImg = loadImage("block_shadow.png", 38, 20);
+            goldBlockImg = loadImage("goldBlock.png", BLOCK_WIDTH, BLOCK_HEIGHT);
+            grayBlockImg = loadImage("grayBlock.png", BLOCK_WIDTH, BLOCK_HEIGHT);
+            redBlockImg = loadImage("redBlock.png", BLOCK_WIDTH, BLOCK_HEIGHT);
+            yellowBlockImg = loadImage("yellowBlock.png", BLOCK_WIDTH, BLOCK_HEIGHT);
+            blueBlockImg = loadImage("blueBlock.png", BLOCK_WIDTH, BLOCK_HEIGHT);
+            magentaBlockImg = loadImage("magentaBlock.png", BLOCK_WIDTH, BLOCK_HEIGHT);
+            limeBlockImg = loadImage("limeBlock.png", BLOCK_WIDTH, BLOCK_HEIGHT);
+            whiteBlockImg = loadImage("whiteBlock.png", BLOCK_WIDTH, BLOCK_HEIGHT);
+            orangeBlockImg = loadImage("orangeBlock.png", BLOCK_WIDTH, BLOCK_HEIGHT);
+            cyanBlockImg = loadImage("cyanBlock.png", BLOCK_WIDTH, BLOCK_HEIGHT);
+            blockShadowImg = loadImage("block_shadow.png", BLOCK_WIDTH, BLOCK_HEIGHT);
 
-            ballImg = loadImage("ball.png", 12, 12);
+            ballImg = loadImage("ball.png", BALL_SIZE, BALL_SIZE);
             ballShadowImg = loadImage("ball_shadow.png", 12, 12);
 
             //TODO: update this thing to use game constants for paddle sizes
-            paddleStdImg = loadImage("paddle_std.png", 100, 22);
-            paddleStdShadowImg = loadImage("paddle_std_shadow.png", 100, 22);
+            paddleStdImg = loadImage("paddle_std.png", PADDLE_DEFAULT_WIDTH, PADDLE_DEFAULT_HEIGHT);
+            paddleStdShadowImg = loadImage("paddle_std_shadow.png", PADDLE_DEFAULT_WIDTH, PADDLE_DEFAULT_HEIGHT);
             paddleStdSpriteMapImg = loadImage("paddlemap_std.png", 80 * 8, 22 * 8);
 
-            paddleWideImg = loadImage("paddle_wide.png", 121, 22);
-            paddleWideShadowImg = loadImage("paddle_wide_shadow.png", 121, 22);
+            paddleWideImg = loadImage("paddle_wide.png", PADDLE_EXPANDED_WIDTH, PADDLE_EXPANDED_HEIGHT);
+            paddleWideShadowImg = loadImage("paddle_wide_shadow.png", PADDLE_EXPANDED_WIDTH, PADDLE_EXPANDED_HEIGHT);
             paddleWideSpriteMapImg = loadImage("paddlemap_wide.png", 121 * 8, 22 * 8);
             
 
-            bonusBlockCMapImg = loadImage("block_map_bonus_c.png", 190, 72);
-            bonusBlockFMapImg = loadImage("block_map_bonus_f.png", 190, 72);
-            bonusBlockDMapImg = loadImage("block_map_bonus_d.png", 190, 72);
-            bonusBlockSMapImg = loadImage("block_map_bonus_s.png", 190, 72);
-            bonusBlockLMapImg = loadImage("block_map_bonus_l.png", 190, 72);
-            bonusBlockBMapImg = loadImage("block_map_bonus_b.png", 190, 72);
-            bonusBlockPMapImg = loadImage("block_map_bonus_p.png", 190, 72);
-            bonusBlockShadowImg = loadImage("bonus_block_shadow.png", 38, 18);
+            bonusBlockCMapImg = loadImage("block_map_bonus_c.png", BLOCK_MAP_BONUS_WIDTH, BLOCK_MAP_BONUS_HEIGHT);
+            bonusBlockFMapImg = loadImage("block_map_bonus_f.png", BLOCK_MAP_BONUS_WIDTH, BLOCK_MAP_BONUS_HEIGHT);
+            bonusBlockDMapImg = loadImage("block_map_bonus_d.png", BLOCK_MAP_BONUS_WIDTH, BLOCK_MAP_BONUS_HEIGHT);
+            bonusBlockSMapImg = loadImage("block_map_bonus_s.png", BLOCK_MAP_BONUS_WIDTH, BLOCK_MAP_BONUS_HEIGHT);
+            bonusBlockLMapImg = loadImage("block_map_bonus_l.png", BLOCK_MAP_BONUS_WIDTH, BLOCK_MAP_BONUS_HEIGHT);
+            bonusBlockBMapImg = loadImage("block_map_bonus_b.png", BLOCK_MAP_BONUS_WIDTH, BLOCK_MAP_BONUS_HEIGHT);
+            bonusBlockPMapImg = loadImage("block_map_bonus_p.png", BLOCK_MAP_BONUS_WIDTH, BLOCK_MAP_BONUS_HEIGHT);
+            bonusBlockShadowImg = loadImage("bonus_block_shadow.png", BLOCK_SHADOW_BONUS_WIDTH, BLOCK_SHADOW_BONUS_WIDTH);
 
             blinkMapImg = loadImage("blink_map.png", 304, 60);
 

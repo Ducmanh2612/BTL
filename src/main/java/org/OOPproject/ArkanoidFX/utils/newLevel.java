@@ -132,65 +132,6 @@ public class newLevel {
     //  or add a new level
 
 
-
-    private int[][] getLevel1Layout() {
-        return new int[][] {
-                {2, 2, 2, 2, 2, 2, 2, 2, 2, 2}
-        };
-    }
-    private int[][] getLevel2Layout() {
-        return new int[][] {
-                {9, 9, 9, 9, 9, 9, 9, 9, 9, 9},
-                {9, 2, 0, 0, 0, 0, 0, 0, 9, 9},
-                {9, 2, 0, 2, 0, 0, 2, 2, 2, 9},
-                {9, 0, 2, 0, 0, 0, 0, 0, 0, 9},
-                {9, 0, 0, 0, 0, 0, 0, 0, 0, 9},
-                {9, 0, 0, 0, 2, 0, 2, 0, 0, 9},
-                {9, 0, 2, 0, 0, 0, 0, 0, 0, 9},
-                {9, 0, 2, 0, 0, 2, 0, 0, 0, 9},
-                {9, 2, 0, 0, 0, 0, 0, 0, 2, 9},
-                {9, 0, 9, 0, 0, 0, 0, 0, 0, 9},
-                {9, 0, 9, 0, 0, 0, 0, 0, 0, 9},
-                {9, 0, 9, 9, 9, 0, 9, 0, 0, 9},
-                {9, 0, 9, 0, 9, 0, 0, 9, 0, 9},
-                {9, 0, 0, 0, 0, 0, 0, 0, 0, 9},
-                {9, 0, 9, 0, 0, 0, 9, 0, 0, 9},
-                {9, 0, 0, 0, 0, 0, 0, 0, 0, 9},
-                {9, 0, 0, 9, 9, 9, 0, 0, 0, 9},
-                {9, 0, 0, 0, 0, 0, 0, 0, 0, 9},
-                {9, 0, 9, 9, 9, 0, 0, 0, 0, 9},
-                {9, 0, 0, 0, 0, 9, 9, 9, 0, 9},
-                {9, 0, 0, 0, 9, 9, 0, 0, 0, 9},
-                {9, 0, 9, 0, 0, 0, 0, 0, 0, 9},
-                {9, 0, 9, 9, 9, 0, 0, 0, 0, 9},
-                {9, 0, 0, 9, 9, 9, 0, 0, 0, 9},
-                {9, 0, 0, 0, 0, 0, 0, 0, 0, 9},
-                {9, 0, 0, 0, 0, 0, 0, 0, 0, 9},
-                {9, 9, 9, 9, 9, 0, 9, 9, 9, 9}
-        };
-    }
-    private int[][] getLevel3Layout() {
-        return new int[][] {
-                {2, 0, 2, 0, 2, 2, 0, 2, 0, 2},
-                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-                {1, 3, 1, 1, 1, 1, 1, 1, 3, 1},
-                {1, 1, 2, 2, 2, 2, 2, 2, 1, 1},
-                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-                {2, 2, 2, 0, 0, 0, 0, 2, 2, 2}
-        };
-    }
-    private int[][] getLevel4Layout() {
-        return new int[][] {
-                {2, 2, 2, 2, 2, 2, 2, 2, 2, 2},
-                {2, 2, 2, 2, 2, 2, 2, 2, 2, 2},
-                {2, 2, 2, 2, 2, 2, 2, 2, 2, 2},
-                {2, 2, 2, 2, 2, 2, 2, 2, 2, 2},
-                {2, 2, 2, 2, 2, 2, 2, 2, 2, 2},
-                {2, 2, 2, 2, 2, 2, 2, 2, 2, 2}
-        };
-    }
-
-
     protected static final newConstants.BlockType[][] LEVEL_1 =
             {{newConstants.BlockType.NONE, newConstants.BlockType.NONE, newConstants.BlockType.NONE, newConstants.BlockType.NONE, newConstants.BlockType.NONE, newConstants.BlockType.NONE, newConstants.BlockType.NONE, newConstants.BlockType.NONE, newConstants.BlockType.NONE, newConstants.BlockType.NONE, newConstants.BlockType.NONE, newConstants.BlockType.NONE, newConstants.BlockType.NONE},
                     {newConstants.BlockType.NONE, newConstants.BlockType.NONE, newConstants.BlockType.NONE, newConstants.BlockType.NONE, newConstants.BlockType.NONE, newConstants.BlockType.NONE, newConstants.BlockType.NONE, newConstants.BlockType.NONE, newConstants.BlockType.NONE, newConstants.BlockType.NONE, newConstants.BlockType.NONE, newConstants.BlockType.NONE, newConstants.BlockType.NONE},
@@ -784,17 +725,7 @@ public class newLevel {
 
 
 
-    private int[][] getLevel5Layout() {
-        return new int[][] {
-                {1, 0, 1, 0, 1, 0, 1, 0, 1, 0},
-                {0, 1, 0, 1, 0, 1, 0, 1, 0, 1},
-                {1, 0, 1, 0, 1, 0, 1, 0, 1, 0},
-                {0, 1, 0, 1, 0, 1, 0, 1, 0, 1},
-                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-                {9, 9, 0, 0, 3, 3, 0, 0, 9, 9}
-        };
-    }
+
     private newConstants.BlockType[][] generateRandomLayout(int level) {
         int rows = Math.min(4 + level, 10); // Max 10 rows
         int cols = 10;
@@ -843,28 +774,28 @@ public class newLevel {
                 Brick brick = null;
                 switch (brickType) {
                     case newConstants.BlockType.RUBY: // Red
-                        brick = new ColoredBrick(x, y, BRICK_WIDTH, BRICK_HEIGHT, newConstants.BlockType.RUBY, 90, Math.max(newConstants.BlockType.RUBY.maxHits, 5));
+                        brick = new ColoredBrick(x, y, BRICK_WIDTH, BRICK_HEIGHT, newConstants.BlockType.RUBY, newConstants.BlockType.RUBY.ScoreValue, newConstants.BlockType.RUBY.maxHits);
                         break;
                     case newConstants.BlockType.YLLW: // Yellow
-                        brick = new ColoredBrick(x, y, BRICK_WIDTH, BRICK_HEIGHT, newConstants.BlockType.YLLW, 120, Math.max(newConstants.BlockType.YLLW.maxHits, 5));
+                        brick = new ColoredBrick(x, y, BRICK_WIDTH, BRICK_HEIGHT, newConstants.BlockType.YLLW, newConstants.BlockType.YLLW.ScoreValue, newConstants.BlockType.YLLW.maxHits);
                         break;
                     case newConstants.BlockType.BLUE: // Blue
-                        brick = new ColoredBrick(x, y, BRICK_WIDTH, BRICK_HEIGHT,  newConstants.BlockType.BLUE, 100, Math.max(newConstants.BlockType.BLUE.maxHits, 5));
+                        brick = new ColoredBrick(x, y, BRICK_WIDTH, BRICK_HEIGHT,  newConstants.BlockType.BLUE, newConstants.BlockType.BLUE.ScoreValue, newConstants.BlockType.BLUE.maxHits);
                         break;
                     case newConstants.BlockType.MGNT: // Magenta
-                        brick = new ColoredBrick(x, y, BRICK_WIDTH, BRICK_HEIGHT, newConstants.BlockType.MGNT, 110, Math.max(newConstants.BlockType.MGNT.maxHits, 5));
+                        brick = new ColoredBrick(x, y, BRICK_WIDTH, BRICK_HEIGHT, newConstants.BlockType.MGNT, newConstants.BlockType.MGNT.ScoreValue, newConstants.BlockType.MGNT.maxHits);
                         break;
                     case newConstants.BlockType.LIME: // Lime
-                        brick = new ColoredBrick(x, y, BRICK_WIDTH, BRICK_HEIGHT, newConstants.BlockType.LIME, 80, Math.max(newConstants.BlockType.LIME.maxHits, 5));
+                        brick = new ColoredBrick(x, y, BRICK_WIDTH, BRICK_HEIGHT, newConstants.BlockType.LIME, newConstants.BlockType.LIME.ScoreValue, newConstants.BlockType.LIME.maxHits);
                         break;
                     case newConstants.BlockType.WHIT: // White
-                        brick = new ColoredBrick(x, y, BRICK_WIDTH, BRICK_HEIGHT, newConstants.BlockType.WHIT, 50, Math.max(newConstants.BlockType.WHIT.maxHits, 5));
+                        brick = new ColoredBrick(x, y, BRICK_WIDTH, BRICK_HEIGHT, newConstants.BlockType.WHIT, newConstants.BlockType.WHIT.ScoreValue, newConstants.BlockType.WHIT.maxHits);
                         break;
                     case newConstants.BlockType.ORNG: // Orange
-                        brick = new ColoredBrick(x, y, BRICK_WIDTH, BRICK_HEIGHT, newConstants.BlockType.ORNG, 60, Math.max(newConstants.BlockType.ORNG.maxHits, 5));
+                        brick = new ColoredBrick(x, y, BRICK_WIDTH, BRICK_HEIGHT, newConstants.BlockType.ORNG, newConstants.BlockType.ORNG.ScoreValue, newConstants.BlockType.ORNG.maxHits);
                         break;
                     case newConstants.BlockType.CYAN: // Cyan
-                        brick = new ColoredBrick(x, y, BRICK_WIDTH, BRICK_HEIGHT, newConstants.BlockType.CYAN, 70, Math.max(newConstants.BlockType.CYAN.maxHits, 5));
+                        brick = new ColoredBrick(x, y, BRICK_WIDTH, BRICK_HEIGHT, newConstants.BlockType.CYAN, newConstants.BlockType.CYAN.ScoreValue, newConstants.BlockType.CYAN.maxHits);
                         break;
                 }
 

@@ -9,7 +9,7 @@ public final class Constants {
 
     public static final int UI_HEIGHT = 50;
 
-    public static final int PADDLE_WIDTH = 1000;
+    public static final int PADDLE_WIDTH = 80;
 
     //block map width, height
 

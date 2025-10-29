@@ -5,23 +5,55 @@ import java.util.HashMap;
 import java.util.Map;
 
 public final class newConstants {
+
+    public static final int GAME_WIDTH = 800;
+    public static final int GAME_HEIGHT = 700;
+
+    public static final int WINDOW_WIDTH = 800;
+    public static final int WINDOW_HEIGHT = 700;
+
+    public static final int UI_HEIGHT = 50;
+
+    public static final int PADDLE_HEIGHT = 20;
+
+    public static final int BALL_SIZE = 10;
+
+    public static final int BLOCK_WIDTH = 38;
+    public static final int BLOCK_HEIGHT = 20;
+
+    public static final int PADDLE_DEFAULT_WIDTH = 80;
+    public static final int PADDLE_DEFAULT_HEIGHT = 22;
+
+    public static final int PADDLE_EXPANDED_WIDTH = 121;
+    public static final int PADDLE_EXPANDED_HEIGHT = 22;
+
+    public static final int POWER_UP_WIDTH = 38;
+    public static final int POWER_UP_HEIGHT = 18;
+
+    public static final int BLOCK_MAP_BONUS_WIDTH = 190;
+    public static final int BLOCK_MAP_BONUS_HEIGHT = 72;
+
+    public static final int BLOCK_SHADOW_BONUS_WIDTH = 38;
+    public static final int BLOCK_SHADOW_BONUS_HEIGHT = 18;
+
     public enum BlockType {
-        NONE(0),
-        GOLD(-1),
-        GRAY(2),
-        RUBY(1),
-        YLLW(1),
-        BLUE(1),
-        MGNT(1),
-        LIME(1),
-        WHIT(1),
-        ORNG(1),
-        CYAN(1);
+        NONE(0, 0),
+        GOLD(-1, 0),
+        GRAY(2, 0),
+        RUBY(1, 90),
+        YLLW(1, 120),
+        BLUE(1, 100),
+        MGNT(1, 110),
+        LIME(1, 80),
+        WHIT(1, 50),
+        ORNG(1, 60),
+        CYAN(1, 70);
 
         protected final int maxHits;
-
-        BlockType(final int maxHits) {
+        protected final int ScoreValue;
+        BlockType(final int maxHits, final int scoreValue) {
             this.maxHits = maxHits;
+            this.ScoreValue = scoreValue;
         }
     }
 
