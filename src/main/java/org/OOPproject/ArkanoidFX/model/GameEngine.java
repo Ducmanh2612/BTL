@@ -226,6 +226,7 @@ public class GameEngine {
         // 1. Ball-Paddle collision (simple bounds check is fine for paddle)
         if (ball.collidesWith(paddle)) {
             ball.bounceOffPaddle(paddle);
+            SoundManager.getInstance().playSound("bounce.wav");
             if(ball.velocityX < 520) ball.specialMode = true;
             return ;
         }
@@ -237,7 +238,6 @@ public class GameEngine {
         else {
             ball.specialMode = false;
             ball.normalSpeed();
-            SoundManager.getInstance().playSound("bounce.wav");
         }
 
         // 2. Ball-Brick collision using trajectory prediction
