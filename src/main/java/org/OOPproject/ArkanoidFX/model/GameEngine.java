@@ -148,7 +148,7 @@ public class GameEngine {
             powerUp.update(deltaTime);
         }
         updateActivePowerUps(deltaTime);
-        updateBlinks(deltaTime);
+        updateBlinks(deltaTime); //TODO sửa lại để blink hoạt động
         particleSystem.update(deltaTime);
 
         // Check if ball fell off bottom of screen
