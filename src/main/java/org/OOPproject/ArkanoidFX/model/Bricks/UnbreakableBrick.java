@@ -1,10 +1,12 @@
 package org.OOPproject.ArkanoidFX.model.Bricks;
 
+import org.OOPproject.ArkanoidFX.utils.newConstants;
+
 public class UnbreakableBrick extends Brick {
     public UnbreakableBrick(int x, int y, int width, int height) {
         super(x, y, width, height);
         this.hitPoints = Integer.MAX_VALUE; // Cannot be destroyed
-        this.type = "UNBREAKABLE";
+        this.type = newConstants.BlockType.NONE;
         this.scoreValue = 0; // No points for hitting unbreakable bricks
     }
 

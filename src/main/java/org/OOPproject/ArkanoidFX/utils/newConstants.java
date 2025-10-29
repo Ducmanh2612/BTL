@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public final class newConstants {
-    protected enum BlockType {
+    public enum BlockType {
         NONE(0),
         GOLD(-1),
         GRAY(2),

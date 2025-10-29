@@ -333,6 +333,7 @@ public class GameEngine {
     /**
      * Get color for particles based on brick type.
      */
+    /** can sua lai */
     private Color getBrickColor(Brick brick) {
         switch (brick) {
             case UnbreakableBrick unbreakableBrick -> {

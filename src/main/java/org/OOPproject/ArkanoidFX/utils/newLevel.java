@@ -843,28 +843,28 @@ public class newLevel {
                 Brick brick = null;
                 switch (brickType) {
                     case newConstants.BlockType.RUBY: // Red
-                        brick = new ColoredBrick(x, y, BRICK_WIDTH, BRICK_HEIGHT, "RED", 90, newConstants.BlockType.RUBY.maxHits);
+                        brick = new ColoredBrick(x, y, BRICK_WIDTH, BRICK_HEIGHT, "RED", 90, Math.max(newConstants.BlockType.RUBY.maxHits, 5));
                         break;
                     case newConstants.BlockType.YLLW: // Yellow
-                        brick = new ColoredBrick(x, y, BRICK_WIDTH, BRICK_HEIGHT, "YELLOW", 120, newConstants.BlockType.YLLW.maxHits);
+                        brick = new ColoredBrick(x, y, BRICK_WIDTH, BRICK_HEIGHT, "YELLOW", 120, Math.max(newConstants.BlockType.YLLW.maxHits, 5));
                         break;
                     case newConstants.BlockType.BLUE: // Blue
-                        brick = new ColoredBrick(x, y, BRICK_WIDTH, BRICK_HEIGHT, "BLUE", 100, newConstants.BlockType.BLUE.maxHits);
+                        brick = new ColoredBrick(x, y, BRICK_WIDTH, BRICK_HEIGHT, "BLUE", 100, Math.max(newConstants.BlockType.BLUE.maxHits, 5));
                         break;
                     case newConstants.BlockType.MGNT: // Magenta
-                        brick = new ColoredBrick(x, y, BRICK_WIDTH, BRICK_HEIGHT, "MAGENTA", 110, newConstants.BlockType.MGNT.maxHits);
+                        brick = new ColoredBrick(x, y, BRICK_WIDTH, BRICK_HEIGHT, "MAGENTA", 110, Math.max(newConstants.BlockType.MGNT.maxHits, 5));
                         break;
                     case newConstants.BlockType.LIME: // Lime
-                        brick = new ColoredBrick(x, y, BRICK_WIDTH, BRICK_HEIGHT, "LIME", 80, newConstants.BlockType.LIME.maxHits);
+                        brick = new ColoredBrick(x, y, BRICK_WIDTH, BRICK_HEIGHT, "LIME", 80, Math.max(newConstants.BlockType.LIME.maxHits, 5));
                         break;
                     case newConstants.BlockType.WHIT: // White
-                        brick = new ColoredBrick(x, y, BRICK_WIDTH, BRICK_HEIGHT, "WHITE", 50, newConstants.BlockType.WHIT.maxHits);
+                        brick = new ColoredBrick(x, y, BRICK_WIDTH, BRICK_HEIGHT, "WHITE", 50, Math.max(newConstants.BlockType.WHIT.maxHits, 5));
                         break;
                     case newConstants.BlockType.ORNG: // Orange
-                        brick = new ColoredBrick(x, y, BRICK_WIDTH, BRICK_HEIGHT, "ORANGE", 60, newConstants.BlockType.ORNG.maxHits);
+                        brick = new ColoredBrick(x, y, BRICK_WIDTH, BRICK_HEIGHT, "ORANGE", 60, Math.max(newConstants.BlockType.ORNG.maxHits, 5));
                         break;
                     case newConstants.BlockType.CYAN: // Cyan
-                        brick = new ColoredBrick(x, y, BRICK_WIDTH, BRICK_HEIGHT, "CYAN", 70, newConstants.BlockType.CYAN.maxHits);
+                        brick = new ColoredBrick(x, y, BRICK_WIDTH, BRICK_HEIGHT, "CYAN", 70, Math.max(newConstants.BlockType.CYAN.maxHits, 5));
                         break;
                 }
 

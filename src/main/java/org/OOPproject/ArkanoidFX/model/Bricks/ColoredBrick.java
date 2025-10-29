@@ -19,7 +19,9 @@ public class ColoredBrick extends Brick {
         // Sua lai hit points theo mau chuan
         this.hitPoints = hitPoints;
         this.scoreValue = scoreValue;
-        this.type = color + "_BRICK";
+        // this.type = color + "_BRICK";
+        // Sua lai type theo enum
+
     }
     //TODO: the color field can be changed to enum for better type safety and more efficient comparisons
     
