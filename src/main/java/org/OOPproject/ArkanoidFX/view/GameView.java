@@ -13,7 +13,6 @@ import org.OOPproject.ArkanoidFX.model.*;
 import org.OOPproject.ArkanoidFX.model.Bricks.*;
 import org.OOPproject.ArkanoidFX.model.PowerUps.*;
 import org.OOPproject.ArkanoidFX.utils.GameState;
-import org.OOPproject.ArkanoidFX.utils.newConstants;
 
 import static org.OOPproject.ArkanoidFX.utils.Constants.GAME_HEIGHT;
 import static org.OOPproject.ArkanoidFX.utils.Constants.GAME_WIDTH;
@@ -181,9 +180,9 @@ public class GameView extends StackPane {
             ColoredBrick coloredBrick = (ColoredBrick) brick;
             brickImg = assetManager.getBrickImage(coloredBrick.getType());
         } else if (brick instanceof UnbreakableBrick) {
-            brickImg = assetManager.getBrickImage(newConstants.BlockType.GOLD);
+            brickImg = assetManager.getBrickImage(BrickType.GOLD);
         } else if (brick instanceof StrongBrick || brick instanceof ExtraStrongBrick) {
-            brickImg = assetManager.getBrickImage(newConstants.BlockType.GRAY);
+            brickImg = assetManager.getBrickImage(BrickType.GRAY);
         }
         
         if (brickImg != null) {
@@ -199,14 +198,14 @@ public class GameView extends StackPane {
         if (brick instanceof ColoredBrick) {
             ColoredBrick coloredBrick = (ColoredBrick) brick;
             switch (brick.getType()) {
-                case newConstants.BlockType.RUBY: gc.setFill(Color.rgb(255, 50, 50)); break;
-                case newConstants.BlockType.YLLW: gc.setFill(Color.rgb(255, 230, 0)); break;
-                case newConstants.BlockType.BLUE: gc.setFill(Color.rgb(50, 100, 255)); break;
-                case newConstants.BlockType.MGNT: gc.setFill(Color.rgb(255, 50, 255)); break;
-                case newConstants.BlockType.LIME: gc.setFill(Color.rgb(100, 255, 50)); break;
-                case newConstants.BlockType.WHIT: gc.setFill(Color.rgb(240, 240, 240)); break;
-                case newConstants.BlockType.ORNG: gc.setFill(Color.rgb(255, 150, 50)); break;
-                case newConstants.BlockType.CYAN: gc.setFill(Color.rgb(50, 230, 255)); break;
+                case BrickType.RUBY: gc.setFill(Color.rgb(255, 50, 50)); break;
+                case BrickType.YLLW: gc.setFill(Color.rgb(255, 230, 0)); break;
+                case BrickType.BLUE: gc.setFill(Color.rgb(50, 100, 255)); break;
+                case BrickType.MGNT: gc.setFill(Color.rgb(255, 50, 255)); break;
+                case BrickType.LIME: gc.setFill(Color.rgb(100, 255, 50)); break;
+                case BrickType.WHIT: gc.setFill(Color.rgb(240, 240, 240)); break;
+                case BrickType.ORNG: gc.setFill(Color.rgb(255, 150, 50)); break;
+                case BrickType.CYAN: gc.setFill(Color.rgb(50, 230, 255)); break;
                 default: gc.setFill(Color.LIGHTGRAY);
             }
         } else if (brick instanceof UnbreakableBrick) {
@@ -247,7 +246,6 @@ public class GameView extends StackPane {
         
         Image paddleImg = isExpanded ? assetManager.getPaddleWideSpriteMapImg() : assetManager.getPaddleStdSpriteMapImg();
         if (paddleImg != null) {
-            System.out.println(1);
             int frameWidth = PADDLE_DEFAULT_WIDTH;
             int frameHeight = PADDLE_DEFAULT_HEIGHT;
             if(paddle.isExpanded()){
@@ -302,8 +300,8 @@ public class GameView extends StackPane {
 
         if (blinkMapImg != null) {
             // Blink sprite sheet: 8 frames wide (38px each), 3 frames tall (20px each)
-            int frameWidth = BLOCK_WIDTH;
-            int frameHeight = BLOCK_HEIGHT;
+            int frameWidth = BRICK_WIDTH;
+            int frameHeight = BRICK_HEIGHT;
             int frameX = blink.getFrameX();
             int frameY = blink.getFrameY();
             int sourceX = frameX * frameWidth;

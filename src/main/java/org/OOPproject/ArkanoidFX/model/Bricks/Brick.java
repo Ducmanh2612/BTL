@@ -1,14 +1,13 @@
 package org.OOPproject.ArkanoidFX.model.Bricks;
 
 import org.OOPproject.ArkanoidFX.model.GameObject;
-import org.OOPproject.ArkanoidFX.utils.newConstants;
 
 public abstract class Brick extends GameObject {
     protected int hitPoints;
-    protected newConstants.BlockType type; //TODO: change brick type to enum // Solved
+    protected BrickType type; //TODO: change brick type to enum // Solved
     protected int scoreValue;
 
-    public Brick(int x, int y, int width, int height, newConstants.BlockType type) {
+    public Brick(int x, int y, int width, int height, BrickType type) {
         super(x, y, width, height);
         this.type = type;
     }
@@ -17,7 +16,7 @@ public abstract class Brick extends GameObject {
         return hitPoints;
     }
 
-    public newConstants.BlockType getType() {
+    public BrickType getType() {
         return type;
     }
 
@@ -25,6 +24,11 @@ public abstract class Brick extends GameObject {
         return scoreValue;
     }
 
-    public abstract void takeHit();
-    public abstract boolean isDestroyed();
+    public void takeHit() {
+        hitPoints--;
+    }
+
+    public boolean isDestroyed() {
+        return hitPoints <= 0;
+    }
 }

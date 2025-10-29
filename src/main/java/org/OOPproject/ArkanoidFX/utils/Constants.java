@@ -11,13 +11,6 @@ public final class Constants {
 
     public static final int PADDLE_WIDTH = 80;
 
-    //block map width, height
-
-    //
-
-
-
-    
     public static final int PADDLE_HEIGHT = 20;
 
     public static final int BALL_SIZE = 10;

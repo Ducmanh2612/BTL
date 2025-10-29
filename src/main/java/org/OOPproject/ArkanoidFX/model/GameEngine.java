@@ -6,8 +6,6 @@ import org.OOPproject.ArkanoidFX.model.PowerUps.*;
 import javafx.scene.paint.Color;
 import org.OOPproject.ArkanoidFX.utils.GameState;
 import org.OOPproject.ArkanoidFX.utils.InputSignal;
-import org.OOPproject.ArkanoidFX.utils.newConstants;
-import org.OOPproject.ArkanoidFX.utils.newLevel;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -17,7 +15,6 @@ import java.util.Random;
 import static org.OOPproject.ArkanoidFX.utils.Constants.*;
 
 
-//TODO: handle the ball passing bricks bugs
 public class GameEngine {
     private Paddle paddle;                         // The player's paddle
     private Ball ball;                             // The bouncing ball
@@ -72,7 +69,7 @@ public class GameEngine {
         this.enemies = new ArrayList<>();
 
         this.gameState = GameState.PLAYING;
-        this.ballReleased = false; // Ball not released yet
+        this.ballReleased = false;
     }
 
     public static GameEngine getInstance() {
@@ -227,39 +224,34 @@ public class GameEngine {
         if (ball.collidesWith(paddle)) {
             ball.bounceOffPaddle(paddle);
             SoundManager.getInstance().playSound("bounce.wav");
-            if(ball.velocityX < 520) ball.specialMode = true;
             return ;
         }
 
-        //Đảm bảo sẽ không có va chạm trong nhiều nhịp game
-        if (ball.y + ball.height > paddle.y - paddle.height && ball.specialMode) {
-            ball.velocityX = (500 + 20) * (ball.velocityX) / Math.abs(ball.velocityX);
-        }
-        else {
-            ball.specialMode = false;
-            ball.normalSpeed();
-        }
+//        //Đảm bảo sẽ không có va chạm trong nhiều nhịp game
+//        if (ball.y + ball.height > paddle.y - paddle.height && ball.specialMode) {
+//            ball.velocityX = (500 + 20) * (ball.velocityX) / Math.abs(ball.velocityX);
+//        }
+//        else {
+//            ball.specialMode = false;
+//            ball.normalSpeed();
+//        }
 
         // 2. Ball-Brick collision using trajectory prediction
         // Check if ball's path WILL hit any brick
         boolean hitBrick = false; // Only hit one brick per frame
 
         if(ball.velocityY < 0) {
-            int m = bricks.size();
-            for (int i = m - 1; i >= 0; i--) {
+            for (int i = bricks.size() - 1; i >= 0; i--) {
                 if(ball.willHitBrick(bricks.get(i), deltaTime)) {
                     brickAndBallProcess(bricks.get(i));
-                    hitBrick = true;
                     break;
                 }
             }
         } else {
             for (Brick brick : bricks) {
-                /** key */
                 if (ball.willHitBrick(brick, deltaTime)) {
                     brickAndBallProcess(brick);
-                    hitBrick = true;
-                    break; // Only hit one brick
+                    break;
                 }
             }
         }
@@ -290,7 +282,7 @@ public class GameEngine {
         ball.correctPositionAfterBrickHit(brick, side); /** key */
         ball.bounceOffBrick(side);
 
-        Color particleColor = getBrickColor(brick); //TODO sửa lại particle phù hợp với màu enum
+        Color particleColor = getBrickColor(brick);
         particleSystem.createBurstEffect(
                 brick.getX() + brick.getWidth() / 2.0,
                 brick.getY() + brick.getHeight() / 2.0,
@@ -362,21 +354,21 @@ public class GameEngine {
     /** sua lai bang enum */
     private Color getBrickColor(Brick brick) {
         switch (brick.getType()) {
-            case newConstants.BlockType.RUBY: // Red
+            case BrickType.RUBY: // Red
                 return Color.RED;
-            case newConstants.BlockType.YLLW: // Yellow
+            case BrickType.YLLW: // Yellow
                 return Color.YELLOW;
-            case newConstants.BlockType.BLUE: // Blue
+            case BrickType.BLUE: // Blue
                 return Color.BLUE;
-            case newConstants.BlockType.MGNT: // Magenta
+            case BrickType.MGNT: // Magenta
                 return Color.MAGENTA;
-            case newConstants.BlockType.LIME: // Lime
+            case BrickType.LIME: // Lime
                 return Color.LIME;
-            case newConstants.BlockType.WHIT: // White
+            case BrickType.WHIT: // White
                 return Color.WHITE;
-            case newConstants.BlockType.ORNG: // Orange
+            case BrickType.ORNG: // Orange
                 return Color.ORANGE;
-            case newConstants.BlockType.CYAN: // Cyan
+            case BrickType.CYAN: // Cyan
                 return Color.CYAN;
         }
         return Color.CYAN; //IN CASE
@@ -388,8 +380,6 @@ public class GameEngine {
      */
     private void spawnPowerUp(int x, int y) {
         PowerUp powerUp;
-
-        // 50/50 chance between two power-up types
         if (random.nextBoolean()) {
             powerUp = new ExpandPaddlePowerUp(x, y, 20, 20);
         } else {
@@ -508,9 +498,5 @@ public class GameEngine {
 
     public int getLevelNumber() {
         return levelNumber;
-    }
-
-    public int getUIHeight() {
-        return UI_HEIGHT;
     }
 }

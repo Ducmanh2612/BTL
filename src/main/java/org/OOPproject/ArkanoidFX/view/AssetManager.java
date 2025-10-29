@@ -1,15 +1,14 @@
 package org.OOPproject.ArkanoidFX.view;
 
 import javafx.scene.image.Image;
+import org.OOPproject.ArkanoidFX.model.Bricks.BrickType;
 import org.OOPproject.ArkanoidFX.model.PowerUps.PowerUpTypes;
-import org.OOPproject.ArkanoidFX.utils.newConstants;
 
 import javafx.scene.media.Media;
 import java.util.HashMap;
 import java.util.Map;
 
 import static org.OOPproject.ArkanoidFX.utils.Constants.PADDLE_HEIGHT;
-import static org.OOPproject.ArkanoidFX.utils.Constants.PADDLE_WIDTH;
 import static org.OOPproject.ArkanoidFX.utils.newConstants.*;
 
 public class AssetManager {
@@ -85,17 +84,17 @@ public class AssetManager {
             backgroundPatterns[3] = loadImage("backgroundPattern_4.png", 64, 64);
             
             // Load brick images (38x20 pixels each)
-            goldBlockImg = loadImage("goldBlock.png", BLOCK_WIDTH, BLOCK_HEIGHT);
-            grayBlockImg = loadImage("grayBlock.png", BLOCK_WIDTH, BLOCK_HEIGHT);
-            redBlockImg = loadImage("redBlock.png", BLOCK_WIDTH, BLOCK_HEIGHT);
-            yellowBlockImg = loadImage("yellowBlock.png", BLOCK_WIDTH, BLOCK_HEIGHT);
-            blueBlockImg = loadImage("blueBlock.png", BLOCK_WIDTH, BLOCK_HEIGHT);
-            magentaBlockImg = loadImage("magentaBlock.png", BLOCK_WIDTH, BLOCK_HEIGHT);
-            limeBlockImg = loadImage("limeBlock.png", BLOCK_WIDTH, BLOCK_HEIGHT);
-            whiteBlockImg = loadImage("whiteBlock.png", BLOCK_WIDTH, BLOCK_HEIGHT);
-            orangeBlockImg = loadImage("orangeBlock.png", BLOCK_WIDTH, BLOCK_HEIGHT);
-            cyanBlockImg = loadImage("cyanBlock.png", BLOCK_WIDTH, BLOCK_HEIGHT);
-            blockShadowImg = loadImage("block_shadow.png", BLOCK_WIDTH, BLOCK_HEIGHT);
+            goldBlockImg = loadImage("goldBlock.png", BRICK_WIDTH, BRICK_HEIGHT);
+            grayBlockImg = loadImage("grayBlock.png", BRICK_WIDTH, BRICK_HEIGHT);
+            redBlockImg = loadImage("redBlock.png", BRICK_WIDTH, BRICK_HEIGHT);
+            yellowBlockImg = loadImage("yellowBlock.png", BRICK_WIDTH, BRICK_HEIGHT);
+            blueBlockImg = loadImage("blueBlock.png", BRICK_WIDTH, BRICK_HEIGHT);
+            magentaBlockImg = loadImage("magentaBlock.png", BRICK_WIDTH, BRICK_HEIGHT);
+            limeBlockImg = loadImage("limeBlock.png", BRICK_WIDTH, BRICK_HEIGHT);
+            whiteBlockImg = loadImage("whiteBlock.png", BRICK_WIDTH, BRICK_HEIGHT);
+            orangeBlockImg = loadImage("orangeBlock.png", BRICK_WIDTH, BRICK_HEIGHT);
+            cyanBlockImg = loadImage("cyanBlock.png", BRICK_WIDTH, BRICK_HEIGHT);
+            blockShadowImg = loadImage("block_shadow.png", BRICK_WIDTH, BRICK_HEIGHT);
 
             ballImg = loadImage("ball.png", BALL_SIZE, BALL_SIZE);
             ballShadowImg = loadImage("ball_shadow.png", 12, 12);
@@ -103,11 +102,11 @@ public class AssetManager {
             //TODO: update this thing to use game constants for paddle sizes
             paddleStdImg = loadImage("paddle_std.png", PADDLE_DEFAULT_WIDTH, PADDLE_DEFAULT_HEIGHT);
             paddleStdShadowImg = loadImage("paddle_std_shadow.png", PADDLE_DEFAULT_WIDTH, PADDLE_DEFAULT_HEIGHT);
-            paddleStdSpriteMapImg = loadImage("paddlemap_std.png", 80 * 8, 22 * 8);
+            paddleStdSpriteMapImg = loadImage("paddlemap_std.png", PADDLE_DEFAULT_WIDTH * 8, PADDLE_DEFAULT_HEIGHT * 8);
 
             paddleWideImg = loadImage("paddle_wide.png", PADDLE_EXPANDED_WIDTH, PADDLE_EXPANDED_HEIGHT);
             paddleWideShadowImg = loadImage("paddle_wide_shadow.png", PADDLE_EXPANDED_WIDTH, PADDLE_EXPANDED_HEIGHT);
-            paddleWideSpriteMapImg = loadImage("paddlemap_wide.png", 121 * 8, 22 * 8);
+            paddleWideSpriteMapImg = loadImage("paddlemap_wide.png", PADDLE_EXPANDED_WIDTH * 8, PADDLE_HEIGHT * 8);
             
 
             bonusBlockCMapImg = loadImage("block_map_bonus_c.png", BLOCK_MAP_BONUS_WIDTH, BLOCK_MAP_BONUS_HEIGHT);
@@ -166,19 +165,19 @@ public class AssetManager {
         return backgroundPatterns[index];
     }
 
-    public Image getBrickImage(newConstants.BlockType type) {
+    public Image getBrickImage(BrickType type) {
         if (type == null) return null;
         switch (type) {
-            case newConstants.BlockType.RUBY: return redBlockImg;
-            case newConstants.BlockType.YLLW: return yellowBlockImg;
-            case newConstants.BlockType.BLUE: return blueBlockImg;
-            case newConstants.BlockType.MGNT: return magentaBlockImg;
-            case newConstants.BlockType.LIME: return limeBlockImg;
-            case newConstants.BlockType.WHIT: return whiteBlockImg;
-            case newConstants.BlockType.ORNG: return orangeBlockImg;
-            case newConstants.BlockType.CYAN: return cyanBlockImg;
-            case newConstants.BlockType.GOLD: return goldBlockImg;
-            case newConstants.BlockType.GRAY: return grayBlockImg;
+            case BrickType.RUBY: return redBlockImg;
+            case BrickType.YLLW: return yellowBlockImg;
+            case BrickType.BLUE: return blueBlockImg;
+            case BrickType.MGNT: return magentaBlockImg;
+            case BrickType.LIME: return limeBlockImg;
+            case BrickType.WHIT: return whiteBlockImg;
+            case BrickType.ORNG: return orangeBlockImg;
+            case BrickType.CYAN: return cyanBlockImg;
+            case BrickType.GOLD: return goldBlockImg;
+            case BrickType.GRAY: return grayBlockImg;
             default: return null;
         }
     }
