@@ -61,7 +61,7 @@ public class Level {
     //  or add a new level
     private int[][] getLevel1Layout() {
         return new int[][] {
-                {2, 2, 2, 2, 2, 2, 2, 2, 2, 2}
+                {1}
         };
     }
     private int[][] getLevel2Layout() {

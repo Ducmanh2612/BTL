@@ -119,11 +119,10 @@ public class AssetManager {
             // Load audio files
             loadMedia("brick_destroyed.wav");
             loadMedia("click.wav");
-            loadMedia("ball_paddle.wav");
-            loadMedia("explosion.wav");
+            loadMedia("brick_hit.wav");
             loadMedia("powerUp.wav");
             loadMedia("bounce.wav");
-
+            loadMedia("game_over.wav");
 
         } catch (Exception e) {
             System.err.println("Error loading assets: " + e.getMessage());

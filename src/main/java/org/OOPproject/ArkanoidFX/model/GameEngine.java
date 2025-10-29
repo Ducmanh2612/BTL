@@ -90,8 +90,6 @@ public class GameEngine {
         this.ballReleased = false; // Ball starts stuck to paddle
 
         initializeLevel();
-        // Play game start sound
-        SoundManager.getInstance().playSound("game_start.wav");
 
     }
 
@@ -223,6 +221,7 @@ public class GameEngine {
         // 1. Ball-Paddle collision (simple bounds check is fine for paddle)
         if (ball.collidesWith(paddle)) {
             ball.bounceOffPaddle(paddle);
+            SoundManager.getInstance().playSound("bounce.wav");
         }
 
         // 2. Ball-Brick collision using trajectory prediction
@@ -264,6 +263,7 @@ public class GameEngine {
                     // Remove if destroyed
                     if (brick.isDestroyed()) {
                         score += brick.getScoreValue();
+                        SoundManager.getInstance().playSound("brick_destroyed.wav");
 
                         // Spawn power-up chance
                         if (!(brick instanceof UnbreakableBrick) && random.nextInt(100) < 15) {
@@ -271,6 +271,9 @@ public class GameEngine {
                         }
 
                         bricks.remove(brick);
+                    } else {
+                        // Brick was hit but not destroyed
+                        SoundManager.getInstance().playSound("brick_hit.wav");
                     }
 
                     hitBrick = true;
@@ -346,6 +349,7 @@ public class GameEngine {
 
     private void activatePowerUp(PowerUp powerUp) {
         powerUp.applyEffect(paddle);
+        SoundManager.getInstance().playSound("powerUp.wav");
         // Power-up duration is in frames, convert to seconds (assuming 60 FPS)
         double durationInSeconds = powerUp.getDuration() / 60.0;
         activePowerUps.add(new ActivePowerUp(powerUp, durationInSeconds));
@@ -388,6 +392,7 @@ public class GameEngine {
      */
     public void gameOver() {
         gameState = GameState.GAME_OVER;
+        SoundManager.getInstance().playSound("game_over.wav");
     }
 
     public void handleInput(InputSignal inputSignal) {
