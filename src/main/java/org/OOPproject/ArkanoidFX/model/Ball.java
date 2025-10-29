@@ -45,7 +45,6 @@ public class Ball extends MovableObject {
 
     /**
      * Release ball from paddle (start moving)
-     * Called when player presses A or D
      */
     public void releaseFromPaddle() {
         if (stuckToPaddle && attachedPaddle != null) {
@@ -56,6 +55,7 @@ public class Ball extends MovableObject {
             double angle = Math.toRadians(-45);
             this.velocityX = Math.cos(angle) * speed;
             this.velocityY = Math.sin(angle) * speed;
+            SoundManager.getInstance().playSound("click.wav");
             //TODO: launch angle is is a random angle between -45 and -135 degrees
         }
     }
@@ -328,10 +328,12 @@ public class Ball extends MovableObject {
         if (x <= 0) {
             x = 0;
             velocityX = Math.abs(velocityX);
+            SoundManager.getInstance().playSound("bounce.wav");
         } else {
             if (x + width >= boundingBoxWidth) {
                 x = boundingBoxWidth - width;
                 velocityX = -Math.abs(velocityX);
+                SoundManager.getInstance().playSound("bounce.wav");
             }
         }
 
@@ -339,6 +341,7 @@ public class Ball extends MovableObject {
         if (y <= 0) {
             y = 0;
             velocityY = Math.abs(velocityY);
+            SoundManager.getInstance().playSound("bounce.wav");
         }
     }
 

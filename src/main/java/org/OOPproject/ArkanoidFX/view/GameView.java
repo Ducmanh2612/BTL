@@ -12,6 +12,7 @@ import javafx.scene.text.FontWeight;
 import org.OOPproject.ArkanoidFX.model.*;
 import org.OOPproject.ArkanoidFX.model.Bricks.*;
 import org.OOPproject.ArkanoidFX.model.PowerUps.*;
+import org.OOPproject.ArkanoidFX.utils.GameState;
 
 import static org.OOPproject.ArkanoidFX.utils.Constants.GAME_HEIGHT;
 import static org.OOPproject.ArkanoidFX.utils.Constants.GAME_WIDTH;
@@ -44,12 +45,12 @@ public class GameView extends StackPane {
         gc.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
         drawLevelBackground();
         
-        String state = gameEngineRef.getGameState();
-        if (state.equals("GAME_OVER")) {
+        GameState state = gameEngineRef.getGameState();
+        if (state.equals(GameState.GAME_OVER)) {
             renderGameOver();
         } else {
             renderGame();
-            if (state.equals("PAUSED")) {
+            if (state.equals(GameState.PAUSED)) {
                 renderPauseOverlay();
             }
         }
@@ -286,6 +287,7 @@ public class GameView extends StackPane {
             gc.fillOval(bx + 2, by + 2, 3, 3);
         }
     }
+
 
     private void renderBlink(Blink blink) {
         int blinkX = blink.getX();

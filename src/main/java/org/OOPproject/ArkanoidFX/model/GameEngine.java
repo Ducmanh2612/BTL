@@ -4,6 +4,7 @@ import org.OOPproject.ArkanoidFX.utils.Constants;
 import org.OOPproject.ArkanoidFX.model.Bricks.*;
 import org.OOPproject.ArkanoidFX.model.PowerUps.*;
 import javafx.scene.paint.Color;
+import org.OOPproject.ArkanoidFX.utils.GameState;
 import org.OOPproject.ArkanoidFX.utils.InputSignal;
 
 import java.util.ArrayList;
@@ -33,7 +34,7 @@ public class GameEngine {
     private int score;
     private int lives;
     private int levelNumber;                             // Current level number
-    private String gameState;                      // Current state: PLAYING, PAUSED, GAME_OVER
+    private GameState gameState;                      // Current state: PLAYING, PAUSED, GAME_OVER
 
     // Utilities
     private Random random;                         // For random number generation
@@ -68,7 +69,7 @@ public class GameEngine {
         this.blinks = new ArrayList<>();
         this.enemies = new ArrayList<>();
 
-        this.gameState = "PLAYING";
+        this.gameState = GameState.PLAYING;
         this.ballReleased = false; // Ball not released yet
     }
 
@@ -87,11 +88,12 @@ public class GameEngine {
         this.score = 0;
         this.lives = 3;
         this.levelNumber = 1;
-        this.gameState = "PLAYING";
+        this.gameState = GameState.PLAYING;
         this.particleSystem.clear();
         this.ballReleased = false; // Ball starts stuck to paddle
 
         initializeLevel();
+
     }
 
     /**
@@ -131,7 +133,7 @@ public class GameEngine {
      */
     public void updateGame(double deltaTime) {
         // Only update if game is being played
-        if (!gameState.equals("PLAYING")) {
+        if (!gameState.equals(GameState.PLAYING)) {
             return;
         }
 
@@ -222,6 +224,7 @@ public class GameEngine {
         // 1. Ball-Paddle collision (simple bounds check is fine for paddle)
         if (ball.collidesWith(paddle)) {
             ball.bounceOffPaddle(paddle);
+            SoundManager.getInstance().playSound("bounce.wav");
         }
 
         // 2. Ball-Brick collision using trajectory prediction
@@ -263,6 +266,7 @@ public class GameEngine {
                     // Remove if destroyed
                     if (brick.isDestroyed()) {
                         score += brick.getScoreValue();
+                        SoundManager.getInstance().playSound("brick_destroyed.wav");
 
                         // Spawn power-up chance
                         if (!(brick instanceof UnbreakableBrick) && random.nextInt(100) < 15) {
@@ -270,6 +274,9 @@ public class GameEngine {
                         }
 
                         bricks.remove(brick);
+                    } else {
+                        // Brick was hit but not destroyed
+                        SoundManager.getInstance().playSound("brick_hit.wav");
                     }
 
                     hitBrick = true;
@@ -345,6 +352,7 @@ public class GameEngine {
 
     private void activatePowerUp(PowerUp powerUp) {
         powerUp.applyEffect(paddle);
+        SoundManager.getInstance().playSound("powerUp.wav");
         // Power-up duration is in frames, convert to seconds (assuming 60 FPS)
         double durationInSeconds = powerUp.getDuration() / 60.0;
         activePowerUps.add(new ActivePowerUp(powerUp, durationInSeconds));
@@ -386,20 +394,21 @@ public class GameEngine {
      * Game over - set state to GAME_OVER.
      */
     public void gameOver() {
-        gameState = "GAME_OVER";
+        gameState = GameState.GAME_OVER;
+        SoundManager.getInstance().playSound("game_over.wav");
     }
 
     public void handleInput(InputSignal inputSignal) {
         //TODO: remove the two if statements and put them into the innner switch
-        if (gameState.equals("PLAYING")) {
+        if (gameState.equals(GameState.PLAYING)) {
             switch (inputSignal) {
                 case MOVE_LEFT -> paddle.moveLeft();
                 case MOVE_RIGHT -> paddle.moveRight();
                 case STOP -> paddle.stop();
-                case PAUSE_RESUME -> gameState = "PAUSED";
+                case PAUSE_RESUME -> gameState = GameState.PAUSED;
             }
-        } else if (gameState.equals("PAUSED")) {
-            if(inputSignal.equals(InputSignal.PAUSE_RESUME)) gameState = "PLAYING";
+        } else if (gameState.equals(GameState.PAUSED)) {
+            if(inputSignal.equals(InputSignal.PAUSE_RESUME)) gameState = GameState.PLAYING;
         }
     }
 
@@ -412,8 +421,8 @@ public class GameEngine {
     public Paddle getPaddle() { return paddle; }
     public Ball getBall() { return ball; }
     public ParticleSystem getParticleSystem() { return particleSystem; }
-    public String getGameState() { return gameState; }
-    public void setGameState(String state) { this.gameState = state; }
+    public GameState getGameState() { return gameState; }
+    public void setGameState(GameState state) { this.gameState = state; }
     public int getScore() { return score; }
     public int getLives() { return lives; }
     public int getLevelNumber() { return levelNumber; }

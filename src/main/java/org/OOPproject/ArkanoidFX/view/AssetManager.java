@@ -3,11 +3,9 @@ package org.OOPproject.ArkanoidFX.view;
 import javafx.scene.image.Image;
 import org.OOPproject.ArkanoidFX.model.PowerUps.PowerUpTypes;
 
+import javafx.scene.media.Media;
 import java.util.HashMap;
 import java.util.Map;
-
-import static org.OOPproject.ArkanoidFX.utils.Constants.PADDLE_HEIGHT;
-import static org.OOPproject.ArkanoidFX.utils.Constants.PADDLE_WIDTH;
 
 public class AssetManager {
     private static AssetManager instance;
@@ -15,6 +13,9 @@ public class AssetManager {
     // Cache for loaded images
     private Map<String, Image> imageCache;
     
+    // Cache for loaded audio
+    private Map<String, Media> audioCache;
+
     // Background patterns for different levels
     private Image[] backgroundPatterns;
     
@@ -58,6 +59,7 @@ public class AssetManager {
 
     private AssetManager() {
         imageCache = new HashMap<>();
+        audioCache = new HashMap<>();
         loadAllAssets();
     }
 
@@ -114,6 +116,14 @@ public class AssetManager {
 
             blinkMapImg = loadImage("blink_map.png", 304, 60);
 
+            // Load audio files
+            loadMedia("brick_destroyed.wav");
+            loadMedia("click.wav");
+            loadMedia("brick_hit.wav");
+            loadMedia("powerUp.wav");
+            loadMedia("bounce.wav");
+            loadMedia("game_over.wav");
+
         } catch (Exception e) {
             System.err.println("Error loading assets: " + e.getMessage());
         }
@@ -121,12 +131,24 @@ public class AssetManager {
 
     private Image loadImage(String filename, double width, double height) {
         try {
-            String path = "/textures/assets/" + filename;
+            String path = "/assets/textures/" + filename;
             Image img = new Image(getClass().getResourceAsStream(path), width, height, true, false);
             imageCache.put(filename, img);
             return img;
         } catch (Exception e) {
             System.err.println("Failed to load: " + filename);
+            return null;
+        }
+    }
+
+    private Media loadMedia(String filename) {
+        try {
+            String path = "/assets/sfx/" + filename;
+            Media media = new Media(getClass().getResource(path).toExternalForm());
+            audioCache.put(filename, media);
+            return media;
+        } catch (Exception e) {
+            System.err.println("Failed to load media: " + filename);
             return null;
         }
     }
@@ -189,4 +211,8 @@ public class AssetManager {
     
     public Image getBonusBlockShadowImg() { return bonusBlockShadowImg; }
     public Image getBlinkMapImg() { return blinkMapImg; }
+
+    public Media getMedia(String filename) {
+        return audioCache.get(filename);
+    }
 }
