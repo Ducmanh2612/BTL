@@ -253,14 +253,6 @@ public class GameEngine {
                     break;
                 }
             }
-            for (Brick brick : bricks) {
-                /** key */
-                if (ball.willHitBrick(brick, deltaTime)) {
-                    brickAndBallProcess(brick);
-                    hitBrick = true;
-                    break; // Only hit one brick
-                }
-            }
         } else {
             for (Brick brick : bricks) {
                 /** key */
@@ -326,13 +318,10 @@ public class GameEngine {
             }
         }
 
-                    // Remove if destroyed
-                    if (brick.isDestroyed()) {
-                        score += brick.getScoreValue();
-                        SoundManager.getInstance().playSound("brick_destroyed.wav");
         // Remove if destroyed
         if (brick.isDestroyed()) {
             score += brick.getScoreValue();
+            SoundManager.getInstance().playSound("brick_destroyed.wav");
 
             // Spawn power-up chance
             if (!(brick instanceof UnbreakableBrick) && random.nextInt(100) < 15) {
@@ -340,19 +329,9 @@ public class GameEngine {
             }
 
             bricks.remove(brick);
-        }
-                        bricks.remove(brick);
-                    } else {
-                        // Brick was hit but not destroyed
-                        SoundManager.getInstance().playSound("brick_hit.wav");
-                    }
-
-                    hitBrick = true;
-                    break; // Only hit one brick
-
-
-                }
-            }
+        } else {
+            // Brick was hit but not destroyed
+            SoundManager.getInstance().playSound("brick_hit.wav");
         }
 
         // 3. Paddle-PowerUp collision
@@ -372,9 +351,8 @@ public class GameEngine {
                 powerUpIterator.remove();
             }
         }
-
-
     }
+
 
     /**
      * Get color for particles based on brick type.
@@ -512,11 +490,11 @@ public class GameEngine {
         return particleSystem;
     }
 
-    public String getGameState() {
+    public GameState getGameState() {
         return gameState;
     }
 
-    public void setGameState(String state) {
+    public void setGameState(GameState state) {
         this.gameState = state;
     }
 
