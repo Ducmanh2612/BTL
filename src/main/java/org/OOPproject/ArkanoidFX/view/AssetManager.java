@@ -94,8 +94,8 @@ public class AssetManager {
             ballShadowImg = loadImage("ball_shadow.png", 12, 12);
 
             //TODO: update this thing to use game constants for paddle sizes
-            paddleStdImg = loadImage("paddle_std.png", 80, 22);
-            paddleStdShadowImg = loadImage("paddle_std_shadow.png", 80, 22);
+            paddleStdImg = loadImage("paddle_std.png", 100, 22);
+            paddleStdShadowImg = loadImage("paddle_std_shadow.png", 100, 22);
             paddleStdSpriteMapImg = loadImage("paddlemap_std.png", 80 * 8, 22 * 8);
 
             paddleWideImg = loadImage("paddle_wide.png", 121, 22);

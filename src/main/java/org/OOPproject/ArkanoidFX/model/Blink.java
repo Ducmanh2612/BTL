@@ -15,7 +15,7 @@ public class Blink extends GameObject {
         super(brick.getX(), brick.getY(), brick.getWidth(), brick.getHeight());
         this.attachedBrick = brick;
         // Blink sprite: 8 frames wide, 3 frames tall, fast animation (0.05s per frame), no loop
-        this.sprite = new Sprite(8, 3, 0.05, false);
+        this.sprite = new Sprite(8, 3, 0.015, false);
     }
     
     /**

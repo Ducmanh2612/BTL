@@ -27,8 +27,8 @@ public class Level {
     private int[][] layout;
 
     // Brick dimensions
-    private static final int BRICK_WIDTH = 75;
-    private static final int BRICK_HEIGHT = 25;
+    private static final int BRICK_WIDTH = 60;
+    private static final int BRICK_HEIGHT = 20;
     private static final int SPACING = 2;
 
     public Level(int levelNumber) {
@@ -66,11 +66,33 @@ public class Level {
     }
     private int[][] getLevel2Layout() {
         return new int[][] {
-                {2, 1, 1, 1, 1, 1, 1, 1, 1, 2},
-                {1, 2, 1, 1, 1, 1, 1, 1, 2, 1},
-                {1, 1, 2, 2, 1, 1, 2, 2, 1, 1},
-                {1, 1, 1, 1, 2, 2, 1, 1, 1, 1},
-                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
+                {9, 9, 9, 9, 9, 9, 9, 9, 9, 9},
+                {9, 2, 0, 0, 0, 0, 0, 0, 9, 9},
+                {9, 2, 0, 2, 0, 0, 2, 2, 2, 9},
+                {9, 0, 2, 0, 0, 0, 0, 0, 0, 9},
+                {9, 0, 0, 0, 0, 0, 0, 0, 0, 9},
+                {9, 0, 0, 0, 2, 0, 2, 0, 0, 9},
+                {9, 0, 2, 0, 0, 0, 0, 0, 0, 9},
+                {9, 0, 2, 0, 0, 2, 0, 0, 0, 9},
+                {9, 2, 0, 0, 0, 0, 0, 0, 2, 9},
+                {9, 0, 9, 0, 0, 0, 0, 0, 0, 9},
+                {9, 0, 9, 0, 0, 0, 0, 0, 0, 9},
+                {9, 0, 9, 9, 9, 0, 9, 0, 0, 9},
+                {9, 0, 9, 0, 9, 0, 0, 9, 0, 9},
+                {9, 0, 0, 0, 0, 0, 0, 0, 0, 9},
+                {9, 0, 9, 0, 0, 0, 9, 0, 0, 9},
+                {9, 0, 0, 0, 0, 0, 0, 0, 0, 9},
+                {9, 0, 0, 9, 9, 9, 0, 0, 0, 9},
+                {9, 0, 0, 0, 0, 0, 0, 0, 0, 9},
+                {9, 0, 9, 9, 9, 0, 0, 0, 0, 9},
+                {9, 0, 0, 0, 0, 9, 9, 9, 0, 9},
+                {9, 0, 0, 0, 9, 9, 0, 0, 0, 9},
+                {9, 0, 9, 0, 0, 0, 0, 0, 0, 9},
+                {9, 0, 9, 9, 9, 0, 0, 0, 0, 9},
+                {9, 0, 0, 9, 9, 9, 0, 0, 0, 9},
+                {9, 0, 0, 0, 0, 0, 0, 0, 0, 9},
+                {9, 0, 0, 0, 0, 0, 0, 0, 0, 9},
+                {9, 9, 9, 9, 9, 0, 9, 9, 9, 9}
         };
     }
     private int[][] getLevel3Layout() {
@@ -164,28 +186,28 @@ public class Level {
                         brick = new UnbreakableBrick(x, y, BRICK_WIDTH, BRICK_HEIGHT);
                         break;
                     case 10: // Red
-                        brick = new ColoredBrick(x, y, BRICK_WIDTH, BRICK_HEIGHT, "RED", 90);
+                        brick = new ColoredBrick(x, y, BRICK_WIDTH, BRICK_HEIGHT, "RED", 90, 1);
                         break;
                     case 11: // Yellow
-                        brick = new ColoredBrick(x, y, BRICK_WIDTH, BRICK_HEIGHT, "YELLOW", 120);
+                        brick = new ColoredBrick(x, y, BRICK_WIDTH, BRICK_HEIGHT, "YELLOW", 120, 1);
                         break;
                     case 12: // Blue
-                        brick = new ColoredBrick(x, y, BRICK_WIDTH, BRICK_HEIGHT, "BLUE", 100);
+                        brick = new ColoredBrick(x, y, BRICK_WIDTH, BRICK_HEIGHT, "BLUE", 100, 1);
                         break;
                     case 13: // Magenta
-                        brick = new ColoredBrick(x, y, BRICK_WIDTH, BRICK_HEIGHT, "MAGENTA", 110);
+                        brick = new ColoredBrick(x, y, BRICK_WIDTH, BRICK_HEIGHT, "MAGENTA", 110, 1);
                         break;
                     case 14: // Lime
-                        brick = new ColoredBrick(x, y, BRICK_WIDTH, BRICK_HEIGHT, "LIME", 80);
+                        brick = new ColoredBrick(x, y, BRICK_WIDTH, BRICK_HEIGHT, "LIME", 80, 1);
                         break;
                     case 15: // White
-                        brick = new ColoredBrick(x, y, BRICK_WIDTH, BRICK_HEIGHT, "WHITE", 50);
+                        brick = new ColoredBrick(x, y, BRICK_WIDTH, BRICK_HEIGHT, "WHITE", 50, 1);
                         break;
                     case 16: // Orange
-                        brick = new ColoredBrick(x, y, BRICK_WIDTH, BRICK_HEIGHT, "ORANGE", 60);
+                        brick = new ColoredBrick(x, y, BRICK_WIDTH, BRICK_HEIGHT, "ORANGE", 60, 1);
                         break;
                     case 17: // Cyan
-                        brick = new ColoredBrick(x, y, BRICK_WIDTH, BRICK_HEIGHT, "CYAN", 70);
+                        brick = new ColoredBrick(x, y, BRICK_WIDTH, BRICK_HEIGHT, "CYAN", 70, 1);
                         break;
                 }
 

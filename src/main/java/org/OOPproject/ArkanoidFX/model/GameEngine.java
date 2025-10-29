@@ -5,6 +5,7 @@ import org.OOPproject.ArkanoidFX.model.Bricks.*;
 import org.OOPproject.ArkanoidFX.model.PowerUps.*;
 import javafx.scene.paint.Color;
 import org.OOPproject.ArkanoidFX.utils.InputSignal;
+import org.OOPproject.ArkanoidFX.utils.newLevel;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -23,7 +24,7 @@ public class GameEngine {
     private List<ActivePowerUp> activePowerUps;    // Power-ups currently active
     private List<Blink> blinks;                    // List of active blink effects
 
-    private Level currentLevel;                    // Current level definition
+    private newLevel currentLevel;                    // Current level definition
 
     // Particle system for visual effects
     private ParticleSystem particleSystem;
@@ -83,7 +84,7 @@ public class GameEngine {
     public void startGame() {
         this.score = 0;
         this.lives = 3;
-        this.levelNumber = 4;
+        this.levelNumber = 20;
         this.gameState = "PLAYING";
         this.particleSystem.clear();
         this.ballReleased = false; // Ball starts stuck to paddle
@@ -116,7 +117,7 @@ public class GameEngine {
         particleSystem.clear();
 
         // Create bricks using Level system
-        currentLevel = new Level(levelNumber);
+        currentLevel = new newLevel(levelNumber);
         bricks = currentLevel.createBricks(gameWidth, 50);
     }
     //TODO: create a new level generator and delete this method to it
@@ -219,16 +220,17 @@ public class GameEngine {
         // 1. Ball-Paddle collision (simple bounds check is fine for paddle)
         if (ball.collidesWith(paddle)) {
             ball.bounceOffPaddle(paddle);
-            ball.specialMode = true;
+            if(ball.velocityX < 520) ball.specialMode = true;
             return ;
         }
 
         //Đảm bảo sẽ không có va chạm trong nhiều nhịp game
         if (ball.y + ball.height > paddle.y - paddle.height && ball.specialMode) {
-            ball.velocityX = (700 + 20) * (ball.velocityX / Math.abs(ball.velocityX));
+            ball.velocityX = (500 + 20) * (ball.velocityX) / Math.abs(ball.velocityX);
         }
         else {
             ball.specialMode = false;
+            ball.normalSpeed();
         }
 
         // 2. Ball-Brick collision using trajectory prediction

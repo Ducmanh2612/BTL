@@ -13,10 +13,11 @@ public class ColoredBrick extends Brick {
      * @param color Color name (RED, YELLOW, BLUE, MAGENTA, LIME, WHITE, ORANGE, CYAN)
      * @param scoreValue Points awarded when destroyed
      */
-    public ColoredBrick(int x, int y, int width, int height, String color, int scoreValue) {
+    public ColoredBrick(int x, int y, int width, int height, String color, int scoreValue, int hitPoints) {
         super(x, y, width, height);
         this.color = color;
-        this.hitPoints = 1;
+        // Sua lai hit points theo mau chuan
+        this.hitPoints = hitPoints;
         this.scoreValue = scoreValue;
         this.type = color + "_BRICK";
     }
