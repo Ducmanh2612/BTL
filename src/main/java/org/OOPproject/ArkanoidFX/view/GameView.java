@@ -45,13 +45,9 @@ public class GameView extends StackPane {
         drawLevelBackground();
 
         String state = gameEngineRef.getGameState();
-        if (state.equals("GAME_OVER")) {
-            renderGameOver();
-        } else {
-            renderGame();
-            if (state.equals("PAUSED")) {
-                renderPauseOverlay();
-            }
+        renderGame();
+        if (state.equals("PAUSED")) {
+            renderPauseOverlay();
         }
     }
 
@@ -243,7 +239,6 @@ public class GameView extends StackPane {
 
         Image paddleImg = isExpanded ? assetManager.getPaddleWideSpriteMapImg() : assetManager.getPaddleStdSpriteMapImg();
         if (paddleImg != null) {
-//            System.out.println(1);
             int frameWidth = 80;
             int frameHeight = 22;
             if(paddle.isExpanded()){

@@ -371,6 +371,28 @@ public class GameEngine {
         ballReleased = false;
     }
 
+    // Thêm method này vào class GameEngine của bạn
+
+    public void resetGame() {
+        // Reset game state
+        gameState = "PLAYING";
+
+        // Reset score and level
+        score = 0;
+        levelNumber = 1;
+        lives = 3;  // Hoặc số lives mặc định của bạn
+
+        // Clear existing game objects
+        bricks.clear();
+        powerUps.clear();
+        blinks.clear();
+        particleSystem.getParticles().clear();
+
+        // Reinitialize game objects
+        initializeLevel();  // Load level đầu tiên
+
+        // Reset any other game state variables you have
+    }
     /**
      * Level complete - advance to next level.
      */

@@ -20,6 +20,8 @@ public class GameController {
     private long lastFrameUpdate = 0;
     private Set<KeyCode> pressedKeys;
     private boolean gameIsPaused;
+    private Runnable onGameOver;
+    private boolean gameOverTriggered = false;
 
     private GameController(Scene scene) {
         gameEngine = GameEngine.getInstance();
@@ -27,6 +29,8 @@ public class GameController {
         Pane root = (Pane) scene.getRoot();
         root.getChildren().add(gameView);
         pressedKeys = new HashSet<>();
+        gameOverTriggered = false;
+
         gameLoop = new AnimationTimer() {
             @Override
             public void handle(long now) {
@@ -36,28 +40,47 @@ public class GameController {
                 }
                 double deltaTime = (now - lastFrameUpdate) / 1_000_000_000.0;
                 lastFrameUpdate = now;
+
                 handleCurrentKeys();
                 gameEngine.updateGame(deltaTime);
                 gameView.render();
+
+                // Check for game over
+                if (gameEngine.getGameState().equals("GAME_OVER") && !gameOverTriggered) {
+                    gameOverTriggered = true;
+                    stopGameLoop();
+                    if (onGameOver != null) {
+                        // Just signal game over, don't pass any data
+                        onGameOver.run();
+                    }
+                }
             }
         };
         gameIsPaused = false;
     }
 
     public static GameController getInstance(Scene scene) {
-        if (instance == null) {
-            instance = new GameController(scene);
-        }
+        // Don't use singleton pattern here to allow recreation
+        instance = new GameController(scene);
         return instance;
     }
 
     public void startGameLoop() {
         gameEngine.startGame();
+        gameOverTriggered = false;
+        lastFrameUpdate = 0;
         gameLoop.start();
     }
 
+    public void stopGameLoop() {
+        gameLoop.stop();
+    }
+
+    public void setOnGameOver(Runnable onGameOver) {
+        this.onGameOver = onGameOver;
+    }
+
     public void handleCurrentKeys() {
-        //TODO: dive deeper in to logic of this
         if (pressedKeys.contains(KeyCode.A)) {
             gameEngine.handleInput(InputSignal.MOVE_LEFT);
         }
@@ -67,10 +90,8 @@ public class GameController {
         if(!pressedKeys.contains(KeyCode.A) && !pressedKeys.contains(KeyCode.D)) {
             gameEngine.handleInput(InputSignal.STOP);
         }
-        //TODO: handle the bug when pressing P, the game freezes and not not unfreeze on next P press
         if (pressedKeys.contains(KeyCode.P)) {
             gameEngine.handleInput(InputSignal.PAUSE_RESUME);
-            // Remove P key to prevent multiple toggles in one press
             pressedKeys.remove(KeyCode.P);
         }
     }
