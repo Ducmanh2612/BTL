@@ -39,6 +39,7 @@ public class GameController {
                 handleCurrentKeys();
                 gameEngine.updateGame(deltaTime);
                 gameView.render();
+
             }
         };
         gameIsPaused = false;
