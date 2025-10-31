@@ -6,6 +6,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import org.OOPproject.ArkanoidFX.model.GameEngine;
+import org.OOPproject.ArkanoidFX.model.LeaderboardManager;
 import org.OOPproject.ArkanoidFX.view.EndGameView;
 
 public class EndGameController {
@@ -13,6 +14,7 @@ public class EndGameController {
     private final AnimationTimer endGameLoop;
     private EndGameView endGameView;
     private GameEngine gameEngine;
+    private LeaderboardManager leaderboardManager;
     private long lastFrameUpdate = 0;
     private Runnable onPlayAgain;
     private Runnable onReturnToMenu;
@@ -20,6 +22,7 @@ public class EndGameController {
     private EndGameController(Scene scene) {
         endGameView = EndGameView.getInstance();
         gameEngine = GameEngine.getInstance();
+        leaderboardManager = LeaderboardManager.getInstance();
         Pane root = (Pane) scene.getRoot();
         root.getChildren().add(endGameView);
 
@@ -72,17 +75,37 @@ public class EndGameController {
     public void handleKeyPressed(KeyEvent event) {
         KeyCode key = event.getCode();
 
-        if (key == KeyCode.SPACE) {
-            if (onPlayAgain != null) {
-                stopEndGameLoop();
-                gameEngine.resetGame();
-                onPlayAgain.run();
+        // Handle name input
+        if (endGameView.isEnteringName()) {
+            if (key == KeyCode.ENTER) {
+                // Finish entering name and save to leaderboard
+                endGameView.finishEnteringName();
+                String playerName = endGameView.getPlayerName();
+                int score = gameEngine.getScore();
+                int level = gameEngine.getLevelNumber();
+                leaderboardManager.addEntry(playerName, score, level);
+            } else if (key == KeyCode.BACK_SPACE) {
+                endGameView.removeLastCharacter();
+            } else if (key.isLetterKey() || key.isDigitKey() || key == KeyCode.SPACE) {
+                String keyText = key.getName();
+                if (keyText.length() == 1) {
+                    endGameView.addCharacterToName(keyText.charAt(0));
+                }
             }
-        } else if (key == KeyCode.ESCAPE) {
-            if (onReturnToMenu != null) {
-                stopEndGameLoop();
-                gameEngine.resetGame();
-                onReturnToMenu.run();
+        } else {
+            // Handle navigation after name entry
+            if (key == KeyCode.SPACE) {
+                if (onPlayAgain != null) {
+                    stopEndGameLoop();
+                    gameEngine.resetGame();
+                    onPlayAgain.run();
+                }
+            } else if (key == KeyCode.ESCAPE) {
+                if (onReturnToMenu != null) {
+                    stopEndGameLoop();
+                    gameEngine.resetGame();
+                    onReturnToMenu.run();
+                }
             }
         }
     }

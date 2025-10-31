@@ -50,7 +50,7 @@ public class ArkanoidGame extends Application {
         // Set up key handler for menu
         menuScene.setOnKeyPressed(menuController::handleKeyPressed);
 
-        // Set callback to switch to game when SPACE is pressed
+        // Set callback
         menuController.setOnStartGame(this::switchToGame);
     }
 
@@ -101,7 +101,6 @@ public class ArkanoidGame extends Application {
         primaryStage.setScene(endGameScene);
 
         // Start end game animation
-        // EndGameController will get stats from GameEngine
         endGameController.startEndGameLoop();
     }
 

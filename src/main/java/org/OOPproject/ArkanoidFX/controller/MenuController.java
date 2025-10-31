@@ -42,6 +42,9 @@ public class MenuController {
     }
 
     public void startMenuLoop() {
+        menuView.setShowingLeaderboard(false);
+        menuView.resetAnimation();
+        lastFrameUpdate = 0;
         menuLoop.start();
     }
 
@@ -54,10 +57,24 @@ public class MenuController {
     }
 
     public void handleKeyPressed(KeyEvent event) {
-        if (event.getCode() == KeyCode.SPACE) {
-            if (onStartGame != null) {
-                stopMenuLoop();
-                onStartGame.run();
+        KeyCode key = event.getCode();
+
+        if (menuView.isShowingLeaderboard()) {
+            // In leaderboard view
+            if (key == KeyCode.ESCAPE) {
+                menuView.setShowingLeaderboard(false);
+                menuView.resetAnimation();
+            }
+        } else {
+            // In main menu view
+            if (key == KeyCode.SPACE) {
+                if (onStartGame != null) {
+                    stopMenuLoop();
+                    onStartGame.run();
+                }
+            } else if (key == KeyCode.L) {
+                menuView.setShowingLeaderboard(true);
+                menuView.resetAnimation();
             }
         }
     }
