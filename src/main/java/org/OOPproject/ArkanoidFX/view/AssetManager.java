@@ -4,13 +4,14 @@ import javafx.scene.image.Image;
 import org.OOPproject.ArkanoidFX.model.Bricks.BrickType;
 import org.OOPproject.ArkanoidFX.model.PowerUps.PowerUpTypes;
 
-import javafx.scene.media.Media;
+import javafx.scene.media.AudioClip;
 import org.OOPproject.ArkanoidFX.utils.Constants;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import static org.OOPproject.ArkanoidFX.utils.Constants.PADDLE_HEIGHT;
+import static org.OOPproject.ArkanoidFX.utils.newConstants.*;
 
 public class AssetManager {
     private static AssetManager instance;
@@ -19,7 +20,7 @@ public class AssetManager {
     private Map<String, Image> imageCache;
     
     // Cache for loaded audio
-    private Map<String, Media> audioCache;
+    private Map<String, AudioClip> audioCache;
 
     // Background patterns for different levels
     private Image[] backgroundPatterns;
@@ -145,12 +146,12 @@ public class AssetManager {
         }
     }
 
-    private Media loadMedia(String filename) {
+    private AudioClip loadMedia(String filename) {
         try {
             String path = "/assets/sfx/" + filename;
-            Media media = new Media(getClass().getResource(path).toExternalForm());
-            audioCache.put(filename, media);
-            return media;
+            AudioClip audioClip = new AudioClip(getClass().getResource(path).toExternalForm());
+            audioCache.put(filename, audioClip);
+            return audioClip;
         } catch (Exception e) {
             System.err.println("Failed to load media: " + filename);
             return null;
@@ -215,7 +216,7 @@ public class AssetManager {
     public Image getBonusBlockShadowImg() { return bonusBlockShadowImg; }
     public Image getBlinkMapImg() { return blinkMapImg; }
 
-    public Media getMedia(String filename) {
+    public AudioClip getAudioClip(String filename) {
         return audioCache.get(filename);
     }
 }
