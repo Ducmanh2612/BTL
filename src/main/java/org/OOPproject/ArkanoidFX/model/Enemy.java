@@ -1,6 +1,5 @@
 package org.OOPproject.ArkanoidFX.model;
 
-
 import static org.OOPproject.ArkanoidFX.utils.Constants.GAME_WIDTH;
 
 public abstract class Enemy extends MovableObject {
