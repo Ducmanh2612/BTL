@@ -17,7 +17,7 @@ import static org.OOPproject.ArkanoidFX.utils.Constants.*;
 
 public class GameEngine {
     private Paddle paddle;                         // The player's paddle
-    private Ball ball;                             // The bouncing ball
+    private List<Ball> balls;                      // List of balls in play
     private List<Brick> bricks;                    // List of all bricks
     private List<PowerUp> powerUps;                // List of falling power-ups
     private List<ActivePowerUp> activePowerUps;    // Power-ups currently active
@@ -62,6 +62,7 @@ public class GameEngine {
         this.particleSystem = new ParticleSystem();
 
         // Initialize lists to hold game objects
+        this.balls = new ArrayList<>();
         this.bricks = new ArrayList<>();
         this.powerUps = new ArrayList<>();
         this.activePowerUps = new ArrayList<>();
@@ -107,8 +108,10 @@ public class GameEngine {
         // Create ball just above the paddle
         int ballX = gameWidth / 2 - BALL_SIZE / 2;
         int ballY = gameHeight - 100;  // 100 pixels from bottom
-        ball = new Ball(ballX, ballY, BALL_SIZE, BALL_SIZE);
+        Ball ball = new Ball(ballX, ballY, BALL_SIZE, BALL_SIZE);
         ball.attachToPaddle(paddle);
+        balls.clear();
+        balls.add(ball);
         this.ballReleased = false;
         //TODO: ballReleased is set to false too much times, find a way to set it only once at the start of the game
 
@@ -137,16 +140,35 @@ public class GameEngine {
         }
 
         // If ball is stuck and paddle is moving, release the ball
-        if (!ballReleased && ball.isStuckToPaddle()) {
+        if (!ballReleased && !balls.isEmpty() && balls.get(0).isStuckToPaddle()) {
             // Check if paddle is moving
             if (paddle.getVelocityX() != 0) {
-                ball.releaseFromPaddle();
+                balls.get(0).releaseFromPaddle();
                 ballReleased = true;
             }
         }
         paddle.update(deltaTime);
-        checkCollisions(deltaTime);
-        ball.update(deltaTime);
+
+        // Update all balls
+        for (Ball ball : balls) {
+            checkCollisions(ball, deltaTime);
+            ball.update(deltaTime);
+        }
+
+        // Remove balls that fell off bottom of screen
+        Iterator<Ball> ballIterator = balls.iterator();
+        while (ballIterator.hasNext()) {
+            Ball ball = ballIterator.next();
+            if (ball.getY() >= gameHeight) {
+                ballIterator.remove();
+            }
+        }
+
+        // Check if all balls are gone
+        if (balls.isEmpty()) {
+            loseLife();
+        }
+
         for (PowerUp powerUp : powerUps) {
             powerUp.update(deltaTime);
         }
@@ -154,10 +176,6 @@ public class GameEngine {
         updateBlinks(deltaTime);
         particleSystem.update(deltaTime);
 
-        // Check if ball fell off bottom of screen
-        if (ball.getY() >= gameHeight) {
-            loseLife();
-        }
 
         // Check if all destroyable bricks are gone (level complete)
         if (isLevelComplete()) {
@@ -219,7 +237,7 @@ public class GameEngine {
      * 2. Ball vs Brick - destroy brick, bounce ball, create particles
      * 3. Paddle vs Power-up - activate power-up effect
      */
-    public void checkCollisions(double deltaTime) {
+    public void checkCollisions(Ball ball, double deltaTime) {
         // 1. Ball-Paddle collision (simple bounds check is fine for paddle)
         if (ball.collidesWith(paddle)) {
             ball.bounceOffPaddle(paddle);
@@ -238,19 +256,18 @@ public class GameEngine {
 
         // 2. Ball-Brick collision using trajectory prediction
         // Check if ball's path WILL hit any brick
-        boolean hitBrick = false; // Only hit one brick per frame
 
         if(ball.velocityY < 0) {
             for (int i = bricks.size() - 1; i >= 0; i--) {
                 if(ball.willHitBrick(bricks.get(i), deltaTime)) {
-                    brickAndBallProcess(bricks.get(i));
+                    brickAndBallProcess(bricks.get(i), ball);
                     break;
                 }
             }
         } else {
             for (Brick brick : bricks) {
                 if (ball.willHitBrick(brick, deltaTime)) {
-                    brickAndBallProcess(brick);
+                    brickAndBallProcess(brick, ball);
                     break;
                 }
             }
@@ -277,9 +294,9 @@ public class GameEngine {
 
     }
 
-    public void brickAndBallProcess(Brick brick) {
+    public void brickAndBallProcess(Brick brick, Ball ball) {
         String side = ball.getCollisionSide(brick);
-        ball.correctPositionAfterBrickHit(brick, side); /** key */
+        ball.correctPositionAfterBrickHit(brick, side);
         ball.bounceOffBrick(side);
 
         Color particleColor = getBrickColor(brick);
@@ -366,12 +383,26 @@ public class GameEngine {
      */
     private void spawnPowerUp(int x, int y) {
         PowerUp powerUp;
-        if (random.nextBoolean()) {
-            powerUp = new ExpandPaddlePowerUp(x, y, 20, 20);
-        } else {
-            FastBallPowerUp fastBall = new FastBallPowerUp(x, y, 20, 20);
-            fastBall.setBall(ball);
-            powerUp = fastBall;
+        int powerUpType = random.nextInt(3); // 0, 1, or 2
+
+        switch (powerUpType) {
+            case 0:
+                powerUp = new ExpandPaddlePowerUp(x, y, 20, 20);
+                break;
+            case 1:
+                FastBallPowerUp fastBall = new FastBallPowerUp(x, y, 20, 20);
+                // Set the first ball (if any) for fast ball effect
+                if (!balls.isEmpty()) {
+                    fastBall.setBall(balls.get(0));
+                }
+                powerUp = fastBall;
+                break;
+            case 2:
+            default:
+                MultiBallPowerUp multiBall = new MultiBallPowerUp(x, y, 20, 20);
+                multiBall.setCallback(this::spawnExtraBalls);
+                powerUp = multiBall;
+                break;
         }
 
         powerUps.add(powerUp);
@@ -383,6 +414,30 @@ public class GameEngine {
         // Power-up duration is in frames, convert to seconds (assuming 60 FPS)
         double durationInSeconds = powerUp.getDuration() / 60.0;
         activePowerUps.add(new ActivePowerUp(powerUp, durationInSeconds));
+    }
+
+    /**
+     * Spawn extra balls for MultiBall power-up.
+     * Creates 2 additional balls at the paddle position with different angles.
+     */
+    private void spawnExtraBalls(Paddle paddle) {
+        // Get center of paddle
+        int centerX = paddle.getX() + paddle.getWidth() / 2;
+        int centerY = paddle.getY() - BALL_SIZE;
+
+        // Create 2 additional balls
+        for (int i = 0; i < 2; i++) {
+            Ball newBall = new Ball(centerX - BALL_SIZE / 2, centerY, BALL_SIZE, BALL_SIZE);
+            newBall.setActive(true);
+
+            // Launch at different angles: -30 and -150 degrees
+            double angle = (i == 0) ? Math.toRadians(-30) : Math.toRadians(-150);
+            double speed = 500; // Same as normal ball speed
+            newBall.velocityX = Math.cos(angle) * speed;
+            newBall.velocityY = Math.sin(angle) * speed;
+
+            balls.add(newBall);
+        }
     }
 
     /**
@@ -400,13 +455,16 @@ public class GameEngine {
             paddle.setX(paddleX);
             paddle.stop();
 
-            int ballX = gameWidth / 2 - ball.getWidth() / 2;
+            int ballX = gameWidth / 2 - BALL_SIZE / 2;
             int ballY = gameHeight - 100;
-            ball.reset(ballX, ballY);
-        }
 
-        ball.attachToPaddle(paddle);
-        ballReleased = false;
+            // Create new ball and clear all existing balls
+            Ball ball = new Ball(ballX, ballY, BALL_SIZE, BALL_SIZE);
+            ball.attachToPaddle(paddle);
+            balls.clear();
+            balls.add(ball);
+            ballReleased = false;
+        }
     }
 
     /**
@@ -458,8 +516,8 @@ public class GameEngine {
         return paddle;
     }
 
-    public Ball getBall() {
-        return ball;
+    public List<Ball> getBalls() {
+        return balls;
     }
 
     public ParticleSystem getParticleSystem() {
