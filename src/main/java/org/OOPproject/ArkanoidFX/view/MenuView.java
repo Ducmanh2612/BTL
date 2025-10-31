@@ -184,10 +184,10 @@ public class MenuView extends StackPane {
 
         gc.setFont(Font.font("Arial", FontWeight.BOLD, 56));
         gc.setFill(Color.rgb(255, 215, 0, 0.5));
-        gc.fillText("LEADERBOARD", -165, 5);
+        gc.fillText("LEADERBOARD", -215, 0);
 
         gc.setFill(Color.GOLD);
-        gc.fillText("LEADERBOARD", -168, 0);
+        gc.fillText("LEADERBOARD", -210, 0);
 
         gc.restore();
 
