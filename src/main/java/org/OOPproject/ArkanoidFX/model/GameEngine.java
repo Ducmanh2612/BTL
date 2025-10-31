@@ -383,7 +383,7 @@ public class GameEngine {
      */
     private void spawnPowerUp(int x, int y) {
         PowerUp powerUp;
-        int powerUpType = random.nextInt(3); // 0, 1, or 2
+        int powerUpType = random.nextInt(4); // 0, 1, 2, or 3
 
         switch (powerUpType) {
             case 0:
@@ -398,10 +398,15 @@ public class GameEngine {
                 powerUp = fastBall;
                 break;
             case 2:
-            default:
                 MultiBallPowerUp multiBall = new MultiBallPowerUp(x, y, 20, 20);
                 multiBall.setCallback(this::spawnExtraBalls);
                 powerUp = multiBall;
+                break;
+            case 3:
+            default:
+                ExtraLifePowerUp extraLife = new ExtraLifePowerUp(x, y, 20, 20);
+                extraLife.setCallback(this::addLife);
+                powerUp = extraLife;
                 break;
         }
 
@@ -538,6 +543,10 @@ public class GameEngine {
 
     public int getLives() {
         return lives;
+    }
+
+    public void addLife() {
+        lives++;
     }
 
     public int getLevelNumber() {
