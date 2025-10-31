@@ -409,6 +409,27 @@ public class GameEngine {
         ballReleased = false;
     }
 
+
+    public void resetGame() {
+        // Reset game state
+        gameState = GameState.PLAYING;
+
+        // Reset score and level
+        score = 0;
+        levelNumber = 1;
+        lives = 3;
+
+        // Clear existing game objects
+        bricks.clear();
+        powerUps.clear();
+        blinks.clear();
+        particleSystem.getParticles().clear();
+
+        // Reinitialize game objects
+        initializeLevel();  // Load level đầu tiên
+
+        // Reset any other game state variables you have
+    }
     /**
      * Level complete - advance to next level.
      */

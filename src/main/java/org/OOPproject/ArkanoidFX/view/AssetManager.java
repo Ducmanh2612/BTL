@@ -14,16 +14,16 @@ import static org.OOPproject.ArkanoidFX.utils.Constants.PADDLE_HEIGHT;
 
 public class AssetManager {
     private static AssetManager instance;
-    
+
     // Cache for loaded images
     private Map<String, Image> imageCache;
-    
+
     // Cache for loaded audio
     private Map<String, AudioClip> audioCache;
 
     // Background patterns for different levels
     private Image[] backgroundPatterns;
-    
+
     // Brick images
     private Image goldBlockImg;
     private Image grayBlockImg;
@@ -36,11 +36,11 @@ public class AssetManager {
     private Image orangeBlockImg;
     private Image cyanBlockImg;
     private Image blockShadowImg;
-    
+
     // Ball images
     private Image ballImg;
     private Image ballShadowImg;
-    
+
     // Paddle images
     private Image paddleStdImg;
     private Image paddleStdShadowImg;
@@ -83,7 +83,7 @@ public class AssetManager {
             backgroundPatterns[1] = loadImage("backgroundPattern_2.png", 64, 64);
             backgroundPatterns[2] = loadImage("backgroundPattern_3.png", 64, 64);
             backgroundPatterns[3] = loadImage("backgroundPattern_4.png", 64, 64);
-            
+
             // Load brick images (38x20 pixels each)
             goldBlockImg = loadImage("goldBlock.png", Constants.BRICK_WIDTH, Constants.BRICK_HEIGHT);
             grayBlockImg = loadImage("grayBlock.png", Constants.BRICK_WIDTH, Constants.BRICK_HEIGHT);
@@ -181,7 +181,7 @@ public class AssetManager {
             default: return null;
         }
     }
-    
+
     // Getters for all image assets
     public Image getBlockShadowImg() { return blockShadowImg; }
     public Image getBallImg() { return ballImg; }
