@@ -238,7 +238,6 @@ public class GameEngine {
 
         // 2. Ball-Brick collision using trajectory prediction
         // Check if ball's path WILL hit any brick
-        boolean hitBrick = false; // Only hit one brick per frame
 
         if(ball.velocityY < 0) {
             for (int i = bricks.size() - 1; i >= 0; i--) {

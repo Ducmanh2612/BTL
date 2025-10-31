@@ -6,6 +6,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import org.OOPproject.ArkanoidFX.model.GameEngine;
+import org.OOPproject.ArkanoidFX.utils.GameState;
 import org.OOPproject.ArkanoidFX.utils.InputSignal;
 import org.OOPproject.ArkanoidFX.view.GameView;
 
@@ -46,7 +47,7 @@ public class GameController {
                 gameView.render();
 
                 // Check for game over
-                if (gameEngine.getGameState().equals("GAME_OVER") && !gameOverTriggered) {
+                if (gameEngine.getGameState() == GameState.GAME_OVER && !gameOverTriggered) {
                     gameOverTriggered = true;
                     stopGameLoop();
                     if (onGameOver != null) {
@@ -70,6 +71,7 @@ public class GameController {
         gameEngine.startGame();
         gameOverTriggered = false;
         lastFrameUpdate = 0;
+        pressedKeys.clear();
         gameLoop.start();
     }
 
