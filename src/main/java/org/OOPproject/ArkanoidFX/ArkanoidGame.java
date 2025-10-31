@@ -7,6 +7,7 @@ import javafx.stage.Stage;
 import org.OOPproject.ArkanoidFX.controller.EndGameController;
 import org.OOPproject.ArkanoidFX.controller.GameController;
 import org.OOPproject.ArkanoidFX.controller.MenuController;
+import org.OOPproject.ArkanoidFX.model.SoundManager;
 
 import static org.OOPproject.ArkanoidFX.utils.Constants.WINDOW_HEIGHT;
 import static org.OOPproject.ArkanoidFX.utils.Constants.WINDOW_WIDTH;
@@ -38,6 +39,8 @@ public class ArkanoidGame extends Application {
         // Show menu first
         primaryStage.setScene(menuScene);
         primaryStage.show();
+
+        SoundManager.getInstance().playSound("game_start.wav");
 
         // Start menu animation
         menuController.startMenuLoop();
