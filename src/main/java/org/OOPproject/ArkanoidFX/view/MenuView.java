@@ -139,7 +139,7 @@ public class MenuView extends StackPane {
             int startX = (GAME_WIDTH - (totalBricks * brickWidth + (totalBricks - 1) * spacing)) / 2;
             int y = 50;
 
-            BrickType[] colors = {BrickType.RUBY, BrickType.YLLW, BrickType.BLUE, BrickType.MGNT, BrickType.ORNG, BrickType.CYAN};
+            BrickType[] colors = {BrickType.RUBY, BrickType.YLLW, BrickType.BLUE, BrickType.MGNT, BrickType.ORNG, BrickType.CYAN, BrickType.CYAN, BrickType.LIME};
             for (int i = 0; i < totalBricks; i++) {
                 Image colorBrick = assetManager.getBrickImage(colors[i]);
                 if (colorBrick != null) {
