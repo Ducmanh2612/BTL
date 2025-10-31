@@ -11,7 +11,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.OOPproject.ArkanoidFX.utils.Constants.PADDLE_HEIGHT;
-import static org.OOPproject.ArkanoidFX.utils.newConstants.*;
 
 public class AssetManager {
     private static AssetManager instance;
