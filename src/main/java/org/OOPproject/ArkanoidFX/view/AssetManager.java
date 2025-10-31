@@ -50,14 +50,14 @@ public class AssetManager {
     private Image paddleWideSpriteMapImg;
 
     // PowerUp sprite maps (animated)
-    private Image bonusBlockCMapImg;  // Catch
-    private Image bonusBlockFMapImg;  // Expand (F for wide)
-    private Image bonusBlockDMapImg;  // Duplicate balls
-    private Image bonusBlockSMapImg;  // Slow down
-    private Image bonusBlockLMapImg;  // Laser
-    private Image bonusBlockBMapImg;  // Break through
-    private Image bonusBlockPMapImg;  // Extra life (P for player)
-    private Image bonusBlockShadowImg;
+    private Image PowerupCMapImg;  // Catch
+    private Image PowerupFMapImg;  // Expand (F for wide)
+    private Image PowerupDMapImg;  // Duplicate balls
+    private Image PowerupSMapImg;  // Slow down
+    private Image PowerupLMapImg;  // Laser
+    private Image PowerupBMapImg;  // Break through
+    private Image PowerupPMapImg;  // Extra life (P for player)
+    private Image PowerupShadowImg;
     
     // Blink effect sprite map
     private Image blinkMapImg;
@@ -109,14 +109,14 @@ public class AssetManager {
             paddleWideSpriteMapImg = loadImage("paddlemap_wide.png", Constants.PADDLE_EXPANDED_WIDTH * 8, PADDLE_HEIGHT * 8);
 
 
-            bonusBlockCMapImg = loadImage("block_map_bonus_c.png", Constants.BLOCK_MAP_BONUS_WIDTH, Constants.BLOCK_MAP_BONUS_HEIGHT);
-            bonusBlockFMapImg = loadImage("block_map_bonus_f.png", Constants.BLOCK_MAP_BONUS_WIDTH, Constants.BLOCK_MAP_BONUS_HEIGHT);
-            bonusBlockDMapImg = loadImage("block_map_bonus_d.png", Constants.BLOCK_MAP_BONUS_WIDTH, Constants.BLOCK_MAP_BONUS_HEIGHT);
-            bonusBlockSMapImg = loadImage("block_map_bonus_s.png", Constants.BLOCK_MAP_BONUS_WIDTH, Constants.BLOCK_MAP_BONUS_HEIGHT);
-            bonusBlockLMapImg = loadImage("block_map_bonus_l.png", Constants.BLOCK_MAP_BONUS_WIDTH, Constants.BLOCK_MAP_BONUS_HEIGHT);
-            bonusBlockBMapImg = loadImage("block_map_bonus_b.png", Constants.BLOCK_MAP_BONUS_WIDTH, Constants.BLOCK_MAP_BONUS_HEIGHT);
-            bonusBlockPMapImg = loadImage("block_map_bonus_p.png", Constants.BLOCK_MAP_BONUS_WIDTH, Constants.BLOCK_MAP_BONUS_HEIGHT);
-            bonusBlockShadowImg = loadImage("bonus_block_shadow.png", Constants.BLOCK_SHADOW_BONUS_WIDTH, Constants.BLOCK_SHADOW_BONUS_WIDTH);
+            PowerupCMapImg = loadImage("block_map_bonus_c.png", Constants.POWER_UP_MAP_WIDTH, Constants.POWER_UP_MAP_HEIGHT);
+            PowerupFMapImg = loadImage("block_map_bonus_f.png", Constants.POWER_UP_MAP_WIDTH, Constants.POWER_UP_MAP_HEIGHT);
+            PowerupDMapImg = loadImage("block_map_bonus_d.png", Constants.POWER_UP_MAP_WIDTH, Constants.POWER_UP_MAP_HEIGHT);
+            PowerupSMapImg = loadImage("block_map_bonus_s.png", Constants.POWER_UP_MAP_WIDTH, Constants.POWER_UP_MAP_HEIGHT);
+            PowerupLMapImg = loadImage("block_map_bonus_l.png", Constants.POWER_UP_MAP_WIDTH, Constants.POWER_UP_MAP_HEIGHT);
+            PowerupBMapImg = loadImage("block_map_bonus_b.png", Constants.POWER_UP_MAP_WIDTH, Constants.POWER_UP_MAP_HEIGHT);
+            PowerupPMapImg = loadImage("block_map_bonus_p.png", Constants.POWER_UP_MAP_WIDTH, Constants.POWER_UP_MAP_HEIGHT);
+            PowerupShadowImg = loadImage("bonus_block_shadow.png", Constants.POWER_UP_SHADOW_WIDTH, Constants.POWER_UP_SHADOW_HEIGHT);
 
             blinkMapImg = loadImage("blink_map.png", 304, 60);
 
@@ -196,23 +196,23 @@ public class AssetManager {
     public Image getPowerUpSpriteMap(PowerUpTypes powerUpType) {
         switch (powerUpType) {
             case EXPAND_PADDLE:
-                return bonusBlockFMapImg;  // Wide paddle
+                return PowerupFMapImg;  // Wide paddle
             case FAST_BALL:
-                return bonusBlockSMapImg;
+                return PowerupSMapImg;
             case MULTI_BALL:
-                return bonusBlockDMapImg;     // Duplicate balls
+                return PowerupDMapImg;     // Duplicate balls
             case LASER_PADDLE:
-                return bonusBlockLMapImg;         // Laser
+                return PowerupLMapImg;         // Laser
             case SKIP_LEVEL:
-                return bonusBlockBMapImg;         // Break through
+                return PowerupBMapImg;         // Break through
             case EXTRA_LIFE:
-                return bonusBlockPMapImg;          // Extra life
+                return PowerupPMapImg;          // Extra life
             default:
-                return bonusBlockFMapImg;  // Default to expand
+                return PowerupFMapImg;  // Default to expand
         }
     }
     
-    public Image getBonusBlockShadowImg() { return bonusBlockShadowImg; }
+    public Image getPowerupShadowImg() { return PowerupShadowImg; }
     public Image getBlinkMapImg() { return blinkMapImg; }
 
     public AudioClip getAudioClip(String filename) {

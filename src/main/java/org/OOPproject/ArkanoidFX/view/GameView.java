@@ -122,7 +122,7 @@ public class GameView extends StackPane {
         int px = powerUp.getX();
         int py = powerUp.getY();
         
-        Image shadowImg = assetManager.getBonusBlockShadowImg();
+        Image shadowImg = assetManager.getPowerupShadowImg();
         if (shadowImg != null) {
             gc.drawImage(shadowImg, px, py + 2, Constants.POWER_UP_WIDTH, Constants.POWER_UP_HEIGHT);
         }
