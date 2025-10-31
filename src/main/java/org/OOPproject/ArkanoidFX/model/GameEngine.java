@@ -86,7 +86,7 @@ public class GameEngine {
     public void startGame() {
         this.score = 0;
         this.lives = 3;
-        this.levelNumber = 1;
+        this.levelNumber = 2;
         this.gameState = GameState.PLAYING;
         this.particleSystem.clear();
         this.ballReleased = false; // Ball starts stuck to paddle
@@ -147,6 +147,9 @@ public class GameEngine {
         paddle.update(deltaTime);
         checkCollisions(deltaTime);
         ball.update(deltaTime);
+
+        //TODO update enemy trong gameloop o day/
+
         for (PowerUp powerUp : powerUps) {
             powerUp.update(deltaTime);
         }
@@ -158,6 +161,8 @@ public class GameEngine {
         if (ball.getY() >= gameHeight) {
             loseLife();
         }
+
+        //TODO kiem tra enemy bi loai khoi man hinh o day /
 
         // Check if all destroyable bricks are gone (level complete)
         if (isLevelComplete()) {
@@ -274,6 +279,7 @@ public class GameEngine {
             }
         }
 
+        //TODO them kiem tra va cham cho enemy voi ball va brick
     }
 
     public void brickAndBallProcess(Brick brick) {
@@ -295,7 +301,7 @@ public class GameEngine {
 
         // hàm kiểm tra cũ brick instanceof StrongBrick || brick instanceof ExtraStrongBrick || brick instanceof UnbreakableBrick
         // Sửa lại thành brick có hitpoint lớn hơn 1
-        if (brick.getHitPoints() > 1) {
+        if (brick.getHitPoints() >= 1) {
             // Only create new blink if this brick doesn't already have one
             boolean alreadyHasBlink = false;
             for (Blink existingBlink : blinks) {
@@ -325,23 +331,6 @@ public class GameEngine {
             SoundManager.getInstance().playSound("brick_hit.wav");
         }
 
-        // 3. Paddle-PowerUp collision
-        Iterator<PowerUp> powerUpIterator = powerUps.iterator();
-        while (powerUpIterator.hasNext()) {
-            PowerUp powerUp = powerUpIterator.next();
-
-            // Remove power-ups that fell off screen
-            if (powerUp.getY() >= gameHeight) {
-                powerUpIterator.remove();
-                continue;
-            }
-
-            // Check if paddle caught the power-up
-            if (paddle.collidesWith(powerUp)) {
-                activatePowerUp(powerUp);
-                powerUpIterator.remove();
-            }
-        }
     }
     private Color getBrickColor(Brick brick) {
         return switch (brick.getType()) {
