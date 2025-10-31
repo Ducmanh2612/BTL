@@ -100,14 +100,14 @@ public class AssetManager {
             ballImg = loadImage("ball.png", Constants.BALL_SIZE, Constants.BALL_SIZE);
             ballShadowImg = loadImage("ball_shadow.png", 12, 12);
 
-            paddleStdImg = loadImage("paddle_std.png", Constants.PADDLE_DEFAULT_WIDTH, Constants.PADDLE_DEFAULT_HEIGHT);
-            paddleStdShadowImg = loadImage("paddle_std_shadow.png", Constants.PADDLE_DEFAULT_WIDTH, Constants.PADDLE_DEFAULT_HEIGHT);
-            paddleStdSpriteMapImg = loadImage("paddlemap_std.png", Constants.PADDLE_DEFAULT_WIDTH * 8, Constants.PADDLE_DEFAULT_HEIGHT * 8);
+            paddleStdImg = loadImage("paddle_std.png", Constants.PADDLE_DEFAULT_WIDTH, PADDLE_HEIGHT);
+            paddleStdShadowImg = loadImage("paddle_std_shadow.png", Constants.PADDLE_DEFAULT_WIDTH, PADDLE_HEIGHT);
+            paddleStdSpriteMapImg = loadImage("paddlemap_std.png", Constants.PADDLE_DEFAULT_WIDTH * 8, PADDLE_HEIGHT * 8);
 
-            paddleWideImg = loadImage("paddle_wide.png", Constants.PADDLE_EXPANDED_WIDTH, Constants.PADDLE_EXPANDED_HEIGHT);
-            paddleWideShadowImg = loadImage("paddle_wide_shadow.png", Constants.PADDLE_EXPANDED_WIDTH, Constants.PADDLE_EXPANDED_HEIGHT);
+            paddleWideImg = loadImage("paddle_wide.png", Constants.PADDLE_EXPANDED_WIDTH, PADDLE_HEIGHT);
+            paddleWideShadowImg = loadImage("paddle_wide_shadow.png", Constants.PADDLE_EXPANDED_WIDTH, PADDLE_HEIGHT);
             paddleWideSpriteMapImg = loadImage("paddlemap_wide.png", Constants.PADDLE_EXPANDED_WIDTH * 8, PADDLE_HEIGHT * 8);
-            
+
 
             bonusBlockCMapImg = loadImage("block_map_bonus_c.png", Constants.BLOCK_MAP_BONUS_WIDTH, Constants.BLOCK_MAP_BONUS_HEIGHT);
             bonusBlockFMapImg = loadImage("block_map_bonus_f.png", Constants.BLOCK_MAP_BONUS_WIDTH, Constants.BLOCK_MAP_BONUS_HEIGHT);

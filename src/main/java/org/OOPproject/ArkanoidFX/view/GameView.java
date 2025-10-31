@@ -246,17 +246,17 @@ public class GameView extends StackPane {
         Image paddleImg = isExpanded ? assetManager.getPaddleWideSpriteMapImg() : assetManager.getPaddleStdSpriteMapImg();
         if (paddleImg != null) {
             int frameWidth = Constants.PADDLE_DEFAULT_WIDTH;
-            int frameHeight = Constants.PADDLE_DEFAULT_HEIGHT;
+            int frameHeight = Constants.PADDLE_HEIGHT;
             if(paddle.isExpanded()){
                 frameWidth = Constants.PADDLE_EXPANDED_WIDTH;
-                frameHeight = Constants.PADDLE_EXPANDED_HEIGHT;
+                frameHeight = Constants.PADDLE_HEIGHT;
             }
             //TODO: fix frame size for wide paddle
             int frameX = paddle.getFrameX();
             int frameY = paddle.getFrameY();
             int sourceX = frameX * frameWidth;
             int sourceY = frameY * frameHeight;
-            gc.drawImage(paddleImg, sourceX, sourceY, frameWidth, frameHeight, px, py, frameWidth, frameHeight);
+            gc.drawImage(paddleImg, sourceX, sourceY, frameWidth, frameHeight, px, py, pw, ph);
         } else {
             gc.setFill(isExpanded ? Color.GOLD : Color.LIMEGREEN);
             gc.fillRoundRect(px, py, pw, ph, 10, 10);

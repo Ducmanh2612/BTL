@@ -102,7 +102,7 @@ public class GameEngine {
         // Create paddle in the center bottom of play area
         int paddleX = (gameWidth - PADDLE_DEFAULT_WIDTH) / 2;
         int paddleY = gameHeight - 50;  // 50 pixels from bottom
-        paddle = new Paddle(paddleX, paddleY, PADDLE_DEFAULT_WIDTH, PADDLE_DEFAULT_HEIGHT);
+        paddle = new Paddle(paddleX, paddleY, PADDLE_DEFAULT_WIDTH, PADDLE_HEIGHT);
 
         // Create ball just above the paddle
         int ballX = gameWidth / 2 - BALL_SIZE / 2;

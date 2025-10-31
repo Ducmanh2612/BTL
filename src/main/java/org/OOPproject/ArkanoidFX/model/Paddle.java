@@ -7,7 +7,6 @@ public class Paddle extends MovableObject {
     private static final double DEFAULT_SPEED = 500.0;
 
     private double speed; // Speed in pixels per second
-    private int originalWidth;
     private int boundingBoxWidth = Constants.GAME_WIDTH;
 
     private Sprite sprite;
@@ -15,7 +14,6 @@ public class Paddle extends MovableObject {
     public Paddle(int x, int y, int width, int height) {
         super(x, y, width, height);
         this.speed = DEFAULT_SPEED; // 500 pixels per second
-        this.originalWidth = width;
         velocityX = 0;
         sprite = new Sprite(8, 8, 0.1, true);
         // 8x8 frames, 0.1s per frame, loops
@@ -37,18 +35,14 @@ public class Paddle extends MovableObject {
         powerUp.applyEffect(this);
     }
 
-    public boolean isExpanded() { return this.width > originalWidth; }
+    public boolean isExpanded() { return this.width > Constants.PADDLE_DEFAULT_WIDTH; }
 
     public void expandPaddle() {
-        this.width = originalWidth * 2;
+        this.width = Constants.PADDLE_EXPANDED_WIDTH;
     }
 
     public void restorePaddleSize() {
-        this.width = originalWidth;
-    }
-
-    public int getOriginalWidth() {
-        return originalWidth;
+        this.width = Constants.PADDLE_DEFAULT_WIDTH;
     }
 
     @Override
