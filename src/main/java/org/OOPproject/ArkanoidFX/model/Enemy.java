@@ -1,7 +1,6 @@
 package org.OOPproject.ArkanoidFX.model;
 
-import static org.OOPproject.ArkanoidFX.utils.Constants.ENEMY_MOVEMENT_CYCLE;
-import static org.OOPproject.ArkanoidFX.utils.Constants.GAME_WIDTH;
+import static org.OOPproject.ArkanoidFX.utils.Constants.*;
 
 public class Enemy extends MovableObject {
     private EnemyType type;
@@ -21,6 +20,8 @@ public class Enemy extends MovableObject {
         scoreValue = 100;
         currentPhi = 0;
         timeInCurrentCircle = ENEMY_MOVEMENT_CYCLE;
+        velocityX = movementType.vx;
+        velocityY = movementType.vy;
         sprite = new Sprite(8, 3, 0.1, true);
     }
 
@@ -32,6 +33,8 @@ public class Enemy extends MovableObject {
         scoreValue = 100;
         currentPhi = 0;
         timeInCurrentCircle = ENEMY_MOVEMENT_CYCLE;
+        velocityX = movementType.vx;
+        velocityY = movementType.vy;
         sprite = new Sprite(8, 3, 0.1, true);
     }
 
@@ -43,6 +46,8 @@ public class Enemy extends MovableObject {
         scoreValue = 100;
         currentPhi = 0;
         timeInCurrentCircle = ENEMY_MOVEMENT_CYCLE;
+        velocityX = movementType.vx;
+        velocityY = movementType.vy;
         sprite = new Sprite(8, 3, 0.1, true);
     }
 
@@ -136,61 +141,9 @@ public class Enemy extends MovableObject {
         double x1 = x0 + velocityX * deltaTime;
         double y1 = y0 + velocityY * deltaTime;
 
-        // Brick bounds (expanded by ball radius to simplify calculation)
-        double radius = width / 2.0;
-        double brickLeft = brick.getX() - radius;
-        double brickRight = brick.getX() + brick.getWidth() + radius;
-        double brickTop = brick.getY() - radius;
-        double brickBottom = brick.getY() + brick.getHeight() + radius;
+        Enemy fakeEnemy = new Enemy((int)x1, (int)y1, ENEMY_SIZE, type, movementType);
 
-        // Check if trajectory line crosses any of the 4 brick edges
-
-        // Check top edge (ball moving downward)
-        if (y0 <= brickTop && y1 >= brickTop) {
-            // Calculate where X would be when Y crosses top edge
-            double t = (brickTop - y0) / (y1 - y0); // Parameter along line
-            double xAtTop = x0 + t * (x1 - x0);
-            if (xAtTop >= brickLeft && xAtTop <= brickRight) {
-                return true; // Will hit top edge
-            }
-        }
-
-        // Check bottom edge (ball moving upward)
-        if (y0 >= brickBottom && y1 <= brickBottom) {
-            double t = (brickBottom - y0) / (y1 - y0);
-            double xAtBottom = x0 + t * (x1 - x0);
-            if (xAtBottom >= brickLeft && xAtBottom <= brickRight) {
-                return true; // Will hit bottom edge
-            }
-        }
-
-        // Check left edge (ball moving rightward)
-        if (x0 <= brickLeft && x1 >= brickLeft) {
-            double t = (brickLeft - x0) / (x1 - x0);
-            double yAtLeft = y0 + t * (y1 - y0);
-            if (yAtLeft >= brickTop && yAtLeft <= brickBottom) {
-                return true; // Will hit left edge
-            }
-        }
-
-        // Check right edge (ball moving leftward)
-        if (x0 >= brickRight && x1 <= brickRight) {
-            double t = (brickRight - x0) / (x1 - x0);
-            double yAtRight = y0 + t * (y1 - y0);
-            if (yAtRight >= brickTop && yAtRight <= brickBottom) {
-                return true; // Will hit right edge
-            }
-        }
-
-        // Also check if ball is already inside brick (safety check)
-        double enemyCenterX = x + width / 2.0;
-        double enemyCenterY = y + height / 2.0;
-        if (enemyCenterX >= brick.getX() && enemyCenterX <= brick.getX() + brick.getWidth() &&
-                enemyCenterY >= brick.getY() && enemyCenterY <= brick.getY() + brick.getHeight()) {
-            return true; // Ball is inside brick
-        }
-
-        return false; // No hit
+        return fakeEnemy.collidesWith(brick); // No hit
     }
 
     //TODO rewrite bounceOffBrick for enemy
@@ -272,13 +225,9 @@ public class Enemy extends MovableObject {
 
     private void setVelocity(double deltaTime) {
         if (movementType == MovementType.WAVE) {
-            setVelocityX(movementType.vy * Math.sin(currentPhi + 0.08 * deltaTime));
+            setVelocityX(velocityX * Math.sin(currentPhi + 0.08 * deltaTime));
             currentPhi += 0.08 * deltaTime;
             setVelocityY(movementType.vx);
-        }
-        else {
-            setVelocityX(movementType.vx);
-            setVelocityY(movementType.vy);
         }
     }
 
