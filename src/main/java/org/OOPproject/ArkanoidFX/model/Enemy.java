@@ -11,6 +11,7 @@ public class Enemy extends MovableObject {
     private double currentPhi;
     private double timeInCurrentCircle;
 
+    private Sprite sprite;
 
     public Enemy(int x, int y, int size) {
         super(x, y, size, size);
@@ -20,6 +21,7 @@ public class Enemy extends MovableObject {
         scoreValue = 100;
         currentPhi = 0;
         timeInCurrentCircle = ENEMY_MOVEMENT_CYCLE;
+        sprite = new Sprite(8, 3, 0.1, true);
     }
 
     public Enemy(int x, int y, int size, EnemyType type) {
@@ -30,6 +32,7 @@ public class Enemy extends MovableObject {
         scoreValue = 100;
         currentPhi = 0;
         timeInCurrentCircle = ENEMY_MOVEMENT_CYCLE;
+        sprite = new Sprite(8, 3, 0.1, true);
     }
 
     public Enemy(int x, int y, int size, EnemyType type, MovementType movementType) {
@@ -40,10 +43,11 @@ public class Enemy extends MovableObject {
         scoreValue = 100;
         currentPhi = 0;
         timeInCurrentCircle = ENEMY_MOVEMENT_CYCLE;
+        sprite = new Sprite(8, 3, 0.1, true);
     }
 
     public static EnemyType randEnemyType() {
-        int r = (int)Math.random() * 3;
+        int r = (int)(Math.random() * 3);
         switch (r%3) {
             case 0:
                 return EnemyType.UP_SENSITIVE;
@@ -54,7 +58,7 @@ public class Enemy extends MovableObject {
     }
 
     public static MovementType randMovementType() {
-        int r = (int)Math.random() * 3;
+        int r = (int)(Math.random() * 4);
         switch (r%3) {
             case 0:
                 return MovementType.FREE_FALL;
@@ -92,6 +96,9 @@ public class Enemy extends MovableObject {
         return timeInCurrentCircle;
     }
 
+    public int getFrameX() { return sprite.getFrameX(); }
+    public int getFrameY() { return sprite.getFrameY(); }
+
     public void setTimeInCurrentCircle(double timeInCurrentCircle) {
         this.timeInCurrentCircle = timeInCurrentCircle;
     }
@@ -122,8 +129,8 @@ public class Enemy extends MovableObject {
     //TODO rewrite willHitBrick for enemy
     public boolean willHitBrick(GameObject brick, double deltaTime) {
         // Current position (center of enemy)
-        double x0 = x + width / 2.0;
-        double y0 = y + height / 2.0;
+        double x0 = x ;
+        double y0 = y ;
 
         // Next position if ball continues on current path
         double x1 = x0 + velocityX * deltaTime;
@@ -253,15 +260,20 @@ public class Enemy extends MovableObject {
         return "bottom";
     }
 
+
     public void move(double deltaTime) {
         setVelocity(deltaTime);
         x += velocityX * deltaTime;
         y += velocityY * deltaTime;
+        sprite.update(deltaTime);
+
+        checkWallBounces();
     }
 
     private void setVelocity(double deltaTime) {
         if (movementType == MovementType.WAVE) {
             setVelocityX(movementType.vy * Math.sin(currentPhi + 0.08 * deltaTime));
+            currentPhi += 0.08 * deltaTime;
             setVelocityY(movementType.vx);
         }
         else {

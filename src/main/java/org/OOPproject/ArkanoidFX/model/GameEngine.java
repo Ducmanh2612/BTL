@@ -221,6 +221,7 @@ public class GameEngine {
             if (timeLeft - deltaTime <= 0) {
                 MovementType mt = Enemy.randMovementType();
                 e.setMovementType(mt);
+                e.setTimeInCurrentCircle(ENEMY_MOVEMENT_CYCLE);
             }
         }
     }
@@ -233,7 +234,7 @@ public class GameEngine {
                 e = new Enemy(150, 0, ENEMY_SIZE);
             }
             else {
-                e = new Enemy(650, 0, ENEMY_SIZE);
+                e = new Enemy(400, 0, ENEMY_SIZE);
             }
             enemies.add(e);
         }
@@ -568,6 +569,10 @@ public class GameEngine {
 
     // ========== GETTER METHODS ==========
     // These allow GameView to access game objects for rendering
+
+    public List<Enemy> getEnemies() {
+        return enemies;
+    }
 
     public List<Brick> getBricks() {
         return bricks;

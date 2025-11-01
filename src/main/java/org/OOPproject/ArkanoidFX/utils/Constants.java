@@ -26,9 +26,9 @@ public final class Constants {
     public static final int POWER_UP_SHADOW_WIDTH = 38;
     public static final int POWER_UP_SHADOW_HEIGHT = 18;
 
-    public static final int ENEMY_SIZE = 15;
+    public static final int ENEMY_SIZE = 32;
 
-    public static final double ENEMY_MOVEMENT_CYCLE = 0.0167 * 120;
+    public static final double ENEMY_MOVEMENT_CYCLE = 0.0167 * 60;
 
     private Constants() {
         // Prevent instantiation

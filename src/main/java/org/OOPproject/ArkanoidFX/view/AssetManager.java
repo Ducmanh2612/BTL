@@ -58,7 +58,10 @@ public class AssetManager {
     private Image PowerupBMapImg;  // Break through
     private Image PowerupPMapImg;  // Extra life (P for player)
     private Image PowerupShadowImg;
-    
+
+    //Enemy sprite map
+    private Image enemyMapImg;
+
     // Blink effect sprite map
     private Image blinkMapImg;
 
@@ -118,7 +121,12 @@ public class AssetManager {
             PowerupPMapImg = loadImage("block_map_bonus_p.png", Constants.POWER_UP_MAP_WIDTH, Constants.POWER_UP_MAP_HEIGHT);
             PowerupShadowImg = loadImage("bonus_block_shadow.png", Constants.POWER_UP_SHADOW_WIDTH, Constants.POWER_UP_SHADOW_HEIGHT);
 
+            //sprite map for enemy
+            enemyMapImg = loadImage("molecule_map.png", 256, 96);
+
             blinkMapImg = loadImage("blink_map.png", 304, 60);
+
+
 
             // Load audio files
             loadMedia("brick_destroyed.wav");
@@ -192,6 +200,9 @@ public class AssetManager {
     public Image getPaddleWideImg() { return paddleWideImg; }
     public Image getPaddleWideShadowImg() { return paddleWideShadowImg; }
     public Image getPaddleWideSpriteMapImg() { return paddleWideSpriteMapImg; }
+
+    //Getter for enemy sprite
+    public Image getEnemyMapImg() {return enemyMapImg;}
 
     public Image getPowerUpSpriteMap(PowerUpTypes powerUpType) {
         switch (powerUpType) {
