@@ -91,7 +91,7 @@ public class GameEngine {
     public void startGame() {
         this.score = 0;
         this.lives = 3;
-        this.levelNumber = 5;
+        this.levelNumber = 1;
         this.gameState = GameState.PLAYING;
         this.particleSystem.clear();
         this.ballReleased = false; // Ball starts stuck to paddle
@@ -162,7 +162,7 @@ public class GameEngine {
             enemy.update(deltaTime);
         }
         updateEnemies(deltaTime);
-        // update enemies end
+        // update enemies end;
 
         for (PowerUp powerUp : powerUps) {
             powerUp.update(deltaTime);

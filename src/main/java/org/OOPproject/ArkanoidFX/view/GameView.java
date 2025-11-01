@@ -47,13 +47,9 @@ public class GameView extends StackPane {
         drawLevelBackground();
 
         GameState state = gameEngineRef.getGameState();
-        if (state.equals(GameState.GAME_OVER)) {
-            renderGameOver();
-        } else {
-            renderGame();
-            if (state.equals(GameState.PAUSED)) {
-                renderPauseOverlay();
-            }
+        renderGame();
+        if (state.equals(GameState.PAUSED)) {
+            renderPauseOverlay();
         }
     }
 
@@ -66,19 +62,6 @@ public class GameView extends StackPane {
             gc.setFill(patternFill);
             gc.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
         }
-    }
-
-    private void renderGameOver() {
-        gc.setFill(Color.RED);
-        gc.setFont(Font.font("Arial", FontWeight.BOLD, 48));
-        gc.fillText("GAME OVER", GAME_WIDTH / 2 - 130, GAME_HEIGHT / 2 - 50);
-
-        gc.setFill(Color.WHITE);
-        gc.setFont(Font.font("Arial", FontWeight.NORMAL, 24));
-        gc.fillText("Final Score: " + gameEngineRef.getScore(), GAME_WIDTH / 2 - 80, GAME_HEIGHT / 2 + 20);
-        gc.fillText("Level Reached: " + gameEngineRef.getLevelNumber(), GAME_WIDTH / 2 - 90, GAME_HEIGHT / 2 + 60);
-        gc.setFont(Font.font("Arial", FontWeight.NORMAL, 20));
-        gc.fillText("Press SPACE to Play Again", GAME_WIDTH / 2 - 120, GAME_HEIGHT / 2 + 120);
     }
 
     private void renderGame() {
