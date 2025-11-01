@@ -122,6 +122,9 @@ public class GameEngine {
         blinks.clear();
         particleSystem.clear();
 
+        // add enemies clear
+        enemies.clear();
+
         // Create bricks using Level system
         currentLevel = new Level(levelNumber);
         bricks = currentLevel.createBricks(gameWidth, 50);
@@ -156,6 +159,7 @@ public class GameEngine {
             enemy.update(deltaTime);
         }
         updateEnemies(deltaTime);
+        // update enemies end
 
         for (PowerUp powerUp : powerUps) {
             powerUp.update(deltaTime);
@@ -168,8 +172,6 @@ public class GameEngine {
         if (ball.getY() >= gameHeight) {
             loseLife();
         }
-
-        //TODO kiem tra enemy bi loai khoi man hinh o day /
 
         // Check if all destroyable bricks are gone (level complete)
         if (isLevelComplete()) {
@@ -209,6 +211,7 @@ public class GameEngine {
 
     /** Update enemy - update movementType */
     private void updateEnemies(double deltaTime) {
+        removeEnemies();
         if (enemies.isEmpty()) {
             spawnEnemies();
             return;
@@ -233,6 +236,16 @@ public class GameEngine {
                 e = new Enemy(650, 0, ENEMY_SIZE);
             }
             enemies.add(e);
+        }
+    }
+
+    private void removeEnemies() {
+        Iterator<Enemy> iterator = enemies.iterator();
+        while (iterator.hasNext()) {
+            Enemy e = iterator.next();
+            if (e.getY() > gameHeight) {
+                iterator.remove();
+            }
         }
     }
 
