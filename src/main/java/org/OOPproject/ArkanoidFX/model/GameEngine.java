@@ -718,4 +718,9 @@ public class GameEngine {
     public int getLevelNumber() {
         return levelNumber;
     }
+
+    public boolean isBallReleased() {
+        return ballReleased;
+    }
+
 }

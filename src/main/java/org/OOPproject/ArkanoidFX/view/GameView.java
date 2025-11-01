@@ -99,7 +99,7 @@ public class GameView extends StackPane {
         renderLives();
         
         // Show instruction if any ball is stuck to paddle
-        if (!gameEngineRef.getBalls().isEmpty() && gameEngineRef.getBalls().get(0).isStuckToPaddle()) {
+        if (!gameEngineRef.isBallReleased()) {
             gc.setFill(Color.WHITE);
             gc.setFont(Font.font("Arial", FontWeight.BOLD, 20));
             gc.fillText("Move LEFT or RIGHT to release ball", GAME_WIDTH / 2 - 180, GAME_HEIGHT / 2 + 100);
