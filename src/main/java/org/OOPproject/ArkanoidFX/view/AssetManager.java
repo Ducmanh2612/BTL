@@ -48,6 +48,7 @@ public class AssetManager {
     private Image paddleWideShadowImg;
     private Image paddleStdSpriteMapImg;
     private Image paddleWideSpriteMapImg;
+    private Image paddleGunSpriteMapImg;
 
     // PowerUp sprite maps (animated)
     private Image PowerupCMapImg;  // Catch
@@ -67,6 +68,11 @@ public class AssetManager {
 
     // Blink effect sprite map
     private Image blinkMapImg;
+
+    // Bullet Image
+    private Image bulletImg;
+
+    private Image HeartImg;
 
     private AssetManager() {
         imageCache = new HashMap<>();
@@ -129,15 +135,27 @@ public class AssetManager {
 
             blinkMapImg = loadImage("blink_map.png", 304, 60);
 
+            paddleGunSpriteMapImg = loadImage("paddlemap_gun.png", 640, 176);
+
             explosionMapImg = loadImage("explosion_map.png", 128, 128);
 
+            bulletImg = loadImage("torpedo.png", 15, 40);
+
+            HeartImg = loadImage("heart.png", 20, 20);
+
             // Load audio files
-            loadMedia("brick_destroyed.wav");
-            loadMedia("click.wav");
-            loadMedia("brick_hit.wav");
-            loadMedia("powerUp.wav");
+            loadMedia("ball_block.wav");
+            loadMedia("ball_hard_block.wav");
+            loadMedia("ball_paddle.wav");
             loadMedia("bounce.wav");
+            loadMedia("click.wav");
+            loadMedia("explosion.wav");
             loadMedia("game_over.wav");
+            loadMedia("game_start.wav");
+            loadMedia("gun.wav");
+            loadMedia("laserShoot.wav");
+            loadMedia("level_ready.wav");
+            loadMedia("powerUp.wav");
 
         } catch (Exception e) {
             System.err.println("Error loading assets: " + e.getMessage());
@@ -203,12 +221,19 @@ public class AssetManager {
     public Image getPaddleWideImg() { return paddleWideImg; }
     public Image getPaddleWideShadowImg() { return paddleWideShadowImg; }
     public Image getPaddleWideSpriteMapImg() { return paddleWideSpriteMapImg; }
+    public Image getHeartImg() { return HeartImg;}
 
     //Getter for enemy sprite
     public Image getEnemyMapImg() {return enemyMapImg;}
 
     //Getter for explosion sprite
     public Image getExplosionMapImg() {return explosionMapImg;}
+
+    //Getter for gun padddle sprite
+    public Image getPaddleGunSpriteMapImg() {return paddleGunSpriteMapImg;}
+
+    // Getter for bullet
+    public Image getBulletImg() {return bulletImg;}
 
     public Image getPowerUpSpriteMap(PowerUpTypes powerUpType) {
         switch (powerUpType) {
@@ -223,12 +248,14 @@ public class AssetManager {
             case SKIP_LEVEL:
                 return PowerupBMapImg;         // Break through
             case EXTRA_LIFE:
-                return PowerupPMapImg;          // Extra life
+                return PowerupPMapImg;  // Extra life
+            case GUN:
+                return PowerupCMapImg;
             default:
                 return PowerupFMapImg;  // Default to expand
         }
     }
-    
+
     public Image getPowerupShadowImg() { return PowerupShadowImg; }
     public Image getBlinkMapImg() { return blinkMapImg; }
 

@@ -105,11 +105,6 @@ public class ArkanoidGame extends Application {
     }
 
     private void restartGame() {
-        // Recreate game scene for fresh start
-        gameScene = null;
-        gameController = null;
-        createGameScene();
-
         // Switch to game
         primaryStage.setScene(gameScene);
         gameController.startGameLoop();
