@@ -394,6 +394,7 @@ public class GameEngine {
                 score += e.getScoreValue();
                 destroys.add(new Destroy(e));
                 enemies.remove(e);
+                SoundManager.getInstance().playSound("explosion.wav");
             }
         }
         else if (e.getType() == EnemyType.UP_SENSITIVE) {
@@ -403,6 +404,7 @@ public class GameEngine {
                     score += e.getScoreValue();
                     destroys.add(new Destroy(e));
                     enemies.remove(e);
+                    SoundManager.getInstance().playSound("explosion.wav");
                 }
             }
         }
@@ -413,6 +415,7 @@ public class GameEngine {
                     score += e.getScoreValue();
                     destroys.add(new Destroy(e));
                     enemies.remove(e);
+                    SoundManager.getInstance().playSound("explosion.wav");
                 }
             }
         }
