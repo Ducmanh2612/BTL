@@ -92,7 +92,6 @@ public class GameEngine {
         this.ballReleased = false; // Ball starts stuck to paddle
 
         initializeLevel();
-
     }
 
     /**
@@ -223,7 +222,7 @@ public class GameEngine {
         // 1. Ball-Paddle collision (simple bounds check is fine for paddle)
         if (ball.collidesWith(paddle)) {
             ball.bounceOffPaddle(paddle);
-            SoundManager.getInstance().playSound("bounce.wav");
+            SoundManager.getInstance().playSound("ball_paddle.wav");
             return ;
         }
 
@@ -312,7 +311,7 @@ public class GameEngine {
         // Remove if destroyed
         if (brick.isDestroyed()) {
             score += brick.getScoreValue();
-            SoundManager.getInstance().playSound("brick_destroyed.wav");
+            SoundManager.getInstance().playSound("ball_block.wav");
 
             // Spawn power-up chance
             if (!(brick instanceof UnbreakableBrick) && random.nextInt(100) < 15) {
@@ -322,7 +321,7 @@ public class GameEngine {
             bricks.remove(brick);
         } else {
             // Brick was hit but not destroyed
-            SoundManager.getInstance().playSound("brick_hit.wav");
+            SoundManager.getInstance().playSound("ball_hard_block.wav");
         }
 
         // 3. Paddle-PowerUp collision
@@ -433,6 +432,7 @@ public class GameEngine {
      * Level complete - advance to next level.
      */
     private void levelComplete() {
+        SoundManager.getInstance().playSound("level_ready.wav");
         levelNumber++;
         initializeLevel();
     }

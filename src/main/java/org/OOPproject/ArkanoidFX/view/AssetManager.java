@@ -121,12 +121,18 @@ public class AssetManager {
             blinkMapImg = loadImage("blink_map.png", 304, 60);
 
             // Load audio files
-            loadMedia("brick_destroyed.wav");
-            loadMedia("click.wav");
-            loadMedia("brick_hit.wav");
-            loadMedia("powerUp.wav");
+            loadMedia("ball_block.wav");
+            loadMedia("ball_hard_block.wav");
+            loadMedia("ball_paddle.wav");
             loadMedia("bounce.wav");
+            loadMedia("click.wav");
+            loadMedia("explosion.wav");
             loadMedia("game_over.wav");
+            loadMedia("game_start.wav");
+            loadMedia("gun.wav");
+            loadMedia("laserShoot.wav");
+            loadMedia("level_ready.wav");
+            loadMedia("powerUp.wav");
 
         } catch (Exception e) {
             System.err.println("Error loading assets: " + e.getMessage());
