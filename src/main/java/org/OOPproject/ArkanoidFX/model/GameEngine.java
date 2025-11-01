@@ -23,6 +23,10 @@ public class GameEngine {
     private List<ActivePowerUp> activePowerUps;    // Power-ups currently active
     private List<Blink> blinks;                    // List of active blink effects
     private List<Enemy> enemies;
+    private List<Destroy> destroys;
+
+    // new list for ball, easy for update new power up
+    private List<Ball> balls;
 
     private Level currentLevel;                    // Current level definition
 
@@ -67,6 +71,7 @@ public class GameEngine {
         this.activePowerUps = new ArrayList<>();
         this.blinks = new ArrayList<>();
         this.enemies = new ArrayList<>();
+        this.destroys = new ArrayList<>();
 
         this.gameState = GameState.PLAYING;
         this.ballReleased = false;
@@ -86,7 +91,7 @@ public class GameEngine {
     public void startGame() {
         this.score = 0;
         this.lives = 3;
-        this.levelNumber = 1;
+        this.levelNumber = 5;
         this.gameState = GameState.PLAYING;
         this.particleSystem.clear();
         this.ballReleased = false; // Ball starts stuck to paddle
@@ -118,6 +123,10 @@ public class GameEngine {
         blinks.clear();
         particleSystem.clear();
 
+        // add enemies clear
+        enemies.clear();
+        destroys.clear();
+
         // Create bricks using Level system
         currentLevel = new Level(levelNumber);
         bricks = currentLevel.createBricks(gameWidth, 50);
@@ -146,11 +155,21 @@ public class GameEngine {
         paddle.update(deltaTime);
         checkCollisions(deltaTime);
         ball.update(deltaTime);
+
+        //TODO update enemy trong gameloop o day/
+        for (Enemy enemy : enemies) {
+            System.out.println(enemy.getMovementType());
+            enemy.update(deltaTime);
+        }
+        updateEnemies(deltaTime);
+        // update enemies end
+
         for (PowerUp powerUp : powerUps) {
             powerUp.update(deltaTime);
         }
         updateActivePowerUps(deltaTime);
         updateBlinks(deltaTime);
+        updateDestroys(deltaTime);
         particleSystem.update(deltaTime);
 
         // Check if ball fell off bottom of screen
@@ -194,6 +213,51 @@ public class GameEngine {
         }
     }
 
+    /** Update enemy - update movementType */
+    private void updateEnemies(double deltaTime) {
+        removeEnemies();
+        if (enemies.isEmpty()) {
+            spawnEnemies();
+            return;
+        }
+        for (Enemy e : enemies) {
+            double timeLeft = e.getTimeInCurrentCircle();
+            if (timeLeft - deltaTime <= 0) {
+                MovementType mt = Enemy.randMovementType();
+                e.setMovementType(mt);
+                e.setTimeInCurrentCircle(ENEMY_MOVEMENT_CYCLE);
+            }
+            else {
+                timeLeft -= deltaTime;
+                e.setTimeInCurrentCircle(timeLeft);
+            }
+        }
+    }
+
+    /** Spawn new enemies when enemies size == 0 */
+    private void spawnEnemies() {
+        for (int i = 0; i < 3; i++) {
+            Enemy e;
+            if(i%2 == 0) {
+                e = new Enemy(150, 0, ENEMY_SIZE);
+            }
+            else {
+                e = new Enemy(400, 0, ENEMY_SIZE);
+            }
+            enemies.add(e);
+        }
+    }
+
+    private void removeEnemies() {
+        Iterator<Enemy> iterator = enemies.iterator();
+        while (iterator.hasNext()) {
+            Enemy e = iterator.next();
+            if (e.getY() > gameHeight) {
+                iterator.remove();
+            }
+        }
+    }
+
     /**
      * Update blink effects - animate them and remove when finished or brick destroyed.
      */
@@ -205,6 +269,18 @@ public class GameEngine {
 
             // Remove blink if animation finished or attached brick was destroyed
             if (blink.isFinished() || !bricks.contains(blink.getAttachedBrick())) {
+                iterator.remove();
+            }
+        }
+    }
+
+    private void updateDestroys(double deltaTime) {
+        Iterator<Destroy> iterator = destroys.iterator();
+        while (iterator.hasNext()) {
+            Destroy destroy = iterator.next();
+            destroy.update(deltaTime);
+
+            if(destroy.isFinished()) {
                 iterator.remove();
             }
         }
@@ -238,6 +314,7 @@ public class GameEngine {
         // 2. Ball-Brick collision using trajectory prediction
         // Check if ball's path WILL hit any brick
 
+        // 2. Ball - Brick collision
         if(ball.velocityY < 0) {
             for (int i = bricks.size() - 1; i >= 0; i--) {
                 if(ball.willHitBrick(bricks.get(i), deltaTime)) {
@@ -273,6 +350,77 @@ public class GameEngine {
             }
         }
 
+        //TODO them kiem tra va cham cho enemy voi ball va brick
+        // 4. Enemy and brick collision;
+
+        //Each enemy in one game tick must collide with at most 1 brick
+        for (Enemy e : enemies) {
+            for (Brick brick : bricks) {
+                if (e.willHitBrick(brick, deltaTime)) {
+                    brickAndEnemyProcess(brick, e);
+                    break;
+                }
+            }
+        }
+
+
+        // 5. Ball and Enemy collision
+        // Very hard to handle it perfectly
+        //
+
+//        for (Ball ball : balls) {
+//            for (Enemy e : enemies) {
+//                if (ball.willCollideEnemy(e, deltaTime)) {
+//                    ballAndEnemyProcess(ball, e);
+//                }
+//            }
+//        }
+
+        //currently, we dont have power up to duplicate the ball then we use this
+        for (Enemy e : enemies) {
+            if (ball.willCollideEnemy(e, deltaTime)) {
+                ballAndEnemyProcess(ball, e);
+            }
+        }
+    }
+
+
+    //TODO add sfx and render sprite explode for destroyed
+    public void ballAndEnemyProcess(Ball ball, Enemy e) {
+        if (e.getType() == EnemyType.REFLECTOR) {
+            ball.bounceOffEnemy();
+            e.takeHit();
+            if (e.isDestroyed()) {
+                score += e.getScoreValue();
+                destroys.add(new Destroy(e));
+                enemies.remove(e);
+            }
+        }
+        else if (e.getType() == EnemyType.UP_SENSITIVE) {
+            if (ball.velocityY < 0) {
+                e.takeHit();
+                if (e.isDestroyed()) {
+                    score += e.getScoreValue();
+                    destroys.add(new Destroy(e));
+                    enemies.remove(e);
+                }
+            }
+        }
+        else if (e.getType() == EnemyType.DOWN_SENSITIVE) {
+            if (ball.velocityY > 0) {
+                e.takeHit();
+                if (e.isDestroyed()) {
+                    score += e.getScoreValue();
+                    destroys.add(new Destroy(e));
+                    enemies.remove(e);
+                }
+            }
+        }
+    }
+    public void brickAndEnemyProcess(Brick brick, Enemy enemy) {
+        String side = enemy.getCollisionSide(brick);
+        enemy.correctPositionAfterBrickHit(brick, side);
+        enemy.bounceOffBrick(side);
     }
 
     public void brickAndBallProcess(Brick brick) {
@@ -324,24 +472,8 @@ public class GameEngine {
             SoundManager.getInstance().playSound("ball_hard_block.wav");
         }
 
-        // 3. Paddle-PowerUp collision
-        Iterator<PowerUp> powerUpIterator = powerUps.iterator();
-        while (powerUpIterator.hasNext()) {
-            PowerUp powerUp = powerUpIterator.next();
-
-            // Remove power-ups that fell off screen
-            if (powerUp.getY() >= gameHeight) {
-                powerUpIterator.remove();
-                continue;
-            }
-
-            // Check if paddle caught the power-up
-            if (paddle.collidesWith(powerUp)) {
-                activatePowerUp(powerUp);
-                powerUpIterator.remove();
-            }
-        }
     }
+
     private Color getBrickColor(Brick brick) {
         return switch (brick.getType()) {
             case BrickType.RUBY -> Color.RED;
@@ -462,6 +594,10 @@ public class GameEngine {
     // ========== GETTER METHODS ==========
     // These allow GameView to access game objects for rendering
 
+    public List<Enemy> getEnemies() {
+        return enemies;
+    }
+
     public List<Brick> getBricks() {
         return bricks;
     }
@@ -472,6 +608,10 @@ public class GameEngine {
 
     public List<Blink> getBlinks() {
         return blinks;
+    }
+
+    public List<Destroy> getDestroys() {
+        return destroys;
     }
 
     public Paddle getPaddle() {
@@ -505,4 +645,5 @@ public class GameEngine {
     public int getLevelNumber() {
         return levelNumber;
     }
+
 }

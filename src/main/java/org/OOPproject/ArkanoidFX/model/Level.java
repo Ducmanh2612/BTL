@@ -1,9 +1,11 @@
 package org.OOPproject.ArkanoidFX.model;
 
-import org.OOPproject.ArkanoidFX.model.Bricks.*;
+import org.OOPproject.ArkanoidFX.model.Bricks.Brick;
+import org.OOPproject.ArkanoidFX.model.Bricks.BrickFactory;
+import org.OOPproject.ArkanoidFX.model.Bricks.BrickType;
+
 import java.util.ArrayList;
 import java.util.List;
-import org.OOPproject.ArkanoidFX.model.Bricks.BrickType;
 
 public class Level {
     private int levelNumber;;
@@ -134,6 +136,12 @@ public class Level {
                 return LEVEL_29;
             case 30:
                 return LEVEL_30;
+            case 31:
+                return LEVEL_31;
+            case 32:
+                return LEVEL_32;
+            case 33:
+                return LEVEL_TEMPLATE;
             default:
                 return generateRandomLayout(level);
         }

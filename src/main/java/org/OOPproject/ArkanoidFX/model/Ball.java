@@ -1,5 +1,6 @@
 package org.OOPproject.ArkanoidFX.model;
 
+import static org.OOPproject.ArkanoidFX.utils.Constants.ENEMY_SIZE;
 import static org.OOPproject.ArkanoidFX.utils.Constants.GAME_WIDTH;
 
 //TODO: rewrite attachPaddle, releaseFromPaddle, willBrickHit, getCollisionSide methods
@@ -138,6 +139,38 @@ public class Ball extends MovableObject {
 
         return false; // No hit
     }
+
+    public boolean willCollideEnemy(Enemy enemy, double deltaTime) {
+        //because handle perfectly is very hard, create a loop with step is deltaTime / 10
+        //to check if enemy and ball is collide
+
+        Ball fakeBall = new Ball(0,0, width, height);
+        Enemy fakeEnemy = new Enemy(0, 0, ENEMY_SIZE);
+
+        for (double t = 0; t <= deltaTime; t += deltaTime/10) {
+
+            //next position if ball continues on current path
+            double x0 = x + velocityX * t;
+            double y0 = y + velocityY * t;
+
+            // Next position if enemy continues on current path
+            double x1 = enemy.x + enemy.velocityX * t;
+            double y1 = enemy.y + enemy.velocityY * t;
+
+            fakeBall.setX((int)x0);
+            fakeBall.setY((int)y0);
+            fakeEnemy.setX((int)x1);
+            fakeEnemy.setY((int)y1);
+
+            if (fakeBall.collidesWith(fakeEnemy)) {
+                return true;
+            }
+        }
+
+        return false; // No hit
+    }
+
+
     /**
      * Increase ball speed (power-up effect).
      */
@@ -234,6 +267,12 @@ public class Ball extends MovableObject {
         }
         // Set cooldown to prevent hitting multiple bricks
         collisionCooldown = COOLDOWN_TIME;
+    }
+
+    public void bounceOffEnemy() {
+        //might add random factor for the bounce
+        velocityX = -velocityX;
+        velocityY = -velocityY;
     }
 
     /**
