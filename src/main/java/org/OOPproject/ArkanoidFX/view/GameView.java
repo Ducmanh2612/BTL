@@ -88,13 +88,18 @@ public class GameView extends StackPane {
 
 
         renderPaddle(gameEngineRef.getPaddle());
-        renderBall(gameEngineRef.getBall());
+
+        // Render all balls
+        for (Ball ball : gameEngineRef.getBalls()) {
+            renderBall(ball);
+        }
+
         renderParticles();
         renderScore();
         renderLives();
-
-        Ball ball = gameEngineRef.getBall();
-        if (ball.isStuckToPaddle()) {
+        
+        // Show instruction if any ball is stuck to paddle
+        if (!gameEngineRef.getBalls().isEmpty() && gameEngineRef.getBalls().get(0).isStuckToPaddle()) {
             gc.setFill(Color.WHITE);
             gc.setFont(Font.font("Arial", FontWeight.BOLD, 20));
             gc.fillText("Move LEFT or RIGHT to release ball", GAME_WIDTH / 2 - 180, GAME_HEIGHT / 2 + 100);
