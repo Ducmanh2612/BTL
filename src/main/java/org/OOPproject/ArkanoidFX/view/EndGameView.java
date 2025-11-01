@@ -215,45 +215,70 @@ public class EndGameView extends StackPane {
 
     private void drawDecorativeElements() {
         // Draw some decorative bricks at the top
-        Image brickImg = assetManager.getBrickImage(BrickType.CYAN);
-        if (brickImg != null) {
-            int brickWidth = 38;
-            int brickHeight = 20;
-            int spacing = 10;
-            int totalBricks = 8;
-            int startX = (GAME_WIDTH - (totalBricks * brickWidth + (totalBricks - 1) * spacing)) / 2;
-            int y = 50;
-
-            BrickType[] colors = {BrickType.RUBY, BrickType.YLLW, BrickType.BLUE, BrickType.MGNT, BrickType.ORNG, BrickType.CYAN, BrickType.CYAN, BrickType.LIME};
-            for (int i = 0; i < totalBricks; i++) {
-                Image colorBrick = assetManager.getBrickImage(colors[i]);
-                if (colorBrick != null) {
-                    int x = startX + i * (brickWidth + spacing);
-                    gc.drawImage(colorBrick, x, y, brickWidth, brickHeight);
-                }
-            }
-        }
-
-        // Draw decorative ball
-        Image ballImg = assetManager.getBallImg();
-        if (ballImg != null) {
-            double ballX = GAME_WIDTH / 2 - 6 + Math.sin(animationTime * 2) * 50;
-            double ballY = GAME_HEIGHT / 2 + 240;
-            gc.drawImage(ballImg, ballX, ballY, 12, 12);
-        }
-
-        // Draw decorative paddle
-        Image paddleImg = assetManager.getPaddleStdImg();
-        if (paddleImg != null) {
-            int paddleX = GAME_WIDTH / 2 - 40;
-            int paddleY = GAME_HEIGHT / 2 + 270;
-            gc.drawImage(paddleImg, paddleX, paddleY, 80, 22);
-        }
+        drawFloatingBricks();
+//        Image brickImg = assetManager.getBrickImage(BrickType.CYAN);
+//        if (brickImg != null) {
+//            int brickWidth = 38;
+//            int brickHeight = 20;
+//            int spacing = 10;
+//            int totalBricks = 8;
+//            int startX = (GAME_WIDTH - (totalBricks * brickWidth + (totalBricks - 1) * spacing)) / 2;
+//            int y = 50;
+//
+//            BrickType[] colors = {BrickType.RUBY, BrickType.YLLW, BrickType.BLUE, BrickType.MGNT, BrickType.ORNG, BrickType.CYAN, BrickType.CYAN, BrickType.LIME};
+//            for (int i = 0; i < totalBricks; i++) {
+//                Image colorBrick = assetManager.getBrickImage(colors[i]);
+//                if (colorBrick != null) {
+//                    int x = startX + i * (brickWidth + spacing);
+//                    gc.drawImage(colorBrick, x, y, brickWidth, brickHeight);
+//                }
+//            }
+//        }
+//
+//        // Draw decorative ball
+//        Image ballImg = assetManager.getBallImg();
+//        if (ballImg != null) {
+//            double ballX = GAME_WIDTH / 2 - 6 + Math.sin(animationTime * 2) * 50;
+//            double ballY = GAME_HEIGHT / 2 + 240;
+//            gc.drawImage(ballImg, ballX, ballY, 12, 12);
+//        }
+//
+//        // Draw decorative paddle
+//        Image paddleImg = assetManager.getPaddleStdImg();
+//        if (paddleImg != null) {
+//            int paddleX = GAME_WIDTH / 2 - 40;
+//            int paddleY = GAME_HEIGHT / 2 + 270;
+//            gc.drawImage(paddleImg, paddleX, paddleY, 80, 22);
+//        }
 
         // Bottom decoration
         gc.setFont(Font.font("Arial", FontWeight.NORMAL, 14));
         gc.setFill(Color.DARKGRAY);
         gc.fillText("Thanks for playing!", GAME_WIDTH / 2 - 70, GAME_HEIGHT - 30);
+    }
+
+    private void drawFloatingBricks() {
+        BrickType[] colors = {BrickType.RUBY, BrickType.YLLW, BrickType.BLUE, BrickType.MGNT, BrickType.ORNG, BrickType.CYAN};
+        int numBricks = 6;
+
+        for (int i = 0; i < numBricks; i++) {
+            Image brickImg = assetManager.getBrickImage(colors[i]);
+            if (brickImg != null) {
+                // Calculate floating position
+                double angle = animationTime * 0.5 + i * Math.PI * 2 / numBricks;
+                double radius = 150;
+                double x = GAME_WIDTH / 2 + Math.cos(angle) * radius - 19;
+                double y = 50 + Math.sin(angle) * 30;
+                double rotation = angle * 20;
+
+                gc.save();
+                gc.translate(x + 19, y + 10);
+                gc.rotate(rotation);
+                gc.setGlobalAlpha(0.6);
+                gc.drawImage(brickImg, -19, -10, 38, 20);
+                gc.restore();
+            }
+        }
     }
 
     public void resetAnimation() {
