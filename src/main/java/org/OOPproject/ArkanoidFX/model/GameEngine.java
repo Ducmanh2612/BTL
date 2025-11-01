@@ -24,6 +24,9 @@ public class GameEngine {
     private List<Blink> blinks;                    // List of active blink effects
     private List<Enemy> enemies;
 
+    // new list for ball, easy for update new power up
+    private List<Ball> balls;
+
     private Level currentLevel;                    // Current level definition
 
     // Particle system for visual effects
@@ -149,6 +152,10 @@ public class GameEngine {
         ball.update(deltaTime);
 
         //TODO update enemy trong gameloop o day/
+        for (Enemy enemy : enemies) {
+            enemy.update(deltaTime);
+        }
+        updateEnemies(deltaTime);
 
         for (PowerUp powerUp : powerUps) {
             powerUp.update(deltaTime);
@@ -200,6 +207,35 @@ public class GameEngine {
         }
     }
 
+    /** Update enemy - update movementType */
+    private void updateEnemies(double deltaTime) {
+        if (enemies.isEmpty()) {
+            spawnEnemies();
+            return;
+        }
+        for (Enemy e : enemies) {
+            double timeLeft = e.getTimeInCurrentCircle();
+            if (timeLeft - deltaTime <= 0) {
+                MovementType mt = Enemy.randMovementType();
+                e.setMovementType(mt);
+            }
+        }
+    }
+
+    /** Spawn new enemies when enemies size == 0 */
+    private void spawnEnemies() {
+        for (int i = 0; i < 3; i++) {
+            Enemy e;
+            if(i%2 == 0) {
+                e = new Enemy(150, 0, ENEMY_SIZE);
+            }
+            else {
+                e = new Enemy(650, 0, ENEMY_SIZE);
+            }
+            enemies.add(e);
+        }
+    }
+
     /**
      * Update blink effects - animate them and remove when finished or brick destroyed.
      */
@@ -244,6 +280,7 @@ public class GameEngine {
         // 2. Ball-Brick collision using trajectory prediction
         // Check if ball's path WILL hit any brick
 
+        // 2. Ball - Brick collision
         if(ball.velocityY < 0) {
             for (int i = bricks.size() - 1; i >= 0; i--) {
                 if(ball.willHitBrick(bricks.get(i), deltaTime)) {
@@ -280,6 +317,73 @@ public class GameEngine {
         }
 
         //TODO them kiem tra va cham cho enemy voi ball va brick
+        // 4. Enemy and brick collision;
+
+        //Each enemy in one game tick must collide with at most 1 brick
+        for (Enemy e : enemies) {
+            for (Brick brick : bricks) {
+                if (e.willHitBrick(brick, deltaTime)) {
+                    brickAndEnemyProcess(brick, e);
+                    break;
+                }
+            }
+        }
+
+
+        // 5. Ball and Enemy collision
+        // Very hard to handle it perfectly
+        //
+
+//        for (Ball ball : balls) {
+//            for (Enemy e : enemies) {
+//                if (ball.willCollideEnemy(e, deltaTime)) {
+//                    ballAndEnemyProcess(ball, e);
+//                }
+//            }
+//        }
+
+        //currently, we dont have power up to duplicate the ball then we use this
+        for (Enemy e : enemies) {
+            if (ball.willCollideEnemy(e, deltaTime)) {
+                ballAndEnemyProcess(ball, e);
+            }
+        }
+    }
+
+
+    //TODO add sfx and render sprite explode for destroyed
+    public void ballAndEnemyProcess(Ball ball, Enemy e) {
+        if (e.getType() == EnemyType.REFLECTOR) {
+            ball.bounceOffEnemy();
+            e.takeHit();
+            if (e.isDestroyed()) {
+                score += e.getScoreValue();
+                enemies.remove(e);
+            }
+        }
+        else if (e.getType() == EnemyType.UP_SENSITIVE) {
+            if (ball.velocityY < 0) {
+                e.takeHit();
+                if (e.isDestroyed()) {
+                    score += e.getScoreValue();
+                    enemies.remove(e);
+                }
+            }
+        }
+        else if (e.getType() == EnemyType.DOWN_SENSITIVE) {
+            if (ball.velocityY > 0) {
+                e.takeHit();
+                if (e.isDestroyed()) {
+                    score += e.getScoreValue();
+                    enemies.remove(e);
+                }
+            }
+        }
+    }
+    public void brickAndEnemyProcess(Brick brick, Enemy enemy) {
+        String side = enemy.getCollisionSide(brick);
+        enemy.correctPositionAfterBrickHit(brick, side);
+        enemy.bounceOffBrick(side);
     }
 
     public void brickAndBallProcess(Brick brick) {
@@ -332,6 +436,7 @@ public class GameEngine {
         }
 
     }
+
     private Color getBrickColor(Brick brick) {
         return switch (brick.getType()) {
             case BrickType.RUBY -> Color.RED;

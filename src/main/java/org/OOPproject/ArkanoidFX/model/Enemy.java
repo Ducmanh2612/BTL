@@ -1,25 +1,59 @@
 package org.OOPproject.ArkanoidFX.model;
 
+import static org.OOPproject.ArkanoidFX.utils.Constants.ENEMY_MOVEMENT_CYCLE;
 import static org.OOPproject.ArkanoidFX.utils.Constants.GAME_WIDTH;
 
-public abstract class Enemy extends MovableObject {
+public class Enemy extends MovableObject {
     private EnemyType type;
     private MovementType movementType;
     private int hitPoints;
     private int scoreValue;
     private double currentPhi;
+    private double timeInCurrentCircle;
 
-    public Enemy(int x, int y, int width, int height, EnemyType type) {
-        super(x, y, width, height);
-        this.type = type;
-        //may be need to rewrite in constant
+
+    public Enemy(int x, int y, int size) {
+        super(x, y, size, size);
+        this.type = randEnemyType();
+        this.movementType = randMovementType();
         hitPoints = 1;
         scoreValue = 100;
         currentPhi = 0;
-        movementType = randMovementType();
+        timeInCurrentCircle = ENEMY_MOVEMENT_CYCLE;
     }
 
-    public MovementType randMovementType() {
+    public Enemy(int x, int y, int size, EnemyType type) {
+        super(x, y, size, size);
+        this.type = type;
+        movementType = randMovementType();
+        hitPoints = 1;
+        scoreValue = 100;
+        currentPhi = 0;
+        timeInCurrentCircle = ENEMY_MOVEMENT_CYCLE;
+    }
+
+    public Enemy(int x, int y, int size, EnemyType type, MovementType movementType) {
+        super(x, y, size, size);
+        this.type = type;
+        this.movementType = movementType;
+        hitPoints = 1;
+        scoreValue = 100;
+        currentPhi = 0;
+        timeInCurrentCircle = ENEMY_MOVEMENT_CYCLE;
+    }
+
+    public static EnemyType randEnemyType() {
+        int r = (int)Math.random() * 3;
+        switch (r%3) {
+            case 0:
+                return EnemyType.UP_SENSITIVE;
+            case 1:
+                return EnemyType.DOWN_SENSITIVE;
+        }
+        return EnemyType.REFLECTOR;
+    }
+
+    public static MovementType randMovementType() {
         int r = (int)Math.random() * 3;
         switch (r%3) {
             case 0:
@@ -46,6 +80,22 @@ public abstract class Enemy extends MovableObject {
         this.movementType = movementType;
     }
 
+    public void setScoreValue(int score) {
+        scoreValue = score;
+    }
+
+    public int getScoreValue() {
+        return scoreValue;
+    }
+
+    public double getTimeInCurrentCircle() {
+        return timeInCurrentCircle;
+    }
+
+    public void setTimeInCurrentCircle(double timeInCurrentCircle) {
+        this.timeInCurrentCircle = timeInCurrentCircle;
+    }
+
     //TODO add sfx for enemy
     private void checkWallBounces() {
         // Bounce off left and right walls
@@ -65,13 +115,13 @@ public abstract class Enemy extends MovableObject {
         if (y <= 0) {
             y = 0;
             velocityY = Math.abs(velocityY);
-            SoundManager.getInstance().playSound("bounce.wav");
+            //SoundManager.getInstance().playSound("bounce.wav");
         }
     }
 
     //TODO rewrite willHitBrick for enemy
     public boolean willHitBrick(GameObject brick, double deltaTime) {
-        // Current position (center of ball)
+        // Current position (center of enemy)
         double x0 = x + width / 2.0;
         double y0 = y + height / 2.0;
 
@@ -126,10 +176,10 @@ public abstract class Enemy extends MovableObject {
         }
 
         // Also check if ball is already inside brick (safety check)
-        double ballCenterX = x + width / 2.0;
-        double ballCenterY = y + height / 2.0;
-        if (ballCenterX >= brick.getX() && ballCenterX <= brick.getX() + brick.getWidth() &&
-                ballCenterY >= brick.getY() && ballCenterY <= brick.getY() + brick.getHeight()) {
+        double enemyCenterX = x + width / 2.0;
+        double enemyCenterY = y + height / 2.0;
+        if (enemyCenterX >= brick.getX() && enemyCenterX <= brick.getX() + brick.getWidth() &&
+                enemyCenterY >= brick.getY() && enemyCenterY <= brick.getY() + brick.getHeight()) {
             return true; // Ball is inside brick
         }
 
@@ -218,5 +268,13 @@ public abstract class Enemy extends MovableObject {
             setVelocityX(movementType.vx);
             setVelocityY(movementType.vy);
         }
+    }
+
+    public void takeHit() {
+        hitPoints --;
+    }
+
+    public boolean isDestroyed() {
+        return hitPoints == 0;
     }
 }
