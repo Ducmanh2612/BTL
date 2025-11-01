@@ -23,6 +23,7 @@ public class GameEngine {
     private List<ActivePowerUp> activePowerUps;    // Power-ups currently active
     private List<Blink> blinks;                    // List of active blink effects
     private List<Enemy> enemies;
+    private List<Destroy> destroys;
 
     // new list for ball, easy for update new power up
     private List<Ball> balls;
@@ -70,6 +71,7 @@ public class GameEngine {
         this.activePowerUps = new ArrayList<>();
         this.blinks = new ArrayList<>();
         this.enemies = new ArrayList<>();
+        this.destroys = new ArrayList<>();
 
         this.gameState = GameState.PLAYING;
         this.ballReleased = false;
@@ -89,7 +91,7 @@ public class GameEngine {
     public void startGame() {
         this.score = 0;
         this.lives = 3;
-        this.levelNumber = 2;
+        this.levelNumber = 5;
         this.gameState = GameState.PLAYING;
         this.particleSystem.clear();
         this.ballReleased = false; // Ball starts stuck to paddle
@@ -124,6 +126,7 @@ public class GameEngine {
 
         // add enemies clear
         enemies.clear();
+        destroys.clear();
 
         // Create bricks using Level system
         currentLevel = new Level(levelNumber);
@@ -156,6 +159,7 @@ public class GameEngine {
 
         //TODO update enemy trong gameloop o day/
         for (Enemy enemy : enemies) {
+            System.out.println(enemy.getMovementType());
             enemy.update(deltaTime);
         }
         updateEnemies(deltaTime);
@@ -166,6 +170,7 @@ public class GameEngine {
         }
         updateActivePowerUps(deltaTime);
         updateBlinks(deltaTime);
+        updateDestroys(deltaTime);
         particleSystem.update(deltaTime);
 
         // Check if ball fell off bottom of screen
@@ -223,6 +228,10 @@ public class GameEngine {
                 e.setMovementType(mt);
                 e.setTimeInCurrentCircle(ENEMY_MOVEMENT_CYCLE);
             }
+            else {
+                timeLeft -= deltaTime;
+                e.setTimeInCurrentCircle(timeLeft);
+            }
         }
     }
 
@@ -261,6 +270,18 @@ public class GameEngine {
 
             // Remove blink if animation finished or attached brick was destroyed
             if (blink.isFinished() || !bricks.contains(blink.getAttachedBrick())) {
+                iterator.remove();
+            }
+        }
+    }
+
+    private void updateDestroys(double deltaTime) {
+        Iterator<Destroy> iterator = destroys.iterator();
+        while (iterator.hasNext()) {
+            Destroy destroy = iterator.next();
+            destroy.update(deltaTime);
+
+            if(destroy.isFinished()) {
                 iterator.remove();
             }
         }
@@ -372,6 +393,7 @@ public class GameEngine {
             e.takeHit();
             if (e.isDestroyed()) {
                 score += e.getScoreValue();
+                destroys.add(new Destroy(e));
                 enemies.remove(e);
             }
         }
@@ -380,6 +402,7 @@ public class GameEngine {
                 e.takeHit();
                 if (e.isDestroyed()) {
                     score += e.getScoreValue();
+                    destroys.add(new Destroy(e));
                     enemies.remove(e);
                 }
             }
@@ -389,6 +412,7 @@ public class GameEngine {
                 e.takeHit();
                 if (e.isDestroyed()) {
                     score += e.getScoreValue();
+                    destroys.add(new Destroy(e));
                     enemies.remove(e);
                 }
             }
@@ -586,6 +610,10 @@ public class GameEngine {
         return blinks;
     }
 
+    public List<Destroy> getDestroys() {
+        return destroys;
+    }
+
     public Paddle getPaddle() {
         return paddle;
     }
@@ -617,4 +645,5 @@ public class GameEngine {
     public int getLevelNumber() {
         return levelNumber;
     }
+
 }

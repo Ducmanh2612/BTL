@@ -62,6 +62,9 @@ public class AssetManager {
     //Enemy sprite map
     private Image enemyMapImg;
 
+    //Explosion sprite map
+    private Image explosionMapImg;
+
     // Blink effect sprite map
     private Image blinkMapImg;
 
@@ -126,7 +129,7 @@ public class AssetManager {
 
             blinkMapImg = loadImage("blink_map.png", 304, 60);
 
-
+            explosionMapImg = loadImage("explosion_map.png", 128, 128);
 
             // Load audio files
             loadMedia("brick_destroyed.wav");
@@ -203,6 +206,9 @@ public class AssetManager {
 
     //Getter for enemy sprite
     public Image getEnemyMapImg() {return enemyMapImg;}
+
+    //Getter for explosion sprite
+    public Image getExplosionMapImg() {return explosionMapImg;}
 
     public Image getPowerUpSpriteMap(PowerUpTypes powerUpType) {
         switch (powerUpType) {

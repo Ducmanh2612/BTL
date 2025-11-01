@@ -99,6 +99,10 @@ public class GameView extends StackPane {
             renderEnemy(enemy);
         }
 
+        for (Destroy destroy : gameEngineRef.getDestroys()) {
+            renderExplosion(destroy);
+        }
+
         renderPaddle(gameEngineRef.getPaddle());
         renderBall(gameEngineRef.getBall());
         renderParticles();
@@ -332,12 +336,41 @@ public class GameView extends StackPane {
         if (enemyImg != null) {
             int frameWidth = Constants.ENEMY_SIZE;
             int frameHeight = Constants.ENEMY_SIZE;
-            //TODO: fix frame size for wide paddle
             int frameX = enemy.getFrameX();
             int frameY = enemy.getFrameY();
             int sourceX = frameX * frameWidth;
             int sourceY = frameY * frameHeight;
             gc.drawImage(enemyImg, sourceX, sourceY, frameWidth, frameHeight, ex, ey, ew, eh);
+//        } else {
+//            gc.setFill(isExpanded ? Color.GOLD : Color.LIMEGREEN);
+//            gc.fillRoundRect(ex, ey, ew, eh, 10, 10);
+//            gc.setStroke(isExpanded ? Color.ORANGE : Color.DARKGREEN);
+//            gc.setLineWidth(2);
+//            gc.strokeRoundRect(ex, ey, ew, eh, 10, 10);
+//        }
+        }
+    }
+
+    private void renderExplosion(Destroy destroy) {
+        int ex = destroy.getX();
+        int ey = destroy.getY();
+        int ew = destroy.getWidth();
+        int eh = destroy.getHeight();
+
+        //Image shadowImg = ;
+        //if (shadowImg != null) {
+        //gc.drawImage(shadowImg, ex + 2, ey + 2, ew, eh);
+        //}
+
+        Image destroyImg = assetManager.getExplosionMapImg();
+        if (destroyImg != null) {
+            int frameWidth = Constants.ENEMY_SIZE;
+            int frameHeight = Constants.ENEMY_SIZE;
+            int frameX = destroy.getFrameX();
+            int frameY = destroy.getFrameY();
+            int sourceX = frameX * frameWidth;
+            int sourceY = frameY * frameHeight;
+            gc.drawImage(destroyImg, sourceX, sourceY, frameWidth, frameHeight, ex, ey, ew, eh);
 //        } else {
 //            gc.setFill(isExpanded ? Color.GOLD : Color.LIMEGREEN);
 //            gc.fillRoundRect(ex, ey, ew, eh, 10, 10);

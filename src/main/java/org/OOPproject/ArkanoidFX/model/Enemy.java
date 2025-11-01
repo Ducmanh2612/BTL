@@ -224,12 +224,31 @@ public class Enemy extends MovableObject {
     }
 
     private void setVelocity(double deltaTime) {
+        // Xác định hướng hiện tại (tránh chia 0)
+        double dirX = (velocityX >= 0) ? 1 : -1;
+        double dirY = (velocityY >= 0) ? 1 : -1;
+
         if (movementType == MovementType.WAVE) {
-            setVelocityX(velocityX * Math.sin(currentPhi + 0.08 * deltaTime));
-            currentPhi += 0.08 * deltaTime;
-            setVelocityY(movementType.vx);
+            // Cập nhật pha sóng (omega tính theo rad/s)
+            currentPhi += 2 * deltaTime;
+
+            // Dao động ngang (wave motion)
+            double vx = movementType.vx * Math.sin(currentPhi) * dirX;
+            double vy = movementType.vy * dirY;
+
+            setVelocityX(vx);
+            setVelocityY(vy);
+        }
+        else {
+            // Di chuyển thông thường (rơi tự do hoặc drift)
+            double vx = movementType.vx * dirX;
+            double vy = movementType.vy * dirY;
+
+            setVelocityX(vx);
+            setVelocityY(vy);
         }
     }
+
 
     public void takeHit() {
         hitPoints --;

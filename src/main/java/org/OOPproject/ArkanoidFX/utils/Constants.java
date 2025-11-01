@@ -28,7 +28,7 @@ public final class Constants {
 
     public static final int ENEMY_SIZE = 32;
 
-    public static final double ENEMY_MOVEMENT_CYCLE = 0.0167 * 60;
+    public static final double ENEMY_MOVEMENT_CYCLE = 0.0167 * 120;
 
     private Constants() {
         // Prevent instantiation
