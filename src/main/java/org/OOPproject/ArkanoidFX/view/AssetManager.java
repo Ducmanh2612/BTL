@@ -58,9 +58,11 @@ public class AssetManager {
     private Image PowerupBMapImg;  // Break through
     private Image PowerupPMapImg;  // Extra life (P for player)
     private Image PowerupShadowImg;
-    
+
     // Blink effect sprite map
     private Image blinkMapImg;
+
+    private Image HeartImg;
 
     private AssetManager() {
         imageCache = new HashMap<>();
@@ -119,6 +121,8 @@ public class AssetManager {
             PowerupShadowImg = loadImage("bonus_block_shadow.png", Constants.POWER_UP_SHADOW_WIDTH, Constants.POWER_UP_SHADOW_HEIGHT);
 
             blinkMapImg = loadImage("blink_map.png", 304, 60);
+
+            HeartImg = loadImage("heart.png", 20, 20);
 
             // Load audio files
             loadMedia("ball_block.wav");
@@ -198,6 +202,7 @@ public class AssetManager {
     public Image getPaddleWideImg() { return paddleWideImg; }
     public Image getPaddleWideShadowImg() { return paddleWideShadowImg; }
     public Image getPaddleWideSpriteMapImg() { return paddleWideSpriteMapImg; }
+    public Image getHeartImg() { return HeartImg;}
 
     public Image getPowerUpSpriteMap(PowerUpTypes powerUpType) {
         switch (powerUpType) {
@@ -217,7 +222,7 @@ public class AssetManager {
                 return PowerupFMapImg;  // Default to expand
         }
     }
-    
+
     public Image getPowerupShadowImg() { return PowerupShadowImg; }
     public Image getBlinkMapImg() { return blinkMapImg; }
 
