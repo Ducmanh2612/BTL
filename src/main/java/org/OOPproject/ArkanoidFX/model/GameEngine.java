@@ -295,7 +295,7 @@ public class GameEngine {
 
         // hàm kiểm tra cũ brick instanceof StrongBrick || brick instanceof ExtraStrongBrick || brick instanceof UnbreakableBrick
         // Sửa lại thành brick có hitpoint lớn hơn 1
-        if (brick.getHitPoints() > 1) {
+        if (brick.getHitPoints() >= 1) {
             // Only create new blink if this brick doesn't already have one
             boolean alreadyHasBlink = false;
             for (Blink existingBlink : blinks) {
