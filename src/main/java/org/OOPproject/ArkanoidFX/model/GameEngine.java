@@ -86,7 +86,7 @@ public class GameEngine {
      */
     public void startGame() {
         this.score = 0;
-        this.lives = 3;
+        this.lives = 5;
         this.levelNumber = 1;
         this.gameState = GameState.PLAYING;
         this.particleSystem.clear();
@@ -398,15 +398,11 @@ public class GameEngine {
                 powerUp = fastBall;
                 break;
             case 2:
-                MultiBallPowerUp multiBall = new MultiBallPowerUp(x, y, 20, 20);
-                multiBall.setCallback(this::spawnExtraBalls);
-                powerUp = multiBall;
+                powerUp = new MultiBallPowerUp(x, y, 20, 20, this);
                 break;
             case 3:
             default:
-                ExtraLifePowerUp extraLife = new ExtraLifePowerUp(x, y, 20, 20);
-                extraLife.setCallback(this::addLife);
-                powerUp = extraLife;
+                powerUp = new ExtraLifePowerUp(x, y, 20, 20, this);
                 break;
         }
 
@@ -425,7 +421,7 @@ public class GameEngine {
      * Spawn extra balls for MultiBall power-up.
      * Creates 2 additional balls at the paddle position with different angles.
      */
-    private void spawnExtraBalls(Paddle paddle) {
+    public void spawnExtraBalls(Paddle paddle) {
         // Get center of paddle
         int centerX = paddle.getX() + paddle.getWidth() / 2;
         int centerY = paddle.getY() - BALL_SIZE;
@@ -469,6 +465,9 @@ public class GameEngine {
             balls.clear();
             balls.add(ball);
             ballReleased = false;
+
+            activePowerUps.clear();
+            powerUps.clear();
         }
     }
 
@@ -500,6 +499,13 @@ public class GameEngine {
         } else if (gameState.equals(GameState.PAUSED)) {
             if(inputSignal.equals(InputSignal.PAUSE_RESUME)) gameState = GameState.PLAYING;
         }
+    }
+
+    /**
+     * Adds an extra life to the player.
+     */
+    public void addExtraLife() {
+        lives++;
     }
 
     // ========== GETTER METHODS ==========
