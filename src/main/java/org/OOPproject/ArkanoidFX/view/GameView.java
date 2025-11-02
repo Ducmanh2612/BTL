@@ -65,21 +65,22 @@ public class GameView extends StackPane {
     }
 
     private void updateDoorAnimation() {
-        // Check if there are enemies active
-        boolean hasEnemies = !gameEngineRef.getEnemies().isEmpty();
+        boolean shouldOpenDoor = gameEngineRef.isSpawningEnemies();
 
-        if (hasEnemies && !isDoorOpen) {
+        if (shouldOpenDoor && !isDoorOpen) {
             isDoorOpen = true;
-        } else if (!hasEnemies && isDoorOpen) {
+            System.out.println("Door opening...");
+        } else if (!shouldOpenDoor && isDoorOpen) {
             isDoorOpen = false;
+            System.out.println("Door closing...");
         }
 
         // Animate door opening/closing
         if (isDoorOpen && doorOpenProgress < 1.0) {
-            doorOpenProgress += 0.05; // Open speed
+            doorOpenProgress += 0.08; // Fast open speed
             if (doorOpenProgress > 1.0) doorOpenProgress = 1.0;
         } else if (!isDoorOpen && doorOpenProgress > 0.0) {
-            doorOpenProgress -= 0.03; // Close speed
+            doorOpenProgress -= 0.05; // Slower close speed
             if (doorOpenProgress < 0.0) doorOpenProgress = 0.0;
         }
     }

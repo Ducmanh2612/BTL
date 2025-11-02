@@ -7,7 +7,7 @@ public class Paddle extends MovableObject {
     private static final double DEFAULT_SPEED = 500.0;
 
     private double speed; // Speed in pixels per second
-    private int boundingBoxWidth = Constants.GAME_WIDTH;
+    private int boundingBoxWidth = Constants.GAME_WIDTH - 20;
 
     private Sprite sprite;
 
@@ -49,7 +49,7 @@ public class Paddle extends MovableObject {
     public void move(double deltaTime) {
         x += velocityX * deltaTime;
         // Keep paddle within game boundaries
-        if (x < 0) x = 0;
+        if (x < 20) x = 20;
         if (x + width > boundingBoxWidth) x = boundingBoxWidth - width;
         sprite.update(deltaTime);
     }
