@@ -46,6 +46,10 @@ public class GameEngine {
 
     private boolean ballReleased;
 
+    private boolean isSpawningEnemies = false;
+    private double spawnTimer = 0.0;
+    private static final double DOOR_OPEN_TIME = 1.0;
+    private static final double SPAWN_DELAY = 0.2;
 
     private static class ActivePowerUp {
         PowerUp powerUp;           // The power-up object
@@ -247,26 +251,71 @@ public class GameEngine {
     }
 
     /** Update enemy - update movementType */
+    private void removeEnemies() {
+        Iterator<Enemy> iterator = enemies.iterator();
+        while (iterator.hasNext()) {
+            Enemy e = iterator.next();
+            if (e.getY() > gameHeight) {
+                iterator.remove();
+            }
+        }
+    }
+
+    private void spawnEnemies() {
+        isSpawningEnemies = true;
+        spawnTimer = 0.0;
+    }
+
     private void updateEnemies(double deltaTime) {
         removeEnemies();
+
+        if (isSpawningEnemies) {
+            spawnTimer += deltaTime;
+
+            if (spawnTimer >= 0.3 && enemies.size() == 0) {
+                Enemy e1 = new Enemy(GAME_WIDTH / 2 - 90, 0, ENEMY_SIZE);
+                enemies.add(e1);
+            }
+
+            if (spawnTimer >= 0.5 && enemies.size() == 1) {
+                Enemy e2 = new Enemy(GAME_WIDTH / 2 - 90, 0, ENEMY_SIZE);
+                enemies.add(e2);
+            }
+
+            if (spawnTimer >= 0.7 && enemies.size() == 2) {
+                Enemy e3 = new Enemy(GAME_WIDTH / 2 + 80, 0, ENEMY_SIZE);
+                enemies.add(e3);
+            }
+
+            if (spawnTimer >= DOOR_OPEN_TIME) {
+                isSpawningEnemies = false;
+                spawnTimer = 0.0;
+            }
+
+            return;
+        }
+
         if (enemies.isEmpty()) {
             spawnEnemies();
             return;
         }
+
         for (Enemy e : enemies) {
             double timeLeft = e.getTimeInCurrentCircle();
             if (timeLeft - deltaTime <= 0) {
                 MovementType mt = Enemy.randMovementType();
                 e.setMovementType(mt);
                 e.setTimeInCurrentCircle(ENEMY_MOVEMENT_CYCLE);
-            }
-            else {
+            } else {
                 timeLeft -= deltaTime;
                 e.setTimeInCurrentCircle(timeLeft);
             }
         }
     }
 
+    public boolean isSpawningEnemies() {
+        return isSpawningEnemies;
+    }
     /**
      * Update blink effects - animate them and remove when finished or brick destroyed.
      */
@@ -613,30 +662,6 @@ public class GameEngine {
         }
     }
 
-    /** Spawn new enemies when enemies size == 0 */
-    private void spawnEnemies() {
-        for (int i = 0; i < 3; i++) {
-            int choice = (int) (Math.random() * 4);
-            Enemy e;
-            if(choice%2 == 0) {
-                e = new Enemy(150, 0, ENEMY_SIZE);
-            }
-            else {
-                e = new Enemy(400, 0, ENEMY_SIZE);
-            }
-            enemies.add(e);
-        }
-    }
-
-    private void removeEnemies() {
-        Iterator<Enemy> iterator = enemies.iterator();
-        while (iterator.hasNext()) {
-            Enemy e = iterator.next();
-            if (e.getY() > gameHeight) {
-                iterator.remove();
-            }
-        }
-    }
 
     /**
      * Spawn a power-up at the given position.

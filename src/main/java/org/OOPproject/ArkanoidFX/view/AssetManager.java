@@ -10,6 +10,7 @@ import org.OOPproject.ArkanoidFX.utils.Constants;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.OOPproject.ArkanoidFX.utils.Constants.GAME_HEIGHT;
 import static org.OOPproject.ArkanoidFX.utils.Constants.PADDLE_HEIGHT;
 
 public class AssetManager {
@@ -59,6 +60,13 @@ public class AssetManager {
     private Image PowerupBMapImg;  // Break through
     private Image PowerupPMapImg;  // Extra life (P for player)
     private Image PowerupShadowImg;
+
+    // Biến lưu ảnh border
+    private Image borderTopFrameImg;
+    private Image borderTopLeftImg;     // Corner top-left
+    private Image borderTopRightImg;    // Corner top-right
+    private Image borderTopDoorImg;
+    private Image borderSideVertical;
 
     //Enemy sprite map
     private Image enemyMapImg;
@@ -129,6 +137,14 @@ public class AssetManager {
             PowerupBMapImg = loadImage("block_map_bonus_b.png", Constants.POWER_UP_MAP_WIDTH, Constants.POWER_UP_MAP_HEIGHT);
             PowerupPMapImg = loadImage("block_map_bonus_p.png", Constants.POWER_UP_MAP_WIDTH, Constants.POWER_UP_MAP_HEIGHT);
             PowerupShadowImg = loadImage("bonus_block_shadow.png", Constants.POWER_UP_SHADOW_WIDTH, Constants.POWER_UP_SHADOW_HEIGHT);
+
+            // Load border frames
+            borderTopFrameImg = loadImage("borderVertical.png", 60, 20);
+            borderTopDoorImg = loadImage("topDoor.png", 60 , 20);
+            borderTopLeftImg = loadImage("upperLeftCorner.png", 20, 20);
+            borderTopRightImg = loadImage("upperRightCorner.png", 20, 20);
+            borderSideVertical = loadImage("borderPattern.png", 20, GAME_HEIGHT/6);
+
 
             //sprite map for enemy
             enemyMapImg = loadImage("molecule_map.png", 256, 96);
@@ -262,4 +278,11 @@ public class AssetManager {
     public AudioClip getAudioClip(String filename) {
         return audioCache.get(filename);
     }
+
+    // Border getters
+    public Image getBorderTopFrameImg() { return borderTopFrameImg; }
+    public Image getBorderTopLeftImg() { return borderTopLeftImg; }
+    public Image getBorderTopRightImg() { return borderTopRightImg; }
+    public Image getBorderSideVertical() { return borderSideVertical; }
+    public Image getBorderTopDoorImg() { return borderTopDoorImg; }
 }

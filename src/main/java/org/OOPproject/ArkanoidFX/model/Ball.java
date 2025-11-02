@@ -18,7 +18,7 @@ public class Ball extends MovableObject {
     protected boolean stuckToPaddle; // Is ball stuck to paddle?
     protected Paddle attachedPaddle; // Reference to paddle when stuck
 
-    private int boundingBoxWidth = GAME_WIDTH;
+    private int boundingBoxWidth = GAME_WIDTH - 20;
 
     public Ball(int x, int y, int size) {
         this(x, y, size, size);
@@ -377,8 +377,8 @@ public class Ball extends MovableObject {
 
     private void checkWallBounces() {
         // Bounce off left and right walls
-        if (x <= 0) {
-            x = 0;
+        if (x <= 20) {
+            x = 20;
             velocityX = Math.abs(velocityX);
             SoundManager.getInstance().playSound("bounce.wav");
         } else {
@@ -390,8 +390,8 @@ public class Ball extends MovableObject {
         }
 
         // Bounce off top wall
-        if (y <= 0) {
-            y = 0;
+        if (y <= 20) {
+            y = 20;
             velocityY = Math.abs(velocityY);
             SoundManager.getInstance().playSound("bounce.wav");
         }

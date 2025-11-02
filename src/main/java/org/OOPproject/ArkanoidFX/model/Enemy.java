@@ -111,21 +111,21 @@ public class Enemy extends MovableObject {
     //TODO add sfx for enemy
     private void checkWallBounces() {
         // Bounce off left and right walls
-        if (x <= 0) {
-            x = 0;
+        if (x <= 20) {
+            x = 20;
             velocityX = Math.abs(velocityX);
             //SoundManager.getInstance().playSound("bounce.wav");
         } else {
-            if (x + width >= GAME_WIDTH) {
-                x = GAME_WIDTH - width;
+            if (x + width >= GAME_WIDTH - 20) {
+                x = GAME_WIDTH - width - 20;
                 velocityX = -Math.abs(velocityX);
                 //SoundManager.getInstance().playSound("bounce.wav");
             }
         }
 
         // Bounce off top wall
-        if (y <= 0) {
-            y = 0;
+        if (y <= 20) {
+            y = 20;
             velocityY = Math.abs(velocityY);
             //SoundManager.getInstance().playSound("bounce.wav");
         }
