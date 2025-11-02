@@ -230,8 +230,6 @@ public class GameView extends StackPane {
 
         renderParticles();
 
-        renderScore();
-        renderLives();
 
         // Show instruction if any ball is stuck to paddle
         if (!gameEngineRef.isBallReleased()) {
@@ -288,32 +286,6 @@ public class GameView extends StackPane {
         }
     }
 
-    private void renderLives() {
-        int lives = gameEngineRef.getLives();
-        Image heartImg = assetManager.getHeartImg();
-
-        int heartSize = 25;
-        int spacing = 5;
-        int startX = GAME_WIDTH - (heartSize + spacing) * 3 - 20;
-        int startY = GAME_HEIGHT - 30;
-
-        for (int i = 0; i < lives; i++) {
-            int x = startX + (heartSize + spacing) * i;
-            gc.drawImage(heartImg, x, startY, heartSize, heartSize);
-        }
-
-        for (int i = lives; i < 3; i++) {
-            int x = startX + (heartSize + spacing) * i;
-            gc.setGlobalAlpha(0.3);
-            gc.drawImage(heartImg, x, startY, heartSize, heartSize);
-            gc.setGlobalAlpha(1.0);
-        }
-    }
-
-    private void renderScore() {
-        gc.setFill(Color.WHITE);
-        gc.fillText("SCORE: " + gameEngineRef.getScore(), 30 , GAME_HEIGHT - 10);
-    }
 
     private void renderPauseOverlay() {
         gc.setFill(Color.rgb(0, 0, 0, 0.5));
