@@ -103,21 +103,27 @@ public class GameEngine {
         initializeLevel();
     }
 
-    /**
-     * Initialize a level - create paddle, ball, and bricks.
-     */
-    private void initializeLevel() {
-
-        //clear old object
+    private void clearObjects() {
         balls.clear();
         bullets.clear();
         bricks.clear();
         powerUps.clear();
+        for(ActivePowerUp apu : activePowerUps) {
+            apu.powerUp.removeEffect(paddle);
+        }
         activePowerUps.clear();
         blinks.clear();
         particleSystem.clear();
         enemies.clear();
         destroys.clear();
+    }
+
+    /**
+     * Initialize a level - create paddle, ball, and bricks.
+     */
+    private void initializeLevel() {
+
+        clearObjects();
 
         // Create paddle in the center bottom of play area
         int paddleX = (gameWidth - PADDLE_DEFAULT_WIDTH) / 2;
@@ -129,7 +135,6 @@ public class GameEngine {
         int ballY = gameHeight - 100;  // 100 pixels from bottom
         Ball ball = new Ball(ballX, ballY, BALL_SIZE, BALL_SIZE);
         ball.attachToPaddle(paddle);
-        balls.clear();
         balls.add(ball);
         this.ballReleased = false;
 
@@ -755,8 +760,13 @@ public class GameEngine {
             balls.add(ball);
             ballReleased = false;
 
+            // Remove all active power-up effects before clearing
+            for (ActivePowerUp apu : activePowerUps) {
+                apu.powerUp.removeEffect(paddle);
+            }
             activePowerUps.clear();
             powerUps.clear();
+            bullets.clear();
         }
     }
 
@@ -769,16 +779,8 @@ public class GameEngine {
         levelNumber = 1;
         lives = 3;
 
-        // Clear existing game objects
-        bricks.clear();
-        powerUps.clear();
-        blinks.clear();
-        particleSystem.getParticles().clear();
-
-        // Reinitialize game objects
-        initializeLevel();  // Load level đầu tiên
-
-        // Reset any other game state variables you have
+        // Reinitialize game objects (this will call clearObjects internally)
+        initializeLevel();
     }
     /**
      * Level complete - advance to next level.
