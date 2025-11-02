@@ -11,14 +11,18 @@ public class Ball extends MovableObject {
     private static final double FAST_SPEED = 600;
 
     private double speed; // Speed in pixels per second
-    private boolean active;
+    protected boolean active;
     private double collisionCooldown; // Cooldown to prevent multi-brick breaking
 
     public boolean specialMode = false;
-    private boolean stuckToPaddle; // Is ball stuck to paddle?
-    private Paddle attachedPaddle; // Reference to paddle when stuck
+    protected boolean stuckToPaddle; // Is ball stuck to paddle?
+    protected Paddle attachedPaddle; // Reference to paddle when stuck
 
     private int boundingBoxWidth = GAME_WIDTH;
+
+    public Ball(int x, int y, int size) {
+        this(x, y, size, size);
+    }
 
     public Ball(int x, int y, int width, int height) {
         super(x, y, width, height);

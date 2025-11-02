@@ -48,6 +48,7 @@ public class AssetManager {
     private Image paddleWideShadowImg;
     private Image paddleStdSpriteMapImg;
     private Image paddleWideSpriteMapImg;
+    private Image paddleGunSpriteMapImg;
 
     // PowerUp sprite maps (animated)
     private Image PowerupCMapImg;  // Catch
@@ -67,6 +68,9 @@ public class AssetManager {
 
     // Blink effect sprite map
     private Image blinkMapImg;
+
+    // Bullet Image
+    private Image bulletImg;
 
     private Image HeartImg;
 
@@ -131,7 +135,11 @@ public class AssetManager {
 
             blinkMapImg = loadImage("blink_map.png", 304, 60);
 
+            paddleGunSpriteMapImg = loadImage("paddlemap_gun.png", 640, 176);
+
             explosionMapImg = loadImage("explosion_map.png", 128, 128);
+
+            bulletImg = loadImage("torpedo.png", 5, 13);
 
             HeartImg = loadImage("heart.png", 20, 20);
 
@@ -221,6 +229,12 @@ public class AssetManager {
     //Getter for explosion sprite
     public Image getExplosionMapImg() {return explosionMapImg;}
 
+    //Getter for gun padddle sprite
+    public Image getPaddleGunSpriteMapImg() {return paddleGunSpriteMapImg;}
+
+    // Getter for bullet
+    public Image getBulletImg() {return bulletImg;}
+
     public Image getPowerUpSpriteMap(PowerUpTypes powerUpType) {
         switch (powerUpType) {
             case EXPAND_PADDLE:
@@ -234,7 +248,9 @@ public class AssetManager {
             case SKIP_LEVEL:
                 return PowerupBMapImg;         // Break through
             case EXTRA_LIFE:
-                return PowerupPMapImg;          // Extra life
+                return PowerupPMapImg;  // Extra life
+            case GUN:
+                return PowerupCMapImg;
             default:
                 return PowerupFMapImg;  // Default to expand
         }

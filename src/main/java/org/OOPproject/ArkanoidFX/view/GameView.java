@@ -94,10 +94,14 @@ public class GameView extends StackPane {
             renderBall(ball);
         }
 
+        for (Bullet bullet : gameEngineRef.getBullets()) {
+            renderBullet(bullet);
+        }
+
         renderParticles();
         renderScore();
         renderLives();
-        
+
         // Show instruction if any ball is stuck to paddle
         if (!gameEngineRef.isBallReleased()) {
             gc.setFill(Color.WHITE);
@@ -263,17 +267,28 @@ public class GameView extends StackPane {
         int pw = paddle.getWidth();
         int ph = paddle.getHeight();
         boolean isExpanded = paddle.isExpanded();
+        boolean isGun = paddle.isGun();
 
         Image shadowImg = isExpanded ? assetManager.getPaddleWideShadowImg() : assetManager.getPaddleStdShadowImg();
         if (shadowImg != null) {
             gc.drawImage(shadowImg, px + 2, py + 2, pw, ph);
         }
 
-        Image paddleImg = isExpanded ? assetManager.getPaddleWideSpriteMapImg() : assetManager.getPaddleStdSpriteMapImg();
+        Image paddleImg = assetManager.getPaddleStdSpriteMapImg();;
+        if(isGun) {
+            paddleImg = assetManager.getPaddleGunSpriteMapImg();
+        }
+        else if (isExpanded) {
+            paddleImg = assetManager.getPaddleWideSpriteMapImg();
+        }
         if (paddleImg != null) {
             int frameWidth = Constants.PADDLE_DEFAULT_WIDTH;
             int frameHeight = Constants.PADDLE_HEIGHT;
-            if(paddle.isExpanded()){
+            if(paddle.isGun()){
+                frameWidth = Constants.PADDLE_DEFAULT_WIDTH;
+                frameHeight = Constants.PADDLE_HEIGHT;
+            }
+            else if (paddle.isExpanded()) {
                 frameWidth = Constants.PADDLE_EXPANDED_WIDTH;
                 frameHeight = Constants.PADDLE_HEIGHT;
             }
@@ -314,6 +329,22 @@ public class GameView extends StackPane {
         }
     }
 
+    private void renderBullet(Bullet bullet) {
+        int bx = bullet.getX();
+        int by = bullet.getY();
+        int bw = bullet.getWidth();
+        int bh = bullet.getHeight();
+
+        Image bulletImg = assetManager.getBulletImg();
+        if (bulletImg != null) {
+            gc.drawImage(bulletImg, bx, by, bw, bh);
+        } else {
+            gc.setFill(Color.YELLOW);
+            gc.fillOval(bx, by, bw, bh);
+            gc.setFill(Color.WHITE);
+            gc.fillOval(bx + 2, by + 2, 3, 3);
+        }
+    }
 
     private void renderBlink(Blink blink) {
         int blinkX = blink.getX();

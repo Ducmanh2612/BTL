@@ -7,4 +7,5 @@ public enum PowerUpTypes {
     MULTI_BALL,
     EXTRA_LIFE,
     SKIP_LEVEL,
+    GUN,
 }

@@ -146,6 +146,24 @@ public class Enemy extends MovableObject {
         return fakeEnemy.collidesWith(brick); // No hit
     }
 
+    public boolean willHitPaddle(Paddle paddle, double deltaTime) {
+        int currentPaddleX = paddle.getX();
+        int currentPaddleY = paddle.getY();
+
+        Paddle fakePaddle = new Paddle((int)(currentPaddleX),
+                (int)(currentPaddleY), paddle.width, paddle.height);
+        Enemy fakeEnemy = new Enemy((int)x, (int)y, ENEMY_SIZE);
+        for (double t = 0; t <= deltaTime; t += deltaTime / 10) {
+            fakePaddle.setX((int)(currentPaddleX + paddle.velocityX * t));
+            fakePaddle.setY((int)(currentPaddleY + paddle.velocityY * t));
+
+            fakeEnemy.setX((int)(x + velocityX * t));
+            fakeEnemy.setY((int)(y + velocityY * t));
+            if (fakeEnemy.collidesWith(fakePaddle)) return true;
+        }
+
+        return false;
+    }
     //TODO rewrite bounceOffBrick for enemy
     public void bounceOffBrick(String side) {
         switch (side) {

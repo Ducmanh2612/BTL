@@ -18,6 +18,7 @@ import static org.OOPproject.ArkanoidFX.utils.Constants.*;
 public class GameEngine {
     private Paddle paddle;                         // The player's paddle
     private List<Ball> balls;                      // List of balls in play
+    private List<Bullet> bullets;
     private List<Brick> bricks;                    // List of all bricks
     private List<PowerUp> powerUps;                // List of falling power-ups
     private List<ActivePowerUp> activePowerUps;    // Power-ups currently active
@@ -64,6 +65,7 @@ public class GameEngine {
 
         // Initialize lists to hold game objects
         this.balls = new ArrayList<>();
+        this.bullets = new ArrayList<>();
         this.bricks = new ArrayList<>();
         this.powerUps = new ArrayList<>();
         this.activePowerUps = new ArrayList<>();
@@ -89,7 +91,7 @@ public class GameEngine {
     public void startGame() {
         this.score = 0;
         this.lives = 3;
-        this.levelNumber = 1;
+        this.levelNumber = 22;
         this.gameState = GameState.PLAYING;
         this.particleSystem.clear();
         this.ballReleased = false; // Ball starts stuck to paddle
@@ -101,12 +103,24 @@ public class GameEngine {
      * Initialize a level - create paddle, ball, and bricks.
      */
     private void initializeLevel() {
+
+        //clear old object
+        balls.clear();
+        bullets.clear();
+        bricks.clear();
+        powerUps.clear();
+        activePowerUps.clear();
+        blinks.clear();
+        particleSystem.clear();
+        enemies.clear();
+        destroys.clear();
+
         // Create paddle in the center bottom of play area
         int paddleX = (gameWidth - PADDLE_DEFAULT_WIDTH) / 2;
         int paddleY = gameHeight - 50;  // 50 pixels from bottom
         paddle = new Paddle(paddleX, paddleY, PADDLE_DEFAULT_WIDTH, PADDLE_HEIGHT);
 
-        // Create ball just above the paddle
+        //create new ball for the current level
         int ballX = gameWidth / 2 - BALL_SIZE / 2;
         int ballY = gameHeight - 100;  // 100 pixels from bottom
         Ball ball = new Ball(ballX, ballY, BALL_SIZE, BALL_SIZE);
@@ -114,18 +128,6 @@ public class GameEngine {
         balls.clear();
         balls.add(ball);
         this.ballReleased = false;
-        //TODO: ballReleased is set to false too much times, find a way to set it only once at the start of the game
-
-        // Clear old objects
-        bricks.clear();
-        powerUps.clear();
-        activePowerUps.clear();
-        blinks.clear();
-        particleSystem.clear();
-
-        // add enemies clear
-        enemies.clear();
-        destroys.clear();
 
         // Create bricks using Level system
         currentLevel = new Level(levelNumber);
@@ -152,14 +154,26 @@ public class GameEngine {
                 ballReleased = true;
             }
         }
-        paddle.update(deltaTime);
 
+        // 0. Check collisions
+        checkCollisions(deltaTime);
+        // 1. Paddle update
+        paddle.update(deltaTime);
+        if (paddle.isGun()) paddle.shoot(bullets, deltaTime);
         // Update all balls
+
+        // goi qua nhieu lan ham check, khong nen lam the nay
+//        for (Ball ball : balls) {
+//            checkCollisions(ball, deltaTime);
+//            ball.update(deltaTime);
+//        }
+
+        //checkCollisions(deltaTime);
+
+        // 2. Balls update
         for (Ball ball : balls) {
-            checkCollisions(ball, deltaTime);
             ball.update(deltaTime);
         }
-
         // Remove balls that fell off bottom of screen
         Iterator<Ball> ballIterator = balls.iterator();
         while (ballIterator.hasNext()) {
@@ -169,29 +183,34 @@ public class GameEngine {
             }
         }
 
-        // Check if all balls are gone
         if (balls.isEmpty()) {
             loseLife();
         }
 
-        //TODO update enemy trong gameloop o day/
+        // 3. Bullets update
+        for (Bullet bullet : bullets) {
+            bullet.update(deltaTime);
+        }
+
+        // 4. Enemies update
         for (Enemy enemy : enemies) {
-            System.out.println(enemy.getMovementType());
             enemy.update(deltaTime);
         }
         updateEnemies(deltaTime);
-        // update enemies end;
 
+        // 5. Power-ups update
         for (PowerUp powerUp : powerUps) {
             powerUp.update(deltaTime);
         }
         updateActivePowerUps(deltaTime);
+
+        // 6. Update other game object
         updateBlinks(deltaTime);
         updateDestroys(deltaTime);
         particleSystem.update(deltaTime);
 
 
-        // Check if all destroyable bricks are gone (level complete)
+        // 7. Level update
         if (isLevelComplete()) {
             levelComplete();
         }
@@ -248,30 +267,6 @@ public class GameEngine {
         }
     }
 
-    /** Spawn new enemies when enemies size == 0 */
-    private void spawnEnemies() {
-        for (int i = 0; i < 3; i++) {
-            Enemy e;
-            if(i%2 == 0) {
-                e = new Enemy(150, 0, ENEMY_SIZE);
-            }
-            else {
-                e = new Enemy(400, 0, ENEMY_SIZE);
-            }
-            enemies.add(e);
-        }
-    }
-
-    private void removeEnemies() {
-        Iterator<Enemy> iterator = enemies.iterator();
-        while (iterator.hasNext()) {
-            Enemy e = iterator.next();
-            if (e.getY() > gameHeight) {
-                iterator.remove();
-            }
-        }
-    }
-
     /**
      * Update blink effects - animate them and remove when finished or brick destroyed.
      */
@@ -288,6 +283,7 @@ public class GameEngine {
         }
     }
 
+    /** Update destroy effects */
     private void updateDestroys(double deltaTime) {
         Iterator<Destroy> iterator = destroys.iterator();
         while (iterator.hasNext()) {
@@ -308,45 +304,69 @@ public class GameEngine {
      * 2. Ball vs Brick - destroy brick, bounce ball, create particles
      * 3. Paddle vs Power-up - activate power-up effect
      */
-    public void checkCollisions(Ball ball, double deltaTime) {
-        // 1. Ball-Paddle collision (simple bounds check is fine for paddle)
-        if (ball.collidesWith(paddle)) {
-            ball.bounceOffPaddle(paddle);
-            SoundManager.getInstance().playSound("ball_paddle.wav");
-            return ;
-        }
 
-//        //Đảm bảo sẽ không có va chạm trong nhiều nhịp game
-//        if (ball.y + ball.height > paddle.y - paddle.height && ball.specialMode) {
-//            ball.velocityX = (500 + 20) * (ball.velocityX) / Math.abs(ball.velocityX);
-//        }
-//        else {
-//            ball.specialMode = false;
-//            ball.normalSpeed();
-//        }
+    /** Call the cc functions */
+    public void checkCollisions(double deltaTime) {
+        // 1. Ball-Paddle, Enemy, Brick collision
+        ballsCollision(deltaTime);
 
-        // 2. Ball-Brick collision using trajectory prediction
-        // Check if ball's path WILL hit any brick
-
-        // 2. Ball - Brick collision
-        if(ball.velocityY < 0) {
-            for (int i = bricks.size() - 1; i >= 0; i--) {
-                if(ball.willHitBrick(bricks.get(i), deltaTime)) {
-                    brickAndBallProcess(bricks.get(i), ball);
-                    break;
-                }
-            }
-        } else {
-            for (Brick brick : bricks) {
-                if (ball.willHitBrick(brick, deltaTime)) {
-                    brickAndBallProcess(brick, ball);
-                    break;
-                }
-            }
-        }
-
+        // 2. Bullet, Enemy, Brick collision
+        bulletsCollision(deltaTime);
 
         // 3. Paddle-PowerUp collision
+        paddleAndPowerUpCollision(deltaTime);
+
+        //TODO them kiem tra va cham cho enemy voi ball va brick
+        // 4. Enemy and brick collision;
+
+        //Each enemy in one game tick must collide with at most 1 brick
+        // Enemies - brick, enemies - paddle
+        enemiesCollision(deltaTime);
+
+        // 5. Ball and Enemy collision
+        // Very hard to handle it perfectly
+        //
+
+//        for (Ball ball : balls) {
+//            for (Enemy e : enemies) {
+//                if (ball.willCollideEnemy(e, deltaTime)) {
+//                    ballAndEnemyProcess(ball, e);
+//                }
+//            }
+//        }
+
+        //currently, we dont have power up to duplicate the ball then we use this
+    }
+
+    /** Check collision function for crucial game object */
+    public void ballsCollision(double deltaTime) {
+        Iterator<Ball> iterator = balls.iterator();
+        while (iterator.hasNext()) {
+            Ball ball = iterator.next();
+
+            // Gọi xử lý va chạm
+            boolean removeThisBall = ballProcess(ball, deltaTime);
+
+            // Nếu hàm trả về true (ball cần xóa), thì xóa an toàn
+            if (removeThisBall) {
+                iterator.remove();
+            }
+        }
+    }
+
+    public void bulletsCollision(double deltaTime) {
+        Iterator<Bullet> bulletIterator = bullets.iterator();
+        while (bulletIterator.hasNext()) {
+            Bullet bullet = bulletIterator.next();
+            boolean shouldRemove = BulletProcess(bullet, deltaTime);
+
+            if (shouldRemove) {
+                bulletIterator.remove();
+            }
+        }
+    }
+
+    public void paddleAndPowerUpCollision(double deltaTime) {
         Iterator<PowerUp> powerUpIterator = powerUps.iterator();
         while (powerUpIterator.hasNext()) {
             PowerUp powerUp = powerUpIterator.next();
@@ -363,77 +383,87 @@ public class GameEngine {
                 powerUpIterator.remove();
             }
         }
+    }
 
-        //TODO them kiem tra va cham cho enemy voi ball va brick
-        // 4. Enemy and brick collision;
-
-        //Each enemy in one game tick must collide with at most 1 brick
-        for (Enemy e : enemies) {
+    public void enemiesCollision(double deltaTime) {
+        Iterator<Enemy> enemyIt = enemies.iterator();
+        while(enemyIt.hasNext()) {
+            Enemy e = enemyIt.next();
             for (Brick brick : bricks) {
                 if (e.willHitBrick(brick, deltaTime)) {
                     brickAndEnemyProcess(brick, e);
                     break;
                 }
             }
+            if (e.willHitPaddle(paddle, deltaTime)) {
+                e.takeHit();
+                if (e.isDestroyed()) {
+                    score += e.getScoreValue();
+                    destroys.add(new Destroy(e));
+                    enemyIt.remove();
+                    SoundManager.getInstance().playSound("explosion.wav");
+                }
+            }
+        }
+    }
+
+
+    /** Process function */
+    public boolean ballProcess(Ball ball, double deltaTime) {
+        if (ball.collidesWith(paddle)) {
+            ball.bounceOffPaddle(paddle);
+            SoundManager.getInstance().playSound("ball_paddle.wav");
+            return false;
         }
 
+        if(ball.velocityY < 0) {
+            for (int i = bricks.size() - 1; i >= 0; i--) {
+                if(ball.willHitBrick(bricks.get(i), deltaTime)) {
+                    brickAndBallProcess(bricks.get(i), ball);
+                    return false;
+                }
+            }
+        } else {
+            for (Brick brick : bricks) {
+                if (ball.willHitBrick(brick, deltaTime)) {
+                    brickAndBallProcess(brick, ball);
+                    return false;
+                }
+            }
+        }
 
-        // 5. Ball and Enemy collision
-        // Very hard to handle it perfectly
-        //
-
-//        for (Ball ball : balls) {
-//            for (Enemy e : enemies) {
-//                if (ball.willCollideEnemy(e, deltaTime)) {
-//                    ballAndEnemyProcess(ball, e);
-//                }
-//            }
-//        }
-
-        //currently, we dont have power up to duplicate the ball then we use this
         for (Enemy e : enemies) {
             if (ball.willCollideEnemy(e, deltaTime)) {
-                ballAndEnemyProcess(ball, e);
+                enemyAndBallProcess(ball, e);
+                return false;
             }
         }
+
+        return false;
+    }
+    public boolean BulletProcess(Bullet bullet, double deltaTime) {
+        if (bullet.getY() + deltaTime * bullet.getVelocityY() < 0) {
+            return true;
+        }
+
+        for (int i = bricks.size() - 1; i >= 0; i--) {
+            if(bullet.willCollideBrick(bricks.get(i), deltaTime)) {
+                brickAndBulletProcess(bricks.get(i), bullet);
+                return true;
+            }
+        }
+
+        for (Enemy enemy : enemies) {
+            if(bullet.willCollideEnemy(enemy, deltaTime)) {
+                enemyAndBulletProcess(enemy, bullet);
+                return true;
+            }
+        }
+        return false;
     }
 
 
-    //TODO add sfx and render sprite explode for destroyed
-    public void ballAndEnemyProcess(Ball ball, Enemy e) {
-        if (e.getType() == EnemyType.REFLECTOR) {
-            ball.bounceOffEnemy();
-            e.takeHit();
-            if (e.isDestroyed()) {
-                score += e.getScoreValue();
-                destroys.add(new Destroy(e));
-                enemies.remove(e);
-                SoundManager.getInstance().playSound("explosion.wav");
-            }
-        }
-        else if (e.getType() == EnemyType.UP_SENSITIVE) {
-            if (ball.velocityY < 0) {
-                e.takeHit();
-                if (e.isDestroyed()) {
-                    score += e.getScoreValue();
-                    destroys.add(new Destroy(e));
-                    enemies.remove(e);
-                    SoundManager.getInstance().playSound("explosion.wav");
-                }
-            }
-        }
-        else if (e.getType() == EnemyType.DOWN_SENSITIVE) {
-            if (ball.velocityY > 0) {
-                e.takeHit();
-                if (e.isDestroyed()) {
-                    score += e.getScoreValue();
-                    destroys.add(new Destroy(e));
-                    enemies.remove(e);
-                    SoundManager.getInstance().playSound("explosion.wav");
-                }
-            }
-        }
-    }
+    /** Process one - one function */
     public void brickAndEnemyProcess(Brick brick, Enemy enemy) {
         String side = enemy.getCollisionSide(brick);
         enemy.correctPositionAfterBrickHit(brick, side);
@@ -491,20 +521,121 @@ public class GameEngine {
 
     }
 
-    private Color getBrickColor(Brick brick) {
-        return switch (brick.getType()) {
-            case BrickType.RUBY -> Color.RED;
-            case BrickType.YLLW -> Color.YELLOW;
-            case BrickType.BLUE -> Color.BLUE;
-            case BrickType.MGNT -> Color.MAGENTA;
-            case BrickType.LIME -> Color.LIME;
-            case BrickType.WHIT -> Color.WHITE;
-            case BrickType.ORNG -> Color.ORANGE;
-            case BrickType.CYAN -> Color.CYAN;
-            case BrickType.GRAY -> Color.GRAY;
-            case BrickType.GOLD -> Color.GOLD;
-            default -> Color.GRAY;
-        };
+    public void enemyAndBallProcess(Ball ball, Enemy e) {
+        if (e.getType() == EnemyType.REFLECTOR) {
+            ball.bounceOffEnemy();
+            e.takeHit();
+            if (e.isDestroyed()) {
+                score += e.getScoreValue();
+                destroys.add(new Destroy(e));
+                enemies.remove(e);
+                SoundManager.getInstance().playSound("explosion.wav");
+            }
+        }
+        else if (e.getType() == EnemyType.UP_SENSITIVE) {
+            if (ball.velocityY < 0) {
+                e.takeHit();
+                if (e.isDestroyed()) {
+                    score += e.getScoreValue();
+                    destroys.add(new Destroy(e));
+                    enemies.remove(e);
+                    SoundManager.getInstance().playSound("explosion.wav");
+                }
+            }
+        }
+        else if (e.getType() == EnemyType.DOWN_SENSITIVE) {
+            if (ball.velocityY > 0) {
+                e.takeHit();
+                if (e.isDestroyed()) {
+                    score += e.getScoreValue();
+                    destroys.add(new Destroy(e));
+                    enemies.remove(e);
+                    SoundManager.getInstance().playSound("explosion.wav");
+                }
+            }
+        }
+    }
+
+    public void brickAndBulletProcess(Brick brick, Bullet bullet) {
+
+        Color particleColor = getBrickColor(brick);
+        particleSystem.createBurstEffect(
+                brick.getX() + brick.getWidth() / 2.0,
+                brick.getY() + brick.getHeight() / 2.0,
+                particleColor,
+                15
+        );
+
+        brick.takeHit();
+
+        // Create blink effect for bricks when hit
+
+        // hàm kiểm tra cũ brick instanceof StrongBrick || brick instanceof ExtraStrongBrick || brick instanceof UnbreakableBrick
+        // Sửa lại thành brick có hitpoint lớn hơn 1
+        if (brick.getHitPoints() >= 1) {
+            // Only create new blink if this brick doesn't already have one
+            boolean alreadyHasBlink = false;
+            for (Blink existingBlink : blinks) {
+                if (existingBlink.getAttachedBrick() == brick) {
+                    alreadyHasBlink = true;
+                    break;
+                }
+            }
+            if (!alreadyHasBlink) {
+                blinks.add(new Blink(brick));
+            }
+        }
+
+        // Remove if destroyed
+        if (brick.isDestroyed()) {
+            score += brick.getScoreValue();
+            SoundManager.getInstance().playSound("ball_block.wav");
+
+            // Spawn power-up chance
+            if (!(brick instanceof UnbreakableBrick) && random.nextInt(100) < 15) {
+                spawnPowerUp(brick.getX(), brick.getY());
+            }
+
+            bricks.remove(brick);
+        } else {
+            // Brick was hit but not destroyed
+            SoundManager.getInstance().playSound("ball_hard_block.wav");
+        }
+    }
+
+    public void enemyAndBulletProcess(Enemy e, Bullet bullet) {
+        e.takeHit();
+        if (e.isDestroyed()) {
+            score += e.getScoreValue();
+            destroys.add(new Destroy(e));
+            enemies.remove(e);
+            SoundManager.getInstance().playSound("explosion.wav");
+        }
+    }
+
+    /** Spawn new enemies when enemies size == 0 */
+    private void spawnEnemies() {
+        for (int i = 0; i < 3; i++) {
+            int choice = (int) (Math.random() * 4);
+            Enemy e;
+            if(choice%2 == 0) {
+                e = new Enemy(150, 0, ENEMY_SIZE);
+            }
+            else {
+                e = new Enemy(400, 0, ENEMY_SIZE);
+            }
+            enemies.add(e);
+        }
+    }
+
+    private void removeEnemies() {
+        Iterator<Enemy> iterator = enemies.iterator();
+        while (iterator.hasNext()) {
+            Enemy e = iterator.next();
+            if (e.getY() > gameHeight) {
+                iterator.remove();
+            }
+        }
     }
 
     /**
@@ -517,7 +648,8 @@ public class GameEngine {
 
         switch (powerUpType) {
             case 0:
-                powerUp = new ExpandPaddlePowerUp(x, y, 20, 20);
+                //powerUp = new ExpandPaddlePowerUp(x, y, 20, 20);
+                powerUp = new GunPowerUp(x, y, 20, 20);
                 break;
             case 1:
                 FastBallPowerUp fastBall = new FastBallPowerUp(x, y, 20, 20);
@@ -531,6 +663,8 @@ public class GameEngine {
                 powerUp = new MultiBallPowerUp(x, y, 20, 20, this);
                 break;
             case 3:
+                powerUp = new ExpandPaddlePowerUp(x, y, 20, 20);
+                break;
             default:
                 powerUp = new ExtraLifePowerUp(x, y, 20, 20, this);
                 break;
@@ -601,7 +735,6 @@ public class GameEngine {
         }
     }
 
-
     public void resetGame() {
         // Reset game state
         gameState = GameState.PLAYING;
@@ -662,6 +795,25 @@ public class GameEngine {
 
     // ========== GETTER METHODS ==========
     // These allow GameView to access game objects for rendering
+    private Color getBrickColor(Brick brick) {
+        return switch (brick.getType()) {
+            case BrickType.RUBY -> Color.RED;
+            case BrickType.YLLW -> Color.YELLOW;
+            case BrickType.BLUE -> Color.BLUE;
+            case BrickType.MGNT -> Color.MAGENTA;
+            case BrickType.LIME -> Color.LIME;
+            case BrickType.WHIT -> Color.WHITE;
+            case BrickType.ORNG -> Color.ORANGE;
+            case BrickType.CYAN -> Color.CYAN;
+            case BrickType.GRAY -> Color.GRAY;
+            case BrickType.GOLD -> Color.GOLD;
+            default -> Color.GRAY;
+        };
+    }
+
+    public List<Bullet> getBullets() {
+        return bullets;
+    }
 
     public List<Enemy> getEnemies() {
         return enemies;

@@ -30,6 +30,12 @@ public final class Constants {
 
     public static final double ENEMY_MOVEMENT_CYCLE = 0.0167 * 120;
 
+
+    public static final int BULLET_WIDTH = 5;
+    public static final int BULLET_HEIGHT = 13;
+    public static final double BULLET_VELOCITY = -1000;
+    public static final double GUN_COOLDOWN = 0.0167 * 20;
+
     private Constants() {
         // Prevent instantiation
     }
