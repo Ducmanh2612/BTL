@@ -26,6 +26,10 @@ public class GameView extends StackPane {
     private GraphicsContext gc;
     private AssetManager assetManager;
 
+    // Door animation state
+    private boolean isDoorOpen = false;
+    private double doorOpenProgress = 0.0; // 0.0 = closed, 1.0 = fully open
+
     private GameView(GameEngine gameEngine) {
         gameEngineRef = gameEngine;
         canvas = new Canvas(GAME_WIDTH, GAME_HEIGHT);
@@ -48,8 +52,35 @@ public class GameView extends StackPane {
 
         GameState state = gameEngineRef.getGameState();
         renderGame();
+
+        // Update door animation based on enemies
+        updateDoorAnimation();
+
+        // Draw border frame with animated door
+        drawBorderFrameWithDoor();
+
         if (state.equals(GameState.PAUSED)) {
             renderPauseOverlay();
+        }
+    }
+
+    private void updateDoorAnimation() {
+        // Check if there are enemies active
+        boolean hasEnemies = !gameEngineRef.getEnemies().isEmpty();
+
+        if (hasEnemies && !isDoorOpen) {
+            isDoorOpen = true;
+        } else if (!hasEnemies && isDoorOpen) {
+            isDoorOpen = false;
+        }
+
+        // Animate door opening/closing
+        if (isDoorOpen && doorOpenProgress < 1.0) {
+            doorOpenProgress += 0.05; // Open speed
+            if (doorOpenProgress > 1.0) doorOpenProgress = 1.0;
+        } else if (!isDoorOpen && doorOpenProgress > 0.0) {
+            doorOpenProgress -= 0.03; // Close speed
+            if (doorOpenProgress < 0.0) doorOpenProgress = 0.0;
         }
     }
 
@@ -58,10 +89,111 @@ public class GameView extends StackPane {
         Image pattern = assetManager.getBackgroundPattern(level);
         if (pattern != null) {
             ImagePattern patternFill = new ImagePattern(pattern, 0, 0,
-                pattern.getWidth(), pattern.getHeight(), false);
+                    pattern.getWidth(), pattern.getHeight(), false);
             gc.setFill(patternFill);
             gc.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
         }
+    }
+
+    private void drawBorderFrameWithDoor() {
+        int tileSize = 20;
+        int sideHeight = GAME_HEIGHT / 6; //6 frame
+
+        Image sidePattern = assetManager.getBorderSideVertical();
+        if (sidePattern != null) {
+            for (int i = 0; i < 6; i++) {
+                gc.drawImage(sidePattern, 0, i * sideHeight + 20, tileSize, sideHeight + 20);
+            }
+            for (int i = 0; i < 6; i++) {
+                gc.drawImage(sidePattern, GAME_WIDTH - tileSize, i * sideHeight + 20, tileSize, sideHeight + 20);
+            }
+        }
+
+        int centerX = GAME_WIDTH / 2;
+        int doorGap = 100;
+        int doorWidth = 80;
+
+        int leftDoorX = centerX - doorWidth - doorGap / 2;
+        int rightDoorX = centerX + doorGap / 2;
+
+        int rightCornerStart = GAME_WIDTH - tileSize;
+
+        Image topFrame = assetManager.getBorderTopFrameImg();
+        if (topFrame != null) {
+            int firstSectionStart = tileSize;
+            int firstSectionEnd = leftDoorX;
+            int firstSpacing = firstSectionEnd - firstSectionStart;
+            gc.drawImage(topFrame, firstSectionStart, 0, firstSpacing , tileSize);
+
+            int middleSectionStart = leftDoorX + doorWidth;
+            int middleSectionEnd = rightDoorX;
+            int middleSpacing = (middleSectionEnd - middleSectionStart);
+            gc.drawImage(topFrame, middleSectionStart, 0, middleSpacing , tileSize);
+
+            int lastSectionStart = rightDoorX + doorWidth;
+            int lastSectionEnd = rightCornerStart;
+            int lastSpacing = (lastSectionEnd - lastSectionStart);
+            gc.drawImage(topFrame, lastSectionStart, 0, lastSpacing, tileSize);
+        }
+
+        Image doorImg = assetManager.getBorderTopDoorImg();
+        if (doorImg != null) {
+            int doorSlide = (int)(doorOpenProgress * 40); // Doors slide apart 40px when open
+            gc.drawImage(doorImg, leftDoorX - doorSlide, 0, doorWidth, tileSize);
+
+            gc.drawImage(doorImg, rightDoorX + doorSlide, 0, doorWidth, tileSize);
+        }
+
+        Image topLeft = assetManager.getBorderTopLeftImg();
+        if (topLeft != null) {
+            gc.drawImage(topLeft, 0, 0, tileSize, tileSize);
+        }
+
+        Image topRight = assetManager.getBorderTopRightImg();
+        if (topRight != null) {
+            gc.drawImage(topRight, GAME_WIDTH - tileSize, 0, tileSize, tileSize);
+        }
+
+        drawTopBarUI();
+        drawBottomBarUI();
+    }
+
+    private void drawTopBarUI() {
+        gc.setFill(Color.CYAN);
+        gc.setFont(Font.font("Arial", FontWeight.BOLD, 16));
+        gc.fillText("LV " + gameEngineRef.getLevelNumber(), 20, 30);
+
+        // Lives (hearts) below level
+        int lives = gameEngineRef.getLives();
+        Image heartImg = assetManager.getHeartImg();
+        int heartSize = 16;
+        int spacing = 3;
+        int startX = 12;
+        int startY = 38;
+
+        if (heartImg != null) {
+            for (int i = 0; i < lives; i++) {
+                int x = startX + (heartSize + spacing) * i;
+                gc.drawImage(heartImg, x, startY, heartSize, heartSize);
+            }
+            for (int i = lives; i < 3; i++) {
+                int x = startX + (heartSize + spacing) * i;
+                gc.setGlobalAlpha(0.3);
+                gc.drawImage(heartImg, x, startY, heartSize, heartSize);
+                gc.setGlobalAlpha(1.0);
+            }
+        }
+    }
+
+    private void drawBottomBarUI() {
+        gc.setFill(Color.YELLOW);
+        gc.setFont(Font.font("Arial", FontWeight.BOLD, 18));
+        gc.fillText("SCORE: " + gameEngineRef.getScore(), 70, GAME_HEIGHT - 25);
+
+        // Hint in bottom-right
+        gc.setFill(Color.LIGHTGRAY);
+        gc.setFont(Font.font("Arial", FontWeight.NORMAL, 12));
+        gc.fillText("P: Pause", GAME_WIDTH - 120, GAME_HEIGHT - 25);
     }
 
     private void renderGame() {
@@ -69,7 +201,6 @@ public class GameView extends StackPane {
             renderBrickWithImage(brick);
         }
 
-        // Render blink effects on top of bricks
         for (Blink blink : gameEngineRef.getBlinks()) {
             renderBlink(blink);
         }
@@ -86,19 +217,14 @@ public class GameView extends StackPane {
             renderExplosion(destroy);
         }
 
-
         renderPaddle(gameEngineRef.getPaddle());
 
-        // Render all balls
         for (Ball ball : gameEngineRef.getBalls()) {
             renderBall(ball);
         }
 
         renderParticles();
-        renderScore();
-        renderLives();
-        
-        // Show instruction if any ball is stuck to paddle
+
         if (!gameEngineRef.isBallReleased()) {
             gc.setFill(Color.WHITE);
             gc.setFont(Font.font("Arial", FontWeight.BOLD, 20));
@@ -153,33 +279,6 @@ public class GameView extends StackPane {
         }
     }
 
-    private void renderLives() {
-        int lives = gameEngineRef.getLives();
-        Image heartImg = assetManager.getHeartImg();
-
-        int heartSize = 25;
-        int spacing = 5;
-        int startX = GAME_WIDTH - (heartSize + spacing) * 3 - 20;
-        int startY = GAME_HEIGHT - 30;
-
-        for (int i = 0; i < lives; i++) {
-            int x = startX + (heartSize + spacing) * i;
-            gc.drawImage(heartImg, x, startY, heartSize, heartSize);
-        }
-
-        for (int i = lives; i < 3; i++) {
-            int x = startX + (heartSize + spacing) * i;
-            gc.setGlobalAlpha(0.3);
-            gc.drawImage(heartImg, x, startY, heartSize, heartSize);
-            gc.setGlobalAlpha(1.0);
-        }
-    }
-
-    private void renderScore() {
-        gc.setFill(Color.WHITE);
-        gc.fillText("SCORE: " + gameEngineRef.getScore(), 30 , GAME_HEIGHT - 10);
-    }
-
     private void renderPauseOverlay() {
         gc.setFill(Color.rgb(0, 0, 0, 0.5));
         gc.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
@@ -217,7 +316,6 @@ public class GameView extends StackPane {
             renderBrick(brick);
         }
     }
-
 
     private void renderBrick(Brick brick) {
         if (brick instanceof ColoredBrick) {
@@ -277,7 +375,6 @@ public class GameView extends StackPane {
                 frameWidth = Constants.PADDLE_EXPANDED_WIDTH;
                 frameHeight = Constants.PADDLE_HEIGHT;
             }
-            //TODO: fix frame size for wide paddle
             int frameX = paddle.getFrameX();
             int frameY = paddle.getFrameY();
             int sourceX = frameX * frameWidth;
@@ -314,7 +411,6 @@ public class GameView extends StackPane {
         }
     }
 
-
     private void renderBlink(Blink blink) {
         int blinkX = blink.getX();
         int blinkY = blink.getY();
@@ -324,7 +420,6 @@ public class GameView extends StackPane {
         Image blinkMapImg = assetManager.getBlinkMapImg();
 
         if (blinkMapImg != null) {
-            // Blink sprite sheet: 8 frames wide (38px each), 3 frames tall (20px each)
             int frameWidth = Constants.BRICK_WIDTH;
             int frameHeight = Constants.BRICK_HEIGHT;
             int frameX = blink.getFrameX();
@@ -333,22 +428,15 @@ public class GameView extends StackPane {
             int sourceY = frameY * frameHeight;
 
             gc.drawImage(blinkMapImg, sourceX, sourceY, frameWidth, frameHeight,
-                        blinkX, blinkY, blinkWidth, blinkHeight);
+                    blinkX, blinkY, blinkWidth, blinkHeight);
         }
     }
-
-    //render enemy
 
     private void renderEnemy(Enemy enemy) {
         int ex = enemy.getX();
         int ey = enemy.getY();
         int ew = enemy.getWidth();
         int eh = enemy.getHeight();
-
-        //Image shadowImg = ;
-        //if (shadowImg != null) {
-            //gc.drawImage(shadowImg, ex + 2, ey + 2, ew, eh);
-        //}
 
         Image enemyImg = assetManager.getEnemyMapImg();
         if (enemyImg != null) {
@@ -359,13 +447,6 @@ public class GameView extends StackPane {
             int sourceX = frameX * frameWidth;
             int sourceY = frameY * frameHeight;
             gc.drawImage(enemyImg, sourceX, sourceY, frameWidth, frameHeight, ex, ey, ew, eh);
-//        } else {
-//            gc.setFill(isExpanded ? Color.GOLD : Color.LIMEGREEN);
-//            gc.fillRoundRect(ex, ey, ew, eh, 10, 10);
-//            gc.setStroke(isExpanded ? Color.ORANGE : Color.DARKGREEN);
-//            gc.setLineWidth(2);
-//            gc.strokeRoundRect(ex, ey, ew, eh, 10, 10);
-//        }
         }
     }
 
@@ -374,11 +455,6 @@ public class GameView extends StackPane {
         int ey = destroy.getY();
         int ew = destroy.getWidth();
         int eh = destroy.getHeight();
-
-        //Image shadowImg = ;
-        //if (shadowImg != null) {
-        //gc.drawImage(shadowImg, ex + 2, ey + 2, ew, eh);
-        //}
 
         Image destroyImg = assetManager.getExplosionMapImg();
         if (destroyImg != null) {
@@ -389,13 +465,6 @@ public class GameView extends StackPane {
             int sourceX = frameX * frameWidth;
             int sourceY = frameY * frameHeight;
             gc.drawImage(destroyImg, sourceX, sourceY, frameWidth, frameHeight, ex, ey, ew, eh);
-//        } else {
-//            gc.setFill(isExpanded ? Color.GOLD : Color.LIMEGREEN);
-//            gc.fillRoundRect(ex, ey, ew, eh, 10, 10);
-//            gc.setStroke(isExpanded ? Color.ORANGE : Color.DARKGREEN);
-//            gc.setLineWidth(2);
-//            gc.strokeRoundRect(ex, ey, ew, eh, 10, 10);
-//        }
         }
     }
 }
