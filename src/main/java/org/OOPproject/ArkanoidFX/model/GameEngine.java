@@ -91,7 +91,7 @@ public class GameEngine {
     public void startGame() {
         this.score = 0;
         this.lives = 3;
-        this.levelNumber = 25;
+        this.levelNumber = 22;
         this.gameState = GameState.PLAYING;
         this.particleSystem.clear();
         this.ballReleased = false; // Ball starts stuck to paddle
@@ -180,10 +180,10 @@ public class GameEngine {
             if (ball.getY() >= gameHeight) {
                 ballIterator.remove();
             }
-            // Check if all balls are gone
-            if (balls.isEmpty()) {
-                loseLife();
-            }
+        }
+
+        if (balls.isEmpty()) {
+            loseLife();
         }
 
         // 3. Bullets update
