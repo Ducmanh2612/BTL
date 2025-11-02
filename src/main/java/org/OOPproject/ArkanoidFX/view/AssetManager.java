@@ -139,7 +139,7 @@ public class AssetManager {
 
             explosionMapImg = loadImage("explosion_map.png", 128, 128);
 
-            bulletImg = loadImage("torpedo.png", 15, 40);
+            bulletImg = loadImage("torpedo.png", 5, 13);
 
             HeartImg = loadImage("heart.png", 20, 20);
 
