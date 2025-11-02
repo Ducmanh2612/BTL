@@ -3,6 +3,7 @@ package org.OOPproject.ArkanoidFX.model;
 import static org.OOPproject.ArkanoidFX.utils.Constants.*;
 
 public class Enemy extends MovableObject {
+
     private EnemyType type;
     private MovementType movementType;
     private int hitPoints;
@@ -111,21 +112,21 @@ public class Enemy extends MovableObject {
     //TODO add sfx for enemy
     private void checkWallBounces() {
         // Bounce off left and right walls
-        if (x <= 20) {
-            x = 20;
+        if (x <= BORDER_OFFSET) {
+            x = BORDER_OFFSET;
             velocityX = Math.abs(velocityX);
             //SoundManager.getInstance().playSound("bounce.wav");
         } else {
-            if (x + width >= GAME_WIDTH - 20) {
-                x = GAME_WIDTH - width - 20;
+            if (x + width >= GAME_WIDTH - BORDER_OFFSET) {
+                x = GAME_WIDTH - width - BORDER_OFFSET;
                 velocityX = -Math.abs(velocityX);
                 //SoundManager.getInstance().playSound("bounce.wav");
             }
         }
 
         // Bounce off top wall
-        if (y <= 20) {
-            y = 20;
+        if (y <= BORDER_OFFSET) {
+            y = BORDER_OFFSET;
             velocityY = Math.abs(velocityY);
             //SoundManager.getInstance().playSound("bounce.wav");
         }

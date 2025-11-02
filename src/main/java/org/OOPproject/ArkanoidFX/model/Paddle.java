@@ -11,7 +11,7 @@ public class Paddle extends MovableObject {
     private static final double DEFAULT_SPEED = 500.0;
 
     private double speed; // Speed in pixels per second
-    private int boundingBoxWidth = Constants.GAME_WIDTH;
+    private int boundingBoxWidth = Constants.GAME_WIDTH - (Constants.BORDER_OFFSET * 2); // Account for both borders
     private boolean isGun;
     private double coolDown;
 
@@ -72,6 +72,7 @@ public class Paddle extends MovableObject {
             bullets.add(b1);
             bullets.add(b2);
             coolDown = GUN_COOLDOWN;
+            SoundManager.getInstance().playSound("laserShoot.wav");
         }
         else coolDown -= deltaTime;
     }
@@ -79,9 +80,9 @@ public class Paddle extends MovableObject {
     @Override
     public void move(double deltaTime) {
         x += velocityX * deltaTime;
-        // Keep paddle within game boundaries
-        if (x < 0) x = 0;
-        if (x + width > boundingBoxWidth) x = boundingBoxWidth - width;
+        // Keep paddle within game boundaries (accounting for border)
+        if (x < Constants.BORDER_OFFSET) x = Constants.BORDER_OFFSET;
+        if (x + width > Constants.BORDER_OFFSET + boundingBoxWidth) x = Constants.BORDER_OFFSET + boundingBoxWidth - width;
         sprite.update(deltaTime);
     }
 }

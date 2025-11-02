@@ -7,6 +7,8 @@ public final class Constants {
     public static final int WINDOW_WIDTH = 600;
     public static final int WINDOW_HEIGHT = 700;
 
+    public static final int BORDER_OFFSET = 20; // Border frame width on each side
+
     public static final int PADDLE_HEIGHT = 22;
 
     public static final int BALL_SIZE = 10;

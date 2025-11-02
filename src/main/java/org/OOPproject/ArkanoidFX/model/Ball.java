@@ -1,5 +1,7 @@
 package org.OOPproject.ArkanoidFX.model;
 
+import org.OOPproject.ArkanoidFX.utils.Constants;
+
 import static org.OOPproject.ArkanoidFX.utils.Constants.ENEMY_SIZE;
 import static org.OOPproject.ArkanoidFX.utils.Constants.GAME_WIDTH;
 
@@ -18,7 +20,7 @@ public class Ball extends MovableObject {
     protected boolean stuckToPaddle; // Is ball stuck to paddle?
     protected Paddle attachedPaddle; // Reference to paddle when stuck
 
-    private int boundingBoxWidth = GAME_WIDTH - 20;
+    private int boundingBoxWidth = GAME_WIDTH - (Constants.BORDER_OFFSET * 2); // Account for both borders
 
     public Ball(int x, int y, int size) {
         this(x, y, size, size);
@@ -377,21 +379,21 @@ public class Ball extends MovableObject {
 
     private void checkWallBounces() {
         // Bounce off left and right walls
-        if (x <= 20) {
-            x = 20;
+        if (x <= Constants.BORDER_OFFSET) {
+            x = Constants.BORDER_OFFSET;
             velocityX = Math.abs(velocityX);
             SoundManager.getInstance().playSound("bounce.wav");
         } else {
-            if (x + width >= boundingBoxWidth) {
-                x = boundingBoxWidth - width;
+            if (x + width >= Constants.BORDER_OFFSET + boundingBoxWidth) {
+                x = Constants.BORDER_OFFSET + boundingBoxWidth - width;
                 velocityX = -Math.abs(velocityX);
                 SoundManager.getInstance().playSound("bounce.wav");
             }
         }
 
         // Bounce off top wall
-        if (y <= 20) {
-            y = 20;
+        if (y <= Constants.BORDER_OFFSET) {
+            y = Constants.BORDER_OFFSET;
             velocityY = Math.abs(velocityY);
             SoundManager.getInstance().playSound("bounce.wav");
         }
