@@ -70,6 +70,9 @@ public class AssetManager {
 
     //Enemy sprite map
     private Image enemyMapImg;
+    private Image enemyReflectorMapImg;  // molecule_both_map.png
+    private Image enemyUpSensitiveMapImg;  // molecule_up_map.png
+    private Image enemyDownSensitiveMapImg;  // molecule_down_map.png
 
     //Explosion sprite map
     private Image explosionMapImg;
@@ -148,6 +151,9 @@ public class AssetManager {
 
             //sprite map for enemy
             enemyMapImg = loadImage("molecule_map.png", 256, 96);
+            enemyReflectorMapImg = loadImage("molecule_both_map.png", 256, 96);
+            enemyUpSensitiveMapImg = loadImage("molecule_up_map.png", 256, 96);
+            enemyDownSensitiveMapImg = loadImage("molecule_down_map.png", 256, 96);
 
             blinkMapImg = loadImage("blink_map.png", 304, 60);
 
@@ -241,6 +247,9 @@ public class AssetManager {
 
     //Getter for enemy sprite
     public Image getEnemyMapImg() {return enemyMapImg;}
+    public Image getEnemyReflectorMapImg() {return enemyReflectorMapImg;}
+    public Image getEnemyUpSensitiveMapImg() {return enemyUpSensitiveMapImg;}
+    public Image getEnemyDownSensitiveMapImg() {return enemyDownSensitiveMapImg;}
 
     //Getter for explosion sprite
     public Image getExplosionMapImg() {return explosionMapImg;}
