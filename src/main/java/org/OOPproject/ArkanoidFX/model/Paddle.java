@@ -15,7 +15,7 @@ public class Paddle extends MovableObject {
     private boolean isGun;
     private double coolDown;
 
-
+    private final SoundManager soundManager;
     private Sprite sprite;
 
     public Paddle(int x, int y, int width, int height) {
@@ -23,7 +23,8 @@ public class Paddle extends MovableObject {
         this.speed = DEFAULT_SPEED; // 500 pixels per second
         velocityX = 0;
         isGun = false;
-        sprite = new Sprite(8, 8, 0.1, true);
+        soundManager = SoundManager.getInstance();
+        sprite = new Sprite(8, 8, 0.02, true);
         // 8x8 frames, 0.1s per frame, loops
     }
 
@@ -72,7 +73,7 @@ public class Paddle extends MovableObject {
             bullets.add(b1);
             bullets.add(b2);
             coolDown = GUN_COOLDOWN;
-            SoundManager.getInstance().playSound("laserShoot.wav");
+            soundManager.playSound("laserShoot.wav");
         }
         else coolDown -= deltaTime;
     }
