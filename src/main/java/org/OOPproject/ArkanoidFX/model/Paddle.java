@@ -8,7 +8,7 @@ import java.util.List;
 import static org.OOPproject.ArkanoidFX.utils.Constants.*;
 
 public class Paddle extends MovableObject {
-    private static final double DEFAULT_SPEED = 500.0;
+    private static final double DEFAULT_SPEED = 600.0;
 
     private double speed; // Speed in pixels per second
     private int boundingBoxWidth = Constants.GAME_WIDTH - (Constants.BORDER_OFFSET * 2); // Account for both borders

@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Unit tests cho lớp Sprite.
- * Mục tiêu: kiểm tra hoạt động của hệ thống hoạt ảnh (update, loop, reset, finished).
+ * kiểm tra hoạt động của hệ thống hoạt ảnh (update, loop, reset, finished).
  */
 class SpriteTest {
 

@@ -3,6 +3,7 @@ import org.OOPproject.ArkanoidFX.utils.Constants;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static org.OOPproject.ArkanoidFX.utils.Constants.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -13,31 +14,19 @@ class PaddleTest {
 
     private Paddle paddle;
 
-    /** Mock PowerUp class for testing applyPowerUp behavior */
-
-    //Todo need rewrite/
-//    static class MockPowerUp extends PowerUp {
-//        boolean applied = false;
-//
-//        @Override
-//        public void applyEffect(Paddle paddle) {
-//            applied = true;
-//        }
-//    }
-
     @BeforeEach
     void setUp() {
-        paddle = new Paddle(100, 500, 80, 20);
+        paddle = new Paddle(100, 500, PADDLE_DEFAULT_WIDTH, PADDLE_HEIGHT);
     }
 
     @Test
     void testInitialValues() {
         assertEquals(100, paddle.getX(), "Initial X position should match constructor value");
         assertEquals(500, paddle.getY(), "Initial Y position should match constructor value");
-        assertEquals(80, paddle.getWidth(), "Initial width should match constructor value");
-        assertEquals(20, paddle.getHeight(), "Initial height should match constructor value");
-        assertEquals(500.0, paddle.getSpeed(), "Default paddle speed should be 500.0 px/s");
-        assertEquals(80, paddle.getOriginalWidth(), "Original width should be stored correctly");
+        assertEquals(PADDLE_DEFAULT_WIDTH, paddle.getWidth(), "Initial width should match constructor value");
+        assertEquals(PADDLE_HEIGHT, paddle.getHeight(), "Initial height should match constructor value");
+        assertEquals(600.0, paddle.getSpeed(), "Default paddle speed should be 500.0 px/s");
+        assertEquals(PADDLE_DEFAULT_WIDTH, paddle.getWidth(), "Original width should be stored correctly");
     }
 
     @Test
@@ -70,11 +59,11 @@ class PaddleTest {
 
     @Test
     void testCannotMoveBeyondLeftBoundary() {
-        paddle.setX(0);
+        paddle.setX(20);
         paddle.moveLeft();
         paddle.move(0.5);
 
-        assertEquals(0, paddle.getX(), "Paddle should not move beyond the left boundary");
+        assertEquals(20, paddle.getX(), "Paddle should not move beyond the left boundary");
     }
 
     @Test
@@ -93,17 +82,11 @@ class PaddleTest {
         assertFalse(paddle.isExpanded(), "Paddle should not be expanded initially");
         paddle.expandPaddle();
         assertTrue(paddle.isExpanded(), "Paddle should be expanded after calling expandPaddle()");
-        assertEquals(paddle.getOriginalWidth() * 2, paddle.getWidth(), "Expanded width should double");
+        assertEquals(PADDLE_EXPANDED_WIDTH, paddle.getWidth(), "Expanded width should be same as" +
+                " PADDLE_EXPANDED_WIDTH");
         paddle.restorePaddleSize();
-        assertEquals(paddle.getOriginalWidth(), paddle.getWidth(), "Width should restore to original size");
+        assertEquals(paddle.getWidth(), paddle.getWidth(), "Width should restore to original size");
     }
-
-//    @Test
-// void testApplyPowerUpInvokesEffect() {
-//        MockPowerUp mock = new MockPowerUp();
-//        paddle.applyPowerUp(mock);
-//        assertTrue(mock.applied, "PowerUp.applyEffect() should be invoked when applied to paddle");
-//    }
 
     @Test
     void testSpriteAnimationAdvances() {

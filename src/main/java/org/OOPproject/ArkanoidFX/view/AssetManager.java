@@ -10,8 +10,7 @@ import org.OOPproject.ArkanoidFX.utils.Constants;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.OOPproject.ArkanoidFX.utils.Constants.GAME_HEIGHT;
-import static org.OOPproject.ArkanoidFX.utils.Constants.PADDLE_HEIGHT;
+import static org.OOPproject.ArkanoidFX.utils.Constants.*;
 
 public class AssetManager {
     private static AssetManager instance;
@@ -147,17 +146,17 @@ public class AssetManager {
 
 
             //sprite map for enemy
-            enemyMapImg = loadImage("molecule_map.png", 256, 96);
+            enemyMapImg = loadImage("molecule_map.png", ENEMY_SIZE * 8, ENEMY_SIZE * 3);
 
-            blinkMapImg = loadImage("blink_map.png", 304, 60);
+            blinkMapImg = loadImage("blink_map.png", BRICK_WIDTH * 8, BRICK_HEIGHT * 20);
 
-            paddleGunSpriteMapImg = loadImage("paddlemap_gun.png", 640, 176);
+            paddleGunSpriteMapImg = loadImage("paddlemap_gun.png", PADDLE_DEFAULT_WIDTH * 8, PADDLE_HEIGHT * 8);
 
             explosionMapImg = loadImage("explosion_map.png", 128, 128);
 
-            bulletImg = loadImage("torpedo.png", 5, 13);
+            bulletImg = loadImage("torpedo.png", BULLET_WIDTH, BULLET_HEIGHT);
 
-            HeartImg = loadImage("heart.png", 20, 20);
+            HeartImg = loadImage("heart.png", HEART_SIZE, HEART_SIZE);
 
             // Load audio files
             loadMedia("ball_block.wav");

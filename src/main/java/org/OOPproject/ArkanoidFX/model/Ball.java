@@ -9,7 +9,7 @@ import static org.OOPproject.ArkanoidFX.utils.Constants.GAME_WIDTH;
 //TODO: remove stuckToPaddle or attachedPaddle if not needed anymore
 public class Ball extends MovableObject {
     private static final double COOLDOWN_TIME = 0.05; // 50ms cooldown between brick collisions
-    private static final double NORMAL_SPEED = 500;
+    private static final double NORMAL_SPEED = 400;
     private static final double FAST_SPEED = 600;
 
     private double speed; // Speed in pixels per second

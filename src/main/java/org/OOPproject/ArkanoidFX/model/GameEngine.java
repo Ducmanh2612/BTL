@@ -95,7 +95,7 @@ public class GameEngine {
     public void startGame() {
         this.score = 0;
         this.lives = 3;
-        this.levelNumber = 22;
+        this.levelNumber = 13;
         this.gameState = GameState.PLAYING;
         this.particleSystem.clear();
         this.ballReleased = false; // Ball starts stuck to paddle
@@ -300,7 +300,7 @@ public class GameEngine {
             return;
         }
 
-        if (enemies.isEmpty()) {
+        if (enemies.size() < 3) {
             spawnEnemies();
             return;
         }
@@ -674,7 +674,7 @@ public class GameEngine {
      */
     private void spawnPowerUp(int x, int y) {
         PowerUp powerUp;
-        int powerUpType = random.nextInt(4); // 0, 1, 2, or 3
+        int powerUpType = random.nextInt(5); // 0, 1, 2, or 3
 
         switch (powerUpType) {
             case 0:
@@ -695,9 +695,11 @@ public class GameEngine {
             case 3:
                 powerUp = new ExpandPaddlePowerUp(x, y, 20, 20);
                 break;
-            default:
+            case 4:
                 powerUp = new ExtraLifePowerUp(x, y, 20, 20, this);
                 break;
+            default:
+                powerUp = new ExtraLifePowerUp(x, y, 20, 20, this);
         }
 
         powerUps.add(powerUp);

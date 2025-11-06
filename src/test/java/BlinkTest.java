@@ -74,9 +74,9 @@ class BlinkTest {
     void testBlinkFinishesAfterEnoughTime() {
         // Blink có Sprite 8x3, mỗi frame 0.015s => 24 frame => khoảng 0.36s
         double totalTime = 0.36;
-        double step = 0.02;
+        double step = 0.015;
 
-        for (double t = 0; t < totalTime; t += step) {
+        for (double t = 0; t <= totalTime; t += step) {
             blink.update(step);
         }
 

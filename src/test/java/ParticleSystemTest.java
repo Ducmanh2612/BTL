@@ -44,27 +44,6 @@ class ParticleSystemTest {
         }
     }
 
-
-    //TODO rewrite test case or logic
-//    @Test
-//    void testParticlesMoveAfterUpdate() {
-//        particleSystem.createBurstEffect(0, 0, Color.RED, 5);
-//        List<Particle> beforeUpdate = List.copyOf(particleSystem.getParticles());
-//
-//        particleSystem.update(0.1);
-//
-//        boolean anyMoved = false;
-//        for (int i = 0; i < beforeUpdate.size(); i++) {
-//            Particle old = beforeUpdate.get(i);
-//            Particle updated = particleSystem.getParticles().get(i);
-//            if (old.getX() != updated.getX() || old.getY() != updated.getY()) {
-//                anyMoved = true;
-//                break;
-//            }
-//        }
-//        assertTrue(anyMoved, "At least one particle should move after update()");
-//    }
-
     @Test
     void testDeadParticlesAreRemovedAfterUpdate() {
         particleSystem.createBurstEffect(50, 50, Color.GREEN, 10);

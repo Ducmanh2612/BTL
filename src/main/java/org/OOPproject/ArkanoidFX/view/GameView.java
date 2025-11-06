@@ -199,6 +199,11 @@ public class GameView extends StackPane {
 
     private void renderGame() {
         for (Brick brick : gameEngineRef.getBricks()) {
+            renderBrickShadow(brick);
+        }
+
+
+        for (Brick brick : gameEngineRef.getBricks()) {
             renderBrickWithImage(brick);
         }
 
@@ -286,7 +291,6 @@ public class GameView extends StackPane {
         }
     }
 
-
     private void renderPauseOverlay() {
         gc.setFill(Color.rgb(0, 0, 0, 0.5));
         gc.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
@@ -303,11 +307,6 @@ public class GameView extends StackPane {
         int bw = brick.getWidth();
         int bh = brick.getHeight();
 
-        Image shadowImg = assetManager.getBlockShadowImg();
-        if (shadowImg != null) {
-            gc.drawImage(shadowImg, bx + 2, by + 2, bw, bh);
-        }
-
         Image brickImg = null;
         if (brick instanceof ColoredBrick) {
             ColoredBrick coloredBrick = (ColoredBrick) brick;
@@ -322,6 +321,19 @@ public class GameView extends StackPane {
             gc.drawImage(brickImg, bx, by, bw, bh);
         } else {
             renderBrick(brick);
+        }
+    }
+
+    private void renderBrickShadow(Brick brick) {
+
+        int bx = brick.getX();
+        int by = brick.getY();
+        int bw = brick.getWidth();
+        int bh = brick.getHeight();
+
+        Image shadowImg = assetManager.getBlockShadowImg();
+        if (shadowImg != null) {
+            gc.drawImage(shadowImg, bx + 10, by + 10, bw, bh);
         }
     }
 
@@ -373,7 +385,7 @@ public class GameView extends StackPane {
 
         Image shadowImg = isExpanded ? assetManager.getPaddleWideShadowImg() : assetManager.getPaddleStdShadowImg();
         if (shadowImg != null) {
-            gc.drawImage(shadowImg, px + 2, py + 2, pw, ph);
+            gc.drawImage(shadowImg, px + 10, py + 10, pw, ph);
         }
 
         Image paddleImg = assetManager.getPaddleStdSpriteMapImg();;
@@ -416,7 +428,7 @@ public class GameView extends StackPane {
 
         Image shadowImg = assetManager.getBallShadowImg();
         if (shadowImg != null) {
-            gc.drawImage(shadowImg, bx + 1, by + 1, bw, bh);
+            gc.drawImage(shadowImg, bx + 5, by + 5, bw, bh);
         }
 
         Image ballImg = assetManager.getBallImg();

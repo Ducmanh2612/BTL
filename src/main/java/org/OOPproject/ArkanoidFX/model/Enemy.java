@@ -53,7 +53,7 @@ public class Enemy extends MovableObject {
     }
 
     public static EnemyType randEnemyType() {
-        int r = (int)(Math.random() * 3);
+        int r = (int)(Math.random() * 4);
         switch (r%3) {
             case 0:
                 return EnemyType.UP_SENSITIVE;
