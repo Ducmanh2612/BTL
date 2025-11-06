@@ -1,0 +1,169 @@
+@startuml
+skinparam classAttributeIconSize 0
+skinparam shadowing false
+skinparam defaultFontName Arial
+skinparam packageStyle rectangle
+skinparam linetype ortho
+
+' ================== PACKAGES ==================
+package "org.OOPproject.ArkanoidFX" as arkanoid {
+  class ArkanoidGame
+}
+
+package "controller" as ctrl {
+  class MenuController
+  class GameController
+  class EndGameController
+}
+
+package "view" as view {
+  class AssetManager <<singleton>>
+  class MenuView
+  class GameView
+  class EndGameView
+}
+
+package "model" as model {
+  class GameEngine <<singleton>>
+  class GameObject <<abstract>>
+  class MovableObject <<abstract>>
+  class Sprite
+  class SoundManager <<singleton>>
+  class ParticleSystem
+  class Particle
+  class Level
+  class LeaderboardManager <<singleton>>
+  class "LeaderboardManager::LeaderboardEntry" as LeaderboardEntry
+  class Blink
+  class Destroy
+  class Bullet
+  class Enemy
+  class Ball
+  class Paddle
+  enum EnemyType
+  enum MovementType
+}
+
+package "model.Bricks" as bricks {
+  class Brick <<abstract>>
+  class NormalBrick
+  class ColoredBrick
+  class StrongBrick
+  class ExtraStrongBrick
+  class UnbreakableBrick
+  enum BrickType
+  class BrickFactory <<static>>
+}
+
+package "model.PowerUps" as pwr {
+  class PowerUp <<abstract>>
+  class ExpandPaddlePowerUp
+  class FastBallPowerUp
+  class MultiBallPowerUp
+  class ExtraLifePowerUp
+  class GunPowerUp
+  enum PowerUpTypes
+}
+
+package "utils" as utils {
+  enum GameState
+  enum InputSignal
+  class Constants <<static>>
+}
+
+' ================== HIERARCHY ==================
+model.GameObject <|-- model.MovableObject
+model.GameObject <|-- bricks.Brick
+model.GameObject <|-- pwr.PowerUp
+model.GameObject <|-- model.Blink
+model.GameObject <|-- model.Destroy
+
+model.MovableObject <|-- model.Ball
+model.MovableObject <|-- model.Paddle
+model.MovableObject <|-- model.Enemy
+model.MovableObject <|-- model.Bullet
+
+bricks.Brick <|-- bricks.NormalBrick
+bricks.Brick <|-- bricks.ColoredBrick
+bricks.Brick <|-- bricks.StrongBrick
+bricks.Brick <|-- bricks.ExtraStrongBrick
+bricks.Brick <|-- bricks.UnbreakableBrick
+
+pwr.PowerUp <|-- pwr.ExpandPaddlePowerUp
+pwr.PowerUp <|-- pwr.FastBallPowerUp
+pwr.PowerUp <|-- pwr.MultiBallPowerUp
+pwr.PowerUp <|-- pwr.ExtraLifePowerUp
+pwr.PowerUp <|-- pwr.GunPowerUp
+
+' ================== CONTROLLER <-> VIEW/MODEL ==================
+arkanoid.ArkanoidGame o-- ctrl.MenuController
+arkanoid.ArkanoidGame o-- ctrl.GameController
+arkanoid.ArkanoidGame o-- ctrl.EndGameController
+
+ctrl.MenuController o-- view.MenuView
+ctrl.GameController o-- view.GameView
+ctrl.GameController o-- model.GameEngine
+ctrl.EndGameController o-- view.EndGameView
+ctrl.EndGameController o-- model.GameEngine
+ctrl.EndGameController o-- model.LeaderboardManager
+
+' ================== VIEW DEPENDENCIES ==================
+view.MenuView ..> view.AssetManager
+view.MenuView o-- model.LeaderboardManager
+view.GameView o-- model.GameEngine
+view.GameView ..> view.AssetManager
+view.EndGameView ..> view.AssetManager
+
+' ================== MODEL COMPOSITIONS/ASSOCIATIONS ==================
+model.GameEngine *-- model.Paddle
+model.GameEngine *-- "0..*" model.Ball
+model.GameEngine *-- "0..*" model.Bullet
+model.GameEngine *-- "0..*" bricks.Brick
+model.GameEngine *-- "0..*" pwr.PowerUp
+model.GameEngine *-- "0..*" model.Blink
+model.GameEngine *-- "0..*" model.Enemy
+model.GameEngine *-- "0..*" model.Destroy
+model.GameEngine *-- model.Level
+model.GameEngine *-- model.ParticleSystem
+model.GameEngine o-- model.SoundManager
+model.GameEngine ..> utils.GameState
+model.GameEngine ..> utils.InputSignal
+
+model.ParticleSystem *-- "0..*" model.Particle
+
+' Sprites
+model.Enemy o-- model.Sprite
+model.Paddle o-- model.Sprite
+model.Blink o-- model.Sprite
+model.Destroy o-- model.Sprite
+pwr.PowerUp o-- model.Sprite
+
+' Power-ups and enums
+pwr.PowerUp ..> pwr.PowerUpTypes
+
+' Bricks and types
+bricks.Brick o-- bricks.BrickType
+bricks.ColoredBrick o-- bricks.BrickType
+bricks.BrickFactory ..> bricks.Brick
+bricks.BrickFactory ..> bricks.BrickType
+
+' Enemy types and movement
+model.Enemy ..> model.EnemyType
+model.Enemy ..> model.MovementType
+
+' Ball association to Paddle
+model.Ball --> model.Paddle : attachedPaddle
+
+' SoundManager uses AssetManager
+model.SoundManager ..> view.AssetManager
+
+' Leaderboard
+model.LeaderboardManager *-- "0..*" LeaderboardEntry
+
+' ================== ENUM VALUES (optional notes) ==================
+utils.GameState : PLAYING\nPAUSED\nGAME_OVER
+utils.InputSignal : MOVE_LEFT\nMOVE_RIGHT\nSTOP\nPAUSE_RESUME\nESCAPE
+pwr.PowerUpTypes : EXPAND_PADDLE\nLASER_PADDLE\nFAST_BALL\nMULTI_BALL\nEXTRA_LIFE\nSKIP_LEVEL\nGUN
+bricks.BrickType : NONE\nGOLD\nGRAY\nRUBY\nYLLW\nBLUE\nMGNT\nLIME\nWHIT\nORNG\nCYAN
+
+@enduml
