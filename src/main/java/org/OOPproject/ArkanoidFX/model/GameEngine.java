@@ -41,6 +41,7 @@ public class GameEngine {
     private Random random;                         // For random number generation
     private int gameWidth;                         // Width of game area
     private int gameHeight;                        // Height of game area (including UI)
+    private final SoundManager soundManager;
 
     private static GameEngine instance = null;
 
@@ -66,6 +67,7 @@ public class GameEngine {
         this.gameHeight = Constants.GAME_HEIGHT;
         this.random = new Random();
         this.particleSystem = new ParticleSystem();
+        this.soundManager = SoundManager.getInstance();
 
         // Initialize lists to hold game objects
         this.balls = new ArrayList<>();
@@ -455,7 +457,7 @@ public class GameEngine {
                     score += e.getScoreValue();
                     destroys.add(new Destroy(e));
                     enemyIt.remove();
-                    SoundManager.getInstance().playSound("explosion.wav");
+                    soundManager.playSound("explosion.wav");
                 }
             }
         }
@@ -466,7 +468,7 @@ public class GameEngine {
     public boolean ballProcess(Ball ball, double deltaTime) {
         if (ball.collidesWith(paddle)) {
             ball.bounceOffPaddle(paddle);
-            SoundManager.getInstance().playSound("ball_paddle.wav");
+            soundManager.playSound("ball_paddle.wav");
             return false;
         }
 
@@ -560,7 +562,7 @@ public class GameEngine {
         // Remove if destroyed
         if (brick.isDestroyed()) {
             score += brick.getScoreValue();
-            SoundManager.getInstance().playSound("ball_block.wav");
+            soundManager.playSound("ball_block.wav");
 
             // Spawn power-up chance
             if (!(brick instanceof UnbreakableBrick) && random.nextInt(100) < 15) {
@@ -570,7 +572,7 @@ public class GameEngine {
             bricks.remove(brick);
         } else {
             // Brick was hit but not destroyed
-            SoundManager.getInstance().playSound("ball_hard_block.wav");
+            soundManager.playSound("ball_hard_block.wav");
         }
 
     }
@@ -583,7 +585,7 @@ public class GameEngine {
                 score += e.getScoreValue();
                 destroys.add(new Destroy(e));
                 enemies.remove(e);
-                SoundManager.getInstance().playSound("explosion.wav");
+                soundManager.playSound("explosion.wav");
             }
         }
         else if (e.getType() == EnemyType.UP_SENSITIVE) {
@@ -593,7 +595,7 @@ public class GameEngine {
                     score += e.getScoreValue();
                     destroys.add(new Destroy(e));
                     enemies.remove(e);
-                    SoundManager.getInstance().playSound("explosion.wav");
+                    soundManager.playSound("explosion.wav");
                 }
             }
         }
@@ -604,7 +606,7 @@ public class GameEngine {
                     score += e.getScoreValue();
                     destroys.add(new Destroy(e));
                     enemies.remove(e);
-                    SoundManager.getInstance().playSound("explosion.wav");
+                    soundManager.playSound("explosion.wav");
                 }
             }
         }
@@ -643,7 +645,7 @@ public class GameEngine {
         // Remove if destroyed
         if (brick.isDestroyed()) {
             score += brick.getScoreValue();
-            SoundManager.getInstance().playSound("ball_block.wav");
+            soundManager.playSound("ball_block.wav");
 
             // Spawn power-up chance
             if (!(brick instanceof UnbreakableBrick) && random.nextInt(100) < 15) {
@@ -653,7 +655,7 @@ public class GameEngine {
             bricks.remove(brick);
         } else {
             // Brick was hit but not destroyed
-            SoundManager.getInstance().playSound("ball_hard_block.wav");
+            soundManager.playSound("ball_hard_block.wav");
         }
     }
 
@@ -663,7 +665,7 @@ public class GameEngine {
             score += e.getScoreValue();
             destroys.add(new Destroy(e));
             enemies.remove(e);
-            SoundManager.getInstance().playSound("explosion.wav");
+            soundManager.playSound("explosion.wav");
         }
     }
 
@@ -707,7 +709,7 @@ public class GameEngine {
 
     private void activatePowerUp(PowerUp powerUp) {
         powerUp.applyEffect(paddle);
-        SoundManager.getInstance().playSound("powerUp.wav");
+        soundManager.playSound("powerUp.wav");
         // Power-up duration is in frames, convert to seconds (assuming 60 FPS)
         double durationInSeconds = powerUp.getDuration() / 60.0;
         activePowerUps.add(new ActivePowerUp(powerUp, durationInSeconds));
@@ -788,7 +790,7 @@ public class GameEngine {
      * Level complete - advance to next level.
      */
     private void levelComplete() {
-        SoundManager.getInstance().playSound("level_ready.wav");
+        soundManager.playSound("level_ready.wav");
         levelNumber++;
         initializeLevel();
     }
@@ -798,7 +800,7 @@ public class GameEngine {
      */
     public void gameOver() {
         gameState = GameState.GAME_OVER;
-        SoundManager.getInstance().playSound("game_over.wav");
+        soundManager.playSound("game_over.wav");
     }
 
     public void handleInput(InputSignal inputSignal) {

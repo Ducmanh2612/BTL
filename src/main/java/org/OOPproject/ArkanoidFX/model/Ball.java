@@ -21,6 +21,7 @@ public class Ball extends MovableObject {
     protected Paddle attachedPaddle; // Reference to paddle when stuck
 
     private int boundingBoxWidth = GAME_WIDTH - (Constants.BORDER_OFFSET * 2); // Account for both borders
+    private final SoundManager soundManager;
 
     public Ball(int x, int y, int size) {
         this(x, y, size, size);
@@ -33,6 +34,7 @@ public class Ball extends MovableObject {
         this.stuckToPaddle = true;
         this.velocityX = 0;
         this.velocityY = 0;
+        soundManager = SoundManager.getInstance();
     }
 
     public boolean isActive() {
@@ -63,7 +65,7 @@ public class Ball extends MovableObject {
             double angle = Math.toRadians(-45);
             this.velocityX = Math.cos(angle) * speed;
             this.velocityY = Math.sin(angle) * speed;
-            SoundManager.getInstance().playSound("click.wav");
+            soundManager.playSound("click.wav");
             //TODO: launch angle is is a random angle between -45 and -135 degrees
         }
     }
@@ -382,12 +384,12 @@ public class Ball extends MovableObject {
         if (x <= Constants.BORDER_OFFSET) {
             x = Constants.BORDER_OFFSET;
             velocityX = Math.abs(velocityX);
-            SoundManager.getInstance().playSound("bounce.wav");
+            soundManager.playSound("bounce.wav");
         } else {
             if (x + width >= Constants.BORDER_OFFSET + boundingBoxWidth) {
                 x = Constants.BORDER_OFFSET + boundingBoxWidth - width;
                 velocityX = -Math.abs(velocityX);
-                SoundManager.getInstance().playSound("bounce.wav");
+                soundManager.playSound("bounce.wav");
             }
         }
 
@@ -395,7 +397,7 @@ public class Ball extends MovableObject {
         if (y <= Constants.BORDER_OFFSET) {
             y = Constants.BORDER_OFFSET;
             velocityY = Math.abs(velocityY);
-            SoundManager.getInstance().playSound("bounce.wav");
+            soundManager.playSound("bounce.wav");
         }
     }
 

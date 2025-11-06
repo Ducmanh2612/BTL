@@ -10,7 +10,8 @@ import org.OOPproject.ArkanoidFX.utils.Constants;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.OOPproject.ArkanoidFX.utils.Constants.*;
+import static org.OOPproject.ArkanoidFX.utils.Constants.GAME_HEIGHT;
+import static org.OOPproject.ArkanoidFX.utils.Constants.PADDLE_HEIGHT;
 
 public class AssetManager {
     private static AssetManager instance;
@@ -69,6 +70,9 @@ public class AssetManager {
 
     //Enemy sprite map
     private Image enemyMapImg;
+    private Image enemyReflectorMapImg;  // molecule_both_map.png
+    private Image enemyUpSensitiveMapImg;  // molecule_up_map.png
+    private Image enemyDownSensitiveMapImg;  // molecule_down_map.png
 
     //Explosion sprite map
     private Image explosionMapImg;
@@ -146,17 +150,20 @@ public class AssetManager {
 
 
             //sprite map for enemy
-            enemyMapImg = loadImage("molecule_map.png", ENEMY_SIZE * 8, ENEMY_SIZE * 3);
+            enemyMapImg = loadImage("molecule_map.png", 256, 96);
+            enemyReflectorMapImg = loadImage("molecule_both_map.png", 256, 96);
+            enemyUpSensitiveMapImg = loadImage("molecule_up_map.png", 256, 96);
+            enemyDownSensitiveMapImg = loadImage("molecule_down_map.png", 256, 96);
 
-            blinkMapImg = loadImage("blink_map.png", BRICK_WIDTH * 8, BRICK_HEIGHT * 20);
+            blinkMapImg = loadImage("blink_map.png", 304, 60);
 
-            paddleGunSpriteMapImg = loadImage("paddlemap_gun.png", PADDLE_DEFAULT_WIDTH * 8, PADDLE_HEIGHT * 8);
+            paddleGunSpriteMapImg = loadImage("paddlemap_gun.png", 640, 176);
 
             explosionMapImg = loadImage("explosion_map.png", 128, 128);
 
-            bulletImg = loadImage("torpedo.png", BULLET_WIDTH, BULLET_HEIGHT);
+            bulletImg = loadImage("torpedo.png", 5, 13);
 
-            HeartImg = loadImage("heart.png", HEART_SIZE, HEART_SIZE);
+            HeartImg = loadImage("heart.png", 20, 20);
 
             // Load audio files
             loadMedia("ball_block.wav");
@@ -240,6 +247,9 @@ public class AssetManager {
 
     //Getter for enemy sprite
     public Image getEnemyMapImg() {return enemyMapImg;}
+    public Image getEnemyReflectorMapImg() {return enemyReflectorMapImg;}
+    public Image getEnemyUpSensitiveMapImg() {return enemyUpSensitiveMapImg;}
+    public Image getEnemyDownSensitiveMapImg() {return enemyDownSensitiveMapImg;}
 
     //Getter for explosion sprite
     public Image getExplosionMapImg() {return explosionMapImg;}

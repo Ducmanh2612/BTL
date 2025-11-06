@@ -486,7 +486,20 @@ public class GameView extends StackPane {
         int ew = enemy.getWidth();
         int eh = enemy.getHeight();
 
-        Image enemyImg = assetManager.getEnemyMapImg();
+        // Get the correct sprite map based on enemy type
+        Image enemyImg = null;
+        switch (enemy.getType()) {
+            case REFLECTOR:
+                enemyImg = assetManager.getEnemyReflectorMapImg();
+                break;
+            case UP_SENSITIVE:
+                enemyImg = assetManager.getEnemyUpSensitiveMapImg();
+                break;
+            case DOWN_SENSITIVE:
+                enemyImg = assetManager.getEnemyDownSensitiveMapImg();
+                break;
+        }
+
         if (enemyImg != null) {
             int frameWidth = Constants.ENEMY_SIZE;
             int frameHeight = Constants.ENEMY_SIZE;
