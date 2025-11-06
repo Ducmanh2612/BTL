@@ -11,7 +11,6 @@ import org.OOPproject.ArkanoidFX.controller.MenuController;
 import static org.OOPproject.ArkanoidFX.utils.Constants.WINDOW_HEIGHT;
 import static org.OOPproject.ArkanoidFX.utils.Constants.WINDOW_WIDTH;
 
-//TODO: add sound for the game
 public class ArkanoidGame extends Application {
     private Stage primaryStage;
     private Scene menuScene;
