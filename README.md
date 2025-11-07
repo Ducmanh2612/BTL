@@ -4,6 +4,12 @@ Một bản Arkanoid viết bằng JavaFX, tập trung thể hiện các nguyên
 
 ---
 
+## Credits
+
+- Lấy cảm hứng từ và phát triển dựa trên ý tưởng/assets của "Jarkanoid" bởi Hansolo.
+
+---
+
 ## 1) Tính năng nổi bật (đã có trong mã nguồn)
 
 - Gameplay cơ bản
